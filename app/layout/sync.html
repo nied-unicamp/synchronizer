@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>TelEduc Synchronizer</title>
+</head>
+<body>
+	<h1> Temporary Page For Synchronizer</h1>
+	<p>
+		Please select what do you want to syncronize.
+	</p>
+	
+	<p>
+		 <form name="whatSynchronize"method="post" action="http://localhost//synchronizer/app/View/synchView.php" >
+			 <input type="checkbox" name="targets[]" value="users" checked> Users<br>
+			 <input type="checkbox" name="targets[]" value="courses"> Courses<br>
+			 <input type="checkbox" name="targets[]" value="coursemember"> Members of courses<br>
+			 <input type="submit" value="Synchronize!" />
+		</form> 
+	</p>
+</body>
+</html>

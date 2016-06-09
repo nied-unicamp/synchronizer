@@ -20,12 +20,14 @@ class DAOContext {
 	 * TODO Auto-generated comment.
 	 */
 	public function __construct($formatType) {
+		$this->format = $formatType;
 	}
 
 	/**
 	 * TODO Auto-generated comment.
 	 */
 	public function getList($db, $serverType) {
-		return null;
+		
+		return array($this->format);
 	}
 }
