@@ -25,18 +25,19 @@ class DifferContext {
 	 */
 	public function __construct($dataType) {
 
-	       switch($dataType){
-		case "DATA_TYPE_JSON":
-		     $this->$dataStrategy = new JSONStrategy();
-		     break;
+		switch($dataType){
+			
+			case "DATA_TYPE_JSON":
+			     $this->$dataStrategy = new JSONStrategy();
+			     break;
+			
+			case "DATA_TYPE_XML":
+			
+			case "DATA_TYPE_CSV":
+			
+			default:
+				throw new Exception('Unable to create a Strategy of the type '.$dataType);
 
-		case "DATA_TYPE_XML":
-
-		case "DATA_TYPE_CSV":
-
-		default:
-			throw new Exception('Unable to create a Strategy of the type '.$dataType);
-		
 	       }
 	}
 

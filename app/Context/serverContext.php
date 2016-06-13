@@ -18,11 +18,11 @@ class serverContext {
 	public function __construct($serverType, $data) {
         switch($serverType){
         case "SERVER_TYPE_MYSQL":
-            this->server = new DBWrapper($data);
+            $this->server = new DBWrapper($data);
             break;
 
         case "SERVER_TYPE_REST":
-            this->server = new restfulWrapper($data);
+            $this->server = new restfulWrapper($data);
             break;
 
         default:
