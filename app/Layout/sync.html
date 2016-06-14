@@ -6,18 +6,33 @@
 </head>
 <body>
 	<h1> Temporary Page For Synchronizer</h1>
-	<p>
-		Please select what do you want to syncronize.
-	</p>
 	
-	<p>
 		<form name="whatSynchronize"method="post" action="http://localhost/workspace/synchronizer/app/View/synchView.php" >
-			 <input type="checkbox" name="targets[]" value="users" checked> Users<br>
-			 <input type="checkbox" name="targets[]" value="courses"> Courses<br>
-			 <input type="checkbox" name="targets[]" value="coursemember"> Members of courses<br>
-			 <input type="submit" value="Synchronize!" />
+		
+			<p>
+				Please select where the external data is comming from.
+			</p>
+		
+			<input type="radio" name="serverType" value="SERVER_TYPE_MYSQL" checked> Mysql Database<br>
+			<input type="radio" name="serverType" value="json"> JSON file<br>
+			<input type="radio" name="serverType" value="xml"> XML file<br>	
+			<input type="radio" name="serverType" value="rest"> Rest interface<br>	
+			<input type="radio" name="serverType" value="csv"> CSV file<br>
+		
+			<input type="text" name="db" value="Type identifier of source (Ex.: Database name or file name)"><br>
+		
+			<p>
+				Please select what do you want to syncronize.
+			</p>		
+		
+			<input type="checkbox" name="targets[]" value="users" checked> Users<br>
+			<input type="checkbox" name="targets[]" value="courses"> Courses<br>
+			<input type="checkbox" name="targets[]" value="coursemember"> Members of courses<br>
+			 
+			<br>
+			 
+			<input type="submit" value="Synchronize!" />
 		</form>
-	</p>
 		  
 	
 </body>

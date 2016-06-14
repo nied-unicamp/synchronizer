@@ -46,13 +46,34 @@ class diffController {
 			return null;
 		}
 		
+		try {
+				
+			$this->validateServer($serverType);
+				
+		} catch (Exception $e) {
+				
+			echo '<h2>Exception: ' . $e->getMessage() . '</h2><br>';
+			trigger_error ('<h2>Exception: ' . $e->getMessage() . '</h2><br>', E_USER_ERROR);
+			return null;
+		}
+		
+		
 		foreach($dataType as $key => $target)
 		{
-			$differentiator = new DAOContext($target);
+			
+			
+			try {
+				$differentiator = new DAOContext($target);
+				
+			} catch (Exception $e) {
+				echo '<h2>Exception: ' . $e->getMessage() . '</h2><br>';
+				trigger_error ('<h2>Exception: ' . $e->getMessage() . '</h2><br>', E_USER_ERROR);
+				return null;
+			}
+			
 			array_push($databaseData, $differentiator->getList($db, $serverType));
 			unset($differentiator);
 		}
-		
 		return $databaseData;
 	}
 
@@ -63,6 +84,14 @@ class diffController {
 		return null;
 	}
 	
+	/**
+	 * 
+	 * Throws exception if the user has selected a invalid data type.
+	 * Ains to avoid malicious code send througth $_POST.
+	 * 
+	 * @param unknown $dataType Contain a data type, expected to be on the synchonization tables.
+	 * @throws Exception
+	 */
 	public function validateTargets($dataType){
 		$validTargets = array('users', 'courses', 'coursemember');
 		
@@ -77,5 +106,30 @@ class diffController {
 				throw new Exception('Unkown target for syncronization: '.$target);
 			}
 		}
+	}
+	
+	/**
+	 * 
+	 * Return true if $serverType is a valid server type. Throws exception otherwise.
+	 * Ains to avoid malicious code send througth $_POST.
+	 * 
+	 * @param string $serverType Contains a server type choosen by the user.
+	 * @throws Exception
+	 * @return boolean
+	 */
+	public function validateServer($serverType){
+		
+		/*Array with valid server types.*/
+		$validTargets = array('SERVER_TYPE_MYSQL', 'json', 'xml', 'rest', 'csv');
+
+		if (in_array($serverType, $validTargets))
+		{
+			return true;
+		}
+		else
+		{
+			throw new Exception('Unkown server type for syncronization: ' . $serverType);
+		}
+
 	}
 }

@@ -3,7 +3,7 @@
  * TODO Auto-generated comment.
  */
 class courseStrategy extends formatStrategy {
-
+	
 	/**
 	 * TODO Auto-generated comment.
 	 */

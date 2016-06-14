@@ -4,5 +4,5 @@
  */
 interface abstractDAO {
 
-	public function __construct($db, $serverType);
+	public function serverQuery($string, $serverType);
 }

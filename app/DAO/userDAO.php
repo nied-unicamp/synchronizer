@@ -28,4 +28,8 @@ class userDAO implements abstractDAO {
 	 */
 	public function deleteUser($db, $serverType, $user) {
 	}
+	
+	public function serverQuery($string, $serverType){
+	
+	}
 }

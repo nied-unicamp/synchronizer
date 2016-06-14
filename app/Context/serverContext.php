@@ -19,6 +19,7 @@ class serverContext {
         switch($serverType){
         case "SERVER_TYPE_MYSQL":
             $this->server = new DBWrapper($data);
+            
             break;
 
         case "SERVER_TYPE_REST":

@@ -57,7 +57,7 @@ class synchView {
 	public function callController($targets){
 		
 		$controlsDiff = new diffController();
-		$externalList = $controlsDiff->configDB("todo", $targets, "todo");
+		$externalList = $controlsDiff->configDB($_POST['db'], $targets, $_POST['serverType']);
 		
 		echo '<br>externalLIST:  ';
 		var_dump($externalList);

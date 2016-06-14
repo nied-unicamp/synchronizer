@@ -27,13 +27,13 @@ class DifferContext {
 
 		switch($dataType){
 			
-			case "DATA_TYPE_JSON":
+			case 'DATA_TYPE_JSON':
 			     $this->$dataStrategy = new JSONStrategy();
 			     break;
 			
-			case "DATA_TYPE_XML":
+			case 'DATA_TYPE_XML':
 			
-			case "DATA_TYPE_CSV":
+			case 'DATA_TYPE_CSV':
 			
 			default:
 				throw new Exception('Unable to create a Strategy of the type '.$dataType);
