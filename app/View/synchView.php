@@ -27,7 +27,7 @@ class synchView {
 	public function createView() {
 		if(isset($_POST['targets']))
 		{
-			include "../layout/synchronizingHeader.html";
+			include "../Layout/synchronizingHeader.html";
 			
 			echo '<p>You asked for a sync.<p>';
 			$this->callController($_POST['targets']);
@@ -37,7 +37,7 @@ class synchView {
 		}
 		else 
 		{
-			include "../layout/sync.html";
+			include "../Layout/sync.html";
 		}
 	}
 	
