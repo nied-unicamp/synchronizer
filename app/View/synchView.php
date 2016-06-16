@@ -60,7 +60,7 @@ class synchView {
 		$externalList = $controlsDiff->configDB($_POST['db'], $targets, $_POST['serverType']);
 		
 		echo '<br>externalLIST:  ';
-		var_dump($externalList);
+		var_dump($externalList['courses']);
 	}
 }
 

@@ -4,6 +4,8 @@
  */
 class formatStrategy {
 
+	private $daoObject;
+	
 	/**
 	 * TODO Auto-generated comment.
 	 */

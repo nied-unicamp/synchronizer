@@ -1,4 +1,8 @@
 <?php
+
+require_once '../Wrapper/DBWrapper.php';
+require_once '../Wrapper/restfulWrapper.php';
+
 /**
  * TODO Auto-generated comment.
  */
@@ -38,6 +42,9 @@ class serverContext {
 	 * TODO Auto-generated comment.
 	 */
 	public function serverQuery($db, $query) {
-		return null;
+		
+		$this->data = $this->server->dataRequest($db, $query);
+		
+		return $this->data;
 	}
 }

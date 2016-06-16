@@ -71,9 +71,11 @@ class diffController {
 				return null;
 			}
 			
-			array_push($databaseData, $differentiator->getList($db, $serverType));
+			//array_push($databaseData, $differentiator->getList($db, $serverType));
+			$databaseData[$target] = $differentiator->getList($db, $serverType);
 			unset($differentiator);
 		}
+		
 		return $databaseData;
 	}
 

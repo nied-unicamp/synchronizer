@@ -9,16 +9,16 @@ require_once '../DAO/userDAO.php';
  */
 class userStrategy extends formatStrategy {
 
-	private $userDaoObject;
+	//private $userDaoObject;
 	
 	/**
 	 * TODO Auto-generated comment.
 	 */
 	public function getList($db, $serverType) {
 		
-		$this->userDaoObject = new userDAO();
+		$this->daoObject = new userDAO();
 		
-		return $this->userDaoObject->getUserList($db, $serverType);
+		return $this->daoObject->getUserList($db, $serverType);
 		
 		//return null;
 	}

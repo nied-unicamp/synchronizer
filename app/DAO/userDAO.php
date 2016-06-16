@@ -1,4 +1,7 @@
 <?php
+
+require_once '../Context/serverContext.php';
+
 /**
  * TODO Auto-generated comment.
  */
@@ -8,7 +11,15 @@ class userDAO implements abstractDAO {
 	 * TODO Auto-generated comment.
 	 */
 	public function getUserList($db, $serverType) {
-		return null;
+		
+		$recordsLoader = new serverContext($serverType, 'users');
+		
+		//$recordsLoader->serverQuery($db, $query);
+		
+		//Temporary for learning and testing...
+		$query = 'select login, nome, email from Usuario';
+		
+		return $recordsLoader->serverQuery($db, $query);
 	}
 
 	/**
