@@ -3,24 +3,65 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>TelEduc Synchronizer</title>
+
+<script>
+
+function askForDataInfo()
+{
+	//alert("Test");	
+	
+	if (document.getElementById('mysqlRadio').checked) {
+        document.getElementById('configMysqlDb').style.display = 'inline-block';
+    } else {
+        document.getElementById('configMysqlDb').style.display = 'none';
+    }
+	
+}
+
+</script>
+
 </head>
 <body>
 	<h1> Temporary Page For Synchronizer</h1>
 	
 		<form name="whatSynchronize"method="post" action="../View/synchView.php" >
 		
-			<p>
-				Please select where the external data is comming from.
-			</p>
+			<div>
 		
-			<input type="radio" name="serverType" value="SERVER_TYPE_MYSQL" checked> Mysql Database<br>
-			<input type="radio" name="serverType" value="json"> JSON file<br>
-			<input type="radio" name="serverType" value="xml"> XML file<br>	
-			<input type="radio" name="serverType" value="rest"> Rest interface<br>	
-			<input type="radio" name="serverType" value="csv"> CSV file<br>
-		
-			<input type="text" name="db" value="Type identifier of source (Ex.: Database name or file name)"><br>
-		
+				<div style="display:inline-block; margin:auto">
+					<p>
+						Please select where the external data is comming from.
+					</p>
+					
+					<input id="mysqlRadio" type="radio" onclick="javascript:askForDataInfo()" name="serverType" value="SERVER_TYPE_MYSQL" checked> Mysql Database<br>
+					<div id="configMysqlDb" style="display:inline-block;  margin-left:2em;">
+					
+						
+						<p>
+							Please complete the external mysql database information below.
+						</p>
+					
+						Host: <input type="text" name="dbHost" value="localhost"><br>
+						Port: <input type="text" name="dbPort" value="3306"><br>
+						Database's Name: <input type="text" name="dbName" value=""><br>
+						Login: <input type="text" name="dbLogin" value="Login"><br>
+						Password: <input type="password" size="25" name="dbPassword" value="password"><br>
+						
+						
+					</div><br><br>
+					<input type="radio" onclick="javascript:askForDataInfo()" name="serverType" value="json"> JSON file<br>
+					<input type="radio" onclick="javascript:askForDataInfo()" name="serverType" value="xml"> XML file<br>	
+					<input type="radio" onclick="javascript:askForDataInfo()" name="serverType" value="rest"> Rest interface<br>	
+					<input type="radio" onclick="javascript:askForDataInfo()" name="serverType" value="csv"> CSV file<br>
+				
+					<!-- <input type="text" name="db" value="Type identifier of source (Ex.: Database name or file name)"><br> -->
+				
+				</div>
+				
+				
+			</div>	
+			
+			<br>
 			<p>
 				Please select what do you want to syncronize.
 			</p>		

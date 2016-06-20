@@ -57,7 +57,10 @@ class synchView {
 	public function callController($targets){
 		
 		$controlsDiff = new diffController();
-		$externalList = $controlsDiff->configDB($_POST['db'], $targets, $_POST['serverType']);
+		//mysql:host=localhost;port=3306;dbname=TelEduc4Fenix
+		$db = 'mysql:host=' . $_POST['dbHost'] . ';port=' . $_POST['dbPort'] . ';dbname=' . $_POST['dbName'];
+		
+		$externalList = $controlsDiff->configDB($db, $targets, $_POST['serverType']);
 		
 		echo '<br>externalLIST:  ';
 		var_dump($externalList['courses']);

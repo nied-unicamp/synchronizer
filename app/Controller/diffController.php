@@ -88,7 +88,7 @@ class diffController {
 	
 	/**
 	 * 
-	 * Throws exception if the user has selected a invalid data type.
+	 * Throws exception if the user has selected an invalid data type.
 	 * Ains to avoid malicious code send througth $_POST.
 	 * 
 	 * @param unknown $dataType Contain a data type, expected to be on the synchonization tables.
@@ -117,6 +117,7 @@ class diffController {
 	 * 
 	 * @param string $serverType Contains a server type choosen by the user.
 	 * @throws Exception
+	 * 
 	 * @return boolean
 	 */
 	public function validateServer($serverType){

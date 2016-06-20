@@ -50,9 +50,7 @@ class DAOContext {
 	 */
 	public function getList($db, $serverType) {
 		
-		
 
-		
 		return $this->formatStrategy->getList($db, $serverType);
 	}
 }
