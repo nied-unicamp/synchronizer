@@ -10,10 +10,10 @@ class DBWrapper extends serverStrategy {
 	/**
 	 * Sends a query to the database.
 	 * 
-	 * @param $confDB A string prepared for the creation of a connection to the database.
-	 * @param #query The query that will be sent to the database.
+	 * @param $confDB A array containing the parameters that must be used for connection with PDO.
+	 * 			$confDB can be described as: $confDB = array(serverType, dbHost, dbPort, dbName, dbLogin, dbPassword).
+	 * @param $query The query that will be sent to the database.
 	 * 
-	 * TODO Find a way to get here with login  and password for database access.
 	 * TODO Find a way to know if its necessary to use conn->query or conn->exec. 
 	 */
 	public function dataRequest($confDB, $query) {
@@ -21,16 +21,29 @@ class DBWrapper extends serverStrategy {
 		$data = array();
 		
 		try {
+			/*
+			 * Use the value of $conf[0] (which contains serverType) to discover the database implementation and be able to connect.
+			 * TODO Implement this with strategy if someday the system allow the use of non mysql implementations.
+			 * */
+			switch ($confDB[0]) {
+				case "SERVER_TYPE_MYSQL":
+					$bd = 'mysql:host=' . $confDB[1] . ';port=' . $confDB[2] . ';dbname=' . $confDB[3];
+					$conn = new PDO($bd, $confDB[4], $confDB[5]);
+					break;
+				
+				default:
+					echo "default";
+				break;
+			}
 			
-			
-			// Temporary, for tests.
-			$conn = new PDO($confDB, 'root', 'Sxp01zN');
 			$result = $conn->query($query);
 			
 			if($result){
 				
-				//Build an array with a row in each element. Each row is also a array with the data
-				//of the line from the table.
+				/*
+				 * Build an array with a row in each element. Each row is also a array with the data
+				 * of the line from the table.
+				 * */
 				while($row = $result->fetch(PDO::FETCH_ASSOC)){
 					array_push($data, $row);
 				}			
@@ -38,7 +51,8 @@ class DBWrapper extends serverStrategy {
 			
 		} 
 		catch (PDOException $e) {
-			echo "Couldn't connect to database: " . $e->getMessage();
+			echo "<h2>ERROR: Couldn't connect to database. Please check the information given about the external database.</h2>";
+			exit;
 		}
 
 		

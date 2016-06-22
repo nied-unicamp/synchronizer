@@ -8,6 +8,7 @@ class restfulWrapper extends serverStrategy {
 	 * TODO Auto-generated comment.
 	 */
 	public function dataRequest($confDB, $query) {
-		return null;
+		//Temporary for tests.
+		return array("RESTFUL RETURN");
 	}
 }

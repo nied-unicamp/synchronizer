@@ -123,7 +123,7 @@ class diffController {
 	public function validateServer($serverType){
 		
 		/*Array with valid server types.*/
-		$validTargets = array('SERVER_TYPE_MYSQL', 'json', 'xml', 'rest', 'csv');
+		$validTargets = array('SERVER_TYPE_MYSQL', 'json', 'xml', 'SERVER_TYPE_REST', 'csv');
 
 		if (in_array($serverType, $validTargets))
 		{

@@ -12,17 +12,12 @@ class userDAO implements abstractDAO {
 	 */
 	public function getUserList($db, $serverType) {
 		
-		try {
-			$recordsLoader = new serverContext($serverType, 'users');
-		} catch (Exception $e) {
-			trigger_error ('<h2>Exception: ' . $e->getMessage() . '</h2><br>', E_USER_ERROR);
-		}
-			
+		$recordsLoader = new serverContext($serverType, 'users');
 		
 		//$recordsLoader->serverQuery($db, $query);
 		
 		//Temporary for learning and testing...
-		$query = 'select login, nome, email from Usuario';
+		$query = 'select nome, login, email from Usuario';
 		
 		return $recordsLoader->serverQuery($db, $query);
 	}
