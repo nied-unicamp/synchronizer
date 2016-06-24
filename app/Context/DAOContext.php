@@ -20,6 +20,12 @@ class DAOContext {
 	 * TODO Auto-generated comment.
 	 */
 	public function __construct($formatType) {
+	
+	switch($formatType){
+		case "DAO_USER":
+			return;
+
+	}
 	}
 
 	/**
