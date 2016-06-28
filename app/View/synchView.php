@@ -34,12 +34,11 @@ class synchView {
 			$this->callController($syncTargets);
 			
 			echo "</body>\n</html>";
-			
+			return;
 		}
-		else 
-		{
-			include "../Layout/sync.html";
-		}
+		
+		include "../Layout/sync.html";
+		return;
 	}
 	
 	/**
@@ -51,7 +50,7 @@ class synchView {
 	 * 
 	 * @param $serverType Type of the source of external data.
 	 * 
-	 * @param $db String that identifies the data, according to $serverType.
+	 * @param $dbInfo String that identifies the data, according to $serverType.
 	 * 
 	 * @return 
 	 * */
@@ -59,9 +58,9 @@ class synchView {
 		
 		$controlsDiff = new diffController();
 		
-		$db = array($_POST['serverType'], $_POST['dbHost'], $_POST['dbPort'], $_POST['dbName'], $_POST['dbLogin'], $_POST['dbPassword']);
+		$dbInfo = array($_POST['serverType'], $_POST['dbHost'], $_POST['dbPort'], $_POST['dbName'], $_POST['dbLogin'], $_POST['dbPassword']);
 		
-		$externalList = $controlsDiff->configDB($db, $targets, $_POST['serverType']);
+		$externalList = $controlsDiff->configDB($dbInfo, $targets, $_POST['serverType']);
 		
 		echo '<br>externalLIST:  ';
 		var_dump($externalList['courses']);

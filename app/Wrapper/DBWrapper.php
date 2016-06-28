@@ -27,8 +27,8 @@ class DBWrapper extends serverStrategy {
 			 * */
 			switch ($confDB[0]) {
 				case "SERVER_TYPE_MYSQL":
-					$bd = 'mysql:host=' . $confDB[1] . ';port=' . $confDB[2] . ';dbname=' . $confDB[3];
-					$conn = new PDO($bd, $confDB[4], $confDB[5]);
+					$bdInfo = 'mysql:host=' . $confDB[1] . ';port=' . $confDB[2] . ';dbname=' . $confDB[3];
+					$conn = new PDO($bdInfo, $confDB[4], $confDB[5]);
 					break;
 				
 				default:
@@ -51,8 +51,10 @@ class DBWrapper extends serverStrategy {
 			
 		} 
 		catch (PDOException $e) {
+			
 			echo "<h2>ERROR: Couldn't connect to database. Please check the information given about the external database.</h2>";
-			exit;
+			trigger_error ('<h2>Exception: ' . $e->getMessage() . '</h2><br>', E_USER_ERROR);
+			
 		}
 
 		

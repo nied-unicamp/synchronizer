@@ -103,10 +103,9 @@ class diffController {
 			{
 				continue;
 			}
-			else
-			{
-				throw new Exception('Unkown target for syncronization: '.$target);
-			}
+			
+			throw new Exception('Unkown target for syncronization: '.$target);
+
 		}
 	}
 	
