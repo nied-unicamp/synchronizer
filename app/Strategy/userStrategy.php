@@ -14,11 +14,11 @@ class userStrategy extends formatStrategy {
 	/**
 	 * TODO Auto-generated comment.
 	 */
-	public function getList($db, $serverType) {
+	public function getList($dbInfo, $serverType) {
 		
 		$this->daoObject = new userDAO();
 		
-		return $this->daoObject->getUserList($db, $serverType);
+		return $this->daoObject->getUserList($dbInfo, $serverType);
 		
 		//return null;
 	}

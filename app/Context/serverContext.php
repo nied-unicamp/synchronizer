@@ -41,9 +41,9 @@ class serverContext {
 	/**
 	 * TODO Auto-generated comment.
 	 */
-	public function serverQuery($db, $query) {
+	public function serverQuery($dbInfo, $query) {
 		
-		$this->data = $this->server->dataRequest($db, $query);
+		$this->data = $this->server->dataRequest($dbInfo, $query);
 		
 		return $this->data;
 	}

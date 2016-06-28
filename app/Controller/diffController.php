@@ -23,7 +23,7 @@ class diffController {
 	 * Returns a list with all courses, relations between course and membres, and users
 	 * from a database or similar.
 	 * 
-	 * @param $db A database or archive string identifier.
+	 * @param $dbInfo A database or archive string identifier.
 	 * @param $dataType Specifies if the returned list shoul contain members, users or 
 	 * 		  course member relations.
 	 * @param $serverType Specifies if the source of data is a database, a archive or
@@ -31,7 +31,7 @@ class diffController {
 	 * 
 	 * @return 
 	 */
-	public function configDB($db, $dataType, $serverType) {
+	public function configDB($dbInfo, $dataType, $serverType) {
 		
 		$databaseData = array();
 		
@@ -71,8 +71,8 @@ class diffController {
 				return null;
 			}
 			
-			//array_push($databaseData, $differentiator->getList($db, $serverType));
-			$databaseData[$target] = $differentiator->getList($db, $serverType);
+			//array_push($databaseData, $differentiator->getList($dbInfo, $serverType));
+			$databaseData[$target] = $differentiator->getList($dbInfo, $serverType);
 			unset($differentiator);
 		}
 		

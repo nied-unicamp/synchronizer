@@ -48,9 +48,9 @@ class DAOContext {
 	/**
 	 * TODO Auto-generated comment.
 	 */
-	public function getList($db, $serverType) {
+	public function getList($dbInfo, $serverType) {
 		
 
-		return $this->formatStrategy->getList($db, $serverType);
+		return $this->formatStrategy->getList($dbInfo, $serverType);
 	}
 }

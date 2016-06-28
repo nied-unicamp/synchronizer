@@ -30,7 +30,8 @@ class synchView {
 			include "../Layout/synchronizingHeader.html";
 			
 			echo '<p>You asked for a sync.<p>';
-			$this->callController($_POST['targets']);
+			$syncTargets = ($_POST['targets']);
+			$this->callController($syncTargets);
 			
 			echo "</body>\n</html>";
 			

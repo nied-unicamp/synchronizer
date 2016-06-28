@@ -14,11 +14,11 @@ class courseStrategy extends formatStrategy {
 	/**
 	 * TODO Auto-generated comment.
 	 */
-	public function getList($db, $serverType) {
+	public function getList($dbInfo, $serverType) {
 		
 		$this->daoObject = new courseDAO();
 		
-		return $this->daoObject->getCourseList($db, $serverType);
+		return $this->daoObject->getCourseList($dbInfo, $serverType);
 		return null;
 	}
 }

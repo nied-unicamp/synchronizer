@@ -10,7 +10,7 @@ class userDAO implements abstractDAO {
 	/**
 	 * TODO Auto-generated comment.
 	 */
-	public function getUserList($db, $serverType) {
+	public function getUserList($dbInfo, $serverType) {
 		
 		try {
 			$recordsLoader = new serverContext($serverType, 'users');
@@ -19,30 +19,30 @@ class userDAO implements abstractDAO {
 		}
 			
 		
-		//$recordsLoader->serverQuery($db, $query);
+		//$recordsLoader->serverQuery($dbInfo, $query);
 		
 		//Temporary for learning and testing...
 		$query = 'select login, nome, email from Usuario';
 		
-		return $recordsLoader->serverQuery($db, $query);
+		return $recordsLoader->serverQuery($dbInfo, $query);
 	}
 
 	/**
 	 * TODO Auto-generated comment.
 	 */
-	public function addUser($db, $serverType, $user) {
+	public function addUser($dbInfo, $serverType, $user) {
 	}
 
 	/**
 	 * TODO Auto-generated comment.
 	 */
-	public function updateUser($db, $serverType, $user) {
+	public function updateUser($dbInfo, $serverType, $user) {
 	}
 
 	/**
 	 * TODO Auto-generated comment.
 	 */
-	public function deleteUser($db, $serverType, $user) {
+	public function deleteUser($dbInfo, $serverType, $user) {
 	}
 	
 	public function serverQuery($string, $serverType){
