@@ -128,10 +128,8 @@ class diffController {
 		{
 			return true;
 		}
-		else
-		{
-			throw new Exception('Unkown server type for syncronization: ' . $serverType);
-		}
+		throw new Exception('Unkown server type for syncronization: ' . $serverType);
+		
 
 	}
 }

@@ -13,7 +13,7 @@ class DifferContext {
 	private $dataType;
 	/**
 	 * TODO Auto-generated comment.
-	 
+	 */
 	private $transactions;
 	/**
 	 * TODO Auto-generated comment.

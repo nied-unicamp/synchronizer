@@ -27,8 +27,8 @@ class DBWrapper extends serverStrategy {
 			 * */
 			switch ($confDB[0]) {
 				case "SERVER_TYPE_MYSQL":
-					$bdInfo = 'mysql:host=' . $confDB[1] . ';port=' . $confDB[2] . ';dbname=' . $confDB[3];
-					$conn = new PDO($bdInfo, $confDB[4], $confDB[5]);
+					$dbInfo = 'mysql:host=' . $confDB[1] . ';port=' . $confDB[2] . ';dbname=' . $confDB[3];
+					$conn = new PDO($dbInfo, $confDB[4], $confDB[5]);
 					break;
 				
 				default:
