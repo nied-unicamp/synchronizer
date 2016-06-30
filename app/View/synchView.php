@@ -1,6 +1,7 @@
 <?php
 
 require_once '../Controller/diffController.php';
+require_once '../Model/Request.php';
 
 /**
  * TODO Auto-generated comment.
@@ -25,13 +26,17 @@ class synchView {
 	 * and load another html page.
 	 */
 	public function createView() {
-		if(isset($_POST['targets']))
+		
+		$request = new Request($_POST, $_GET);
+		
+		//if(isset($_POST['targets']))
+		if(isset($request->post['targets']))
 		{
 			include "../Layout/synchronizingHeader.html";
 			
 			echo '<p>You asked for a sync.<p>';
-			$syncTargets = ($_POST['targets']);
-			$this->callController($syncTargets);
+			//$syncTargets = ($_POST['targets']);
+			$this->callController($request);
 			
 			echo "</body>\n</html>";
 			return;
@@ -54,13 +59,13 @@ class synchView {
 	 * 
 	 * @return 
 	 * */
-	public function callController($targets){
+	public function callController($request){
 		
 		$controlsDiff = new diffController();
 		
-		$dbInfo = array($_POST['serverType'], $_POST['dbHost'], $_POST['dbPort'], $_POST['dbName'], $_POST['dbLogin'], $_POST['dbPassword']);
+		$dbInfo = array($request->post['serverType'], $request->post['dbHost'], $request->post['dbPort'], $request->post['dbName'], $request->post['dbLogin'], $request->post['dbPassword']);
 		
-		$externalList = $controlsDiff->configDB($dbInfo, $targets, $_POST['serverType']);
+		$externalList = $controlsDiff->configDB($dbInfo, $request->post['targets'], $request->post['serverType']);
 		
 		echo '<br>externalLIST:  ';
 		var_dump($externalList['courses']);
