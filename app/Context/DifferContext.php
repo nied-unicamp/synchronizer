@@ -43,6 +43,8 @@ class DifferContext {
 
 	/**
 	 * TODO Auto-generated comment.
+	 * TODO Redundant information in parameter $formatType? This information is
+	 * given in the constructor of the object.
 	 */
 	public function diff($externalList, $cacheList, $formatType) {
 		return null;

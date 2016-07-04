@@ -5,9 +5,9 @@ class Request {
 	public $post;
 	public $get;
 	
-	public function __construct($post, $get)
+	public function __construct()
 	{
-		$this->get = $get;
-		$this->post = $post;
+		$this->get = $_GET;
+		$this->post = $_POST;
 	}
 }

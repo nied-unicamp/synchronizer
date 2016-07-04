@@ -1,22 +1,24 @@
 <?php
 
 require_once '../Controller/diffController.php';
+require_once '../Controller/synchController.php';
 require_once '../Model/Request.php';
 
 /**
- * TODO Auto-generated comment.
+ * This class mounts a html page for the page of the synchronizer, and calls the controller
+ * method reponsible for the synchonization process.
  */
 class synchView {
 	/**
-	 * TODO Auto-generated comment.
+	 * Contains an array with all data known about the external data.
 	 */
 	private $confDB;
 	/**
-	 * TODO Auto-generated comment.
+	 * Contains an array with all data known about the internal TelEduc's data.
 	 */
 	private $confDBCache;
 	/**
-	 * TODO Auto-generated comment.
+	 * Contains the path to teleduc.inc file, witch contains information about TelEduc's database.
 	 */
 	private $confTE;
 
@@ -27,27 +29,38 @@ class synchView {
 	 */
 	public function createView() {
 		
-		$request = new Request($_POST, $_GET);
+		/*
+		 * Encapsulates superglobals values.
+		 * */
+		$request = new Request();
 		
-		//if(isset($_POST['targets']))
+		/*
+		 * Checks if a syncrhonization was alredy requestes to this page.
+		 * */
 		if(isset($request->post['targets']))
 		{
 			include "../Layout/synchronizingHeader.html";
 			
 			echo '<p>You asked for a sync.<p>';
-			//$syncTargets = ($_POST['targets']);
+			
+			/*
+			 * Calls controller for synchronizig process.
+			 * */
 			$this->callController($request);
 			
 			echo "</body>\n</html>";
 			return;
 		}
 		
+		/*
+		 * Loads default page for synchronizer configuration.
+		 * */
 		include "../Layout/sync.html";
 		return;
 	}
 	
 	/**
-	 * Calls controller in order to synchronize.
+	 * Calls controller method in order to synchronize.
 	 * 
 	 * @param $targets List of types of the data that should be syncrhronized. 
 	 * 				   Actually, can contain the types "users", "courses" and "coursemember".
@@ -57,18 +70,35 @@ class synchView {
 	 * 
 	 * @param $dbInfo String that identifies the data, according to $serverType.
 	 * 
-	 * @return 
+	 * @return void
 	 * */
 	public function callController($request){
 		
 		$controlsDiff = new diffController();
 		
-		$dbInfo = array($request->post['serverType'], $request->post['dbHost'], $request->post['dbPort'], $request->post['dbName'], $request->post['dbLogin'], $request->post['dbPassword']);
+		$controlsSync = new synchController();
 		
-		$externalList = $controlsDiff->configDB($dbInfo, $request->post['targets'], $request->post['serverType']);
+		/*
+		 * Builds an array with all data known about a possible database choosen for source of external data.
+		 * TODO Put it inside a if according to the imput method for external data?
+		 * */
+		$this->confDB = array($request->post['serverType'], $request->post['dbHost'], $request->post['dbPort'], $request->post['dbName'], $request->post['dbLogin'], $request->post['dbPassword']);
 		
-		echo '<br>externalLIST:  ';
-		var_dump($externalList['courses']);
+		/*
+		 * TODO HERE: Generate confDbCache value with teleduc.inc path.
+		 * */
+		
+		$transactions = $controlsDiff->createDiff($this->confDB, $this->confDbCache, $request->post['targets'], $request->post['serverType']);
+		
+		// TODO Review parameters of the following line.
+		$controlsSync->synchronize($confTE, $serverType, $transactions);
+		
+//		These lines are being used for testing.		
+// 		$externalList = $controlsDiff->configDB($this->confDB, $request->post['targets'], $request->post['serverType']);
+		
+// 		echo '<br>externalLIST:  ';
+// 		var_dump($externalList['courses']);
+	
 	}
 }
 

@@ -1,43 +1,50 @@
 <?php
 
 require_once '../Context/DAOContext.php';
+require_once '../Context/DifferContext.php';
 
 /**
- * TODO Auto-generated comment.
+ * This class validates the input given in the default page of synchronizer, call another 
+ * classes's methods in order to load the databases's infos, and calls another classes's 
+ * methods in order to trigger the synchronization process.
  */
 class diffController {
 	/**
-	 * TODO Auto-generated comment.
+	 * Contains an array with the external data.
 	 */
 	private $externalList;
 	/**
-	 * TODO Auto-generated comment.
+	 * Contains an array with the internal TelEduc's data.
 	 */
 	private $cacheList;
 	/**
-	 * TODO Auto-generated comment.
+	 * Contains an array with transactions, atomic operations that has to be done for the 
+	 * internal database synchronization. 
 	 */
 	private $transactions;
-
+	
 	/**
 	 * Returns a list with all courses, relations between course and membres, and users
 	 * from a database or similar.
 	 * 
 	 * @param $dbInfo A database or archive string identifier.
-	 * @param $dataType Specifies if the returned list shoul contain members, users or 
+	 * @param $syncTargets Specifies if the returned list shoul contain members, users or 
 	 * 		  course member relations.
 	 * @param $serverType Specifies if the source of data is a database, a archive or
 	 * some other thing.
 	 * 
 	 * @return 
 	 */
-	public function configDB($dbInfo, $dataType, $serverType) {
+	public function configDB($dbInfo, $syncTargets, $serverType) {
 		
-		$databaseData = array();
+		$databaseData = array();	
 		
+		/*
+		 * Validates the target information for sync process.
+		 * */
 		try {
 			
-			$this->validateTargets($dataType);
+			$this->validateTargets($syncTargets);
 			
 		} catch (Exception $e) {
 			
@@ -46,6 +53,9 @@ class diffController {
 			return null;
 		}
 		
+		/*
+		 * Validates the server information for sync process.
+		 * */
 		try {
 				
 			$this->validateServer($serverType);
@@ -57,11 +67,14 @@ class diffController {
 			return null;
 		}
 		
-		
-		foreach($dataType as $key => $target)
+		/*
+		 * Iterates thougth the targets, getting a list of the data for each target.
+		 * */
+		foreach($syncTargets as $key => $target)
 		{
-			
-			
+			/*
+			 * Creates a object according to the target information.
+			 * */
 			try {
 				$differentiator = new DAOContext($target);
 				
@@ -71,8 +84,12 @@ class diffController {
 				return null;
 			}
 			
-			//array_push($databaseData, $differentiator->getList($dbInfo, $serverType));
+			/*
+			 * Uses the object created to get the data list, and puts that list in an array with all 
+			 * the other data from other targets
+			 * */
 			$databaseData[$target] = $differentiator->getList($dbInfo, $serverType);
+			
 			unset($differentiator);
 		}
 		
@@ -80,24 +97,50 @@ class diffController {
 	}
 
 	/**
-	 * TODO Auto-generated comment.
+	 * Uses the method configDB to get two lists containg the external and internal data,
+	 * and uses these lists to create a list with transactions, that are atomic operations
+	 * needed to synchronize.
+	 * 
+	 * @param $confDB list			An array with all known information about the external data source.
+	 * @param $confDbCache list		An array with all known information about the internal data source.
+	 * @param $syncTargets list		An array with the information that has to be synchronized (can contain
+	 * users, courses or coursemember).
+	 * @param $serverType string	Defines the type of the external source data.
+	 * 
+	 * TODO $serverType with redundant information? serverType is the first element of $conDB.
+	 * TODO Describe the structure of $confDB.
+	 * 		
 	 */
-	public function createDiff($externalList, $cacheList, $formatType) {
-		return null;
+	//public function createDiff($externalList, $cacheList, $formatType) {
+	public function createDiff($confDB, $confDbCache, $syncTargets, $serverType) {		
+		
+		$differentiator = new DifferContext('DATA_TYPE_JSON');
+		
+		$this->externalList = $this->configDB($confDB, $syncTargets, $serverType);
+		
+		// TODO Here, servertype has to be the internal teleduc's database? 
+		$this->cacheList = $this->configDB($confDbCache, $syncTargets, SERVER_TYPE_MYSQL);
+		
+		/*
+		 * TODO redundant information in parameter $formatType? See DifferContext.php.
+		 * */
+		return $differentiator->diff($externalList, $cacheList, $formatType);
 	}
 	
 	/**
-	 * 
 	 * Throws exception if the user has selected an invalid data type.
 	 * Ains to avoid malicious code send througth $_POST.
 	 * 
-	 * @param unknown $dataType Contain a data type, expected to be on the synchonization tables.
+	 * @param unknown $syncTargets Contain a data type, expected to be on the synchonization tables.
 	 * @throws Exception
+	 * 
+	 * @return void
 	 */
-	public function validateTargets($dataType){
+	public function validateTargets($syncTargets){
+		
 		$validTargets = array('users', 'courses', 'coursemember');
 		
-		foreach($dataType as $key => $target)
+		foreach($syncTargets as $key => $target)
 		{
 			if (in_array($target, $validTargets))
 			{
@@ -110,9 +153,8 @@ class diffController {
 	}
 	
 	/**
-	 * 
 	 * Return true if $serverType is a valid server type. Throws exception otherwise.
-	 * Ains to avoid malicious code send througth $_POST.
+	 * Ains to avoid malicious code sent througth $_POST.
 	 * 
 	 * @param string $serverType Contains a server type choosen by the user.
 	 * @throws Exception
@@ -129,7 +171,5 @@ class diffController {
 			return true;
 		}
 		throw new Exception('Unkown server type for syncronization: ' . $serverType);
-		
-
 	}
 }

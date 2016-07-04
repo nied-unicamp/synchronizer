@@ -6,20 +6,21 @@ require_once '../Strategy/coursememberStrategy.php';
 
 
 /**
- * TODO Auto-generated comment.
+ * This class chooses an algorithm according to the data type that will be synchronized.
  */
 class DAOContext {
 	/**
-	 * Source data type.
+	 * Target for synchronization. Can be users, courses or coursemember.
 	 */
 	private $formatType;
 	/**
-	 * TODO Auto-generated comment.
+	 * Strategy object created according to the value of $formatType.
 	 */
 	private $formatStrategy;
 
 	/**
-	 * TODO Auto-generated comment.
+	 * Gives a value to $formatType and instantiates an strategy object according to this value.
+	 * @param $formatType string 	Target for synchronization. Can be users, courses or coursemember.
 	 */
 	public function __construct($formatType) {
 
@@ -46,11 +47,12 @@ class DAOContext {
 	}
 
 	/**
-	 * TODO Auto-generated comment.
+	 * Uses the strategy object for getting a list of the data, according to $this->serverType.
+	 * @param $dbInfo array 		An array containing all known information about the source of the data.
+	 * @param $serverType string 	Defines the type of the source of data.
 	 */
 	public function getList($dbInfo, $serverType) {
 		
-
 		return $this->formatStrategy->getList($dbInfo, $serverType);
 	}
 }
