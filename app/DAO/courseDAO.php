@@ -14,14 +14,11 @@ class courseDAO implements abstractDAO {
 		
 		$recordsLoader = new serverContext($serverType, 'courses');
 		
-		//$recordsLoader->serverQuery($dbInfo, $query);
-		
 		//Temporary for learning and testing...
+		
 		$query = 'select cod_curso, nome_curso from Cursos';
 		
 		return $recordsLoader->serverQuery($dbInfo, $query);
-		
-		return null;
 	}
 
 	/**

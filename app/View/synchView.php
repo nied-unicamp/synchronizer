@@ -23,9 +23,9 @@ class synchView {
 	private $confTE;
 
 	/**
-	 * Shows synchronization page to user, loading html code on brower.
-	 * If a syncronizations was requested, then calls a controller that syncronizes
-	 * and load another html page.
+	 * Shows synchronization page to user by loading html code on browser.
+	 * If a syncronization was requested, then calls a controller that synchronizes
+	 * and loads another html page.
 	 */
 	public function createView() {
 		
@@ -35,7 +35,7 @@ class synchView {
 		$request = new Request();
 		
 		/*
-		 * Checks if a syncrhonization was alredy requestes to this page.
+		 * Checks if a syncrhonization was alredy requested to this page.
 		 * */
 		if(isset($request->post['targets']))
 		{
@@ -82,22 +82,32 @@ class synchView {
 		 * Builds an array with all data known about a possible database choosen for source of external data.
 		 * TODO Put it inside a if according to the imput method for external data?
 		 * */
-		$this->confDB = array($request->post['serverType'], $request->post['dbHost'], $request->post['dbPort'], $request->post['dbName'], $request->post['dbLogin'], $request->post['dbPassword']);
-		
+		$this->confDB = array(
+								$request->post['serverType'], $request->post['dbHost'], 
+								$request->post['dbPort'], $request->post['dbName'], 
+								$request->post['dbLogin'], $request->post['dbPassword']			
+							);
 		/*
 		 * TODO HERE: Generate confDbCache value with teleduc.inc path.
 		 * */
 		
-		$transactions = $controlsDiff->createDiff($this->confDB, $this->confDbCache, $request->post['targets'], $request->post['serverType']);
+		
+//These lines are the future calls. They dont work yet.		
+		$transactions = $controlsDiff->createDiff(
+													$this->confDB, $this->confDbCache, 
+													$request->post['targets'], $request->post['serverType']
+												);
 		
 		// TODO Review parameters of the following line.
 		$controlsSync->synchronize($confTE, $serverType, $transactions);
 		
-//		These lines are being used for testing.		
-// 		$externalList = $controlsDiff->configDB($this->confDB, $request->post['targets'], $request->post['serverType']);
 		
-// 		echo '<br>externalLIST:  ';
-// 		var_dump($externalList['courses']);
+		
+//		These lines are being used for testing.		
+		$externalList = $controlsDiff->configDB($this->confDB, $request->post['targets'], $request->post['serverType']);
+		
+		echo '<br>externalLIST:  ';
+		var_dump($externalList['coursemember']);
 	
 	}
 }

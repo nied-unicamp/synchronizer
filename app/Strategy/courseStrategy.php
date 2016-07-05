@@ -19,6 +19,6 @@ class courseStrategy extends formatStrategy {
 		$this->daoObject = new courseDAO();
 		
 		return $this->daoObject->getCourseList($dbInfo, $serverType);
-		return null;
+
 	}
 }

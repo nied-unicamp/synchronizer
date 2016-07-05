@@ -19,7 +19,5 @@ class userStrategy extends formatStrategy {
 		$this->daoObject = new userDAO();
 		
 		return $this->daoObject->getUserList($dbInfo, $serverType);
-		
-		//return null;
 	}
 }

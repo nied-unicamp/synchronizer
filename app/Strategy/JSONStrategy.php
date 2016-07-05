@@ -1,4 +1,7 @@
 <?php
+
+require_once 'dataStrategy.php';
+
 /**
  * TODO Auto-generated comment.
  */

@@ -1,4 +1,8 @@
 <?php
+
+require_once '../Strategy/JSONStrategy.php';
+require_once '../Strategy/dataStrategy.php';
+
 /**
  * TODO Auto-generated comment.
  */

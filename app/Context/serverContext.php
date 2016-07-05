@@ -22,7 +22,7 @@ class serverContext {
 	public function __construct($serverType, $data) {
         switch($serverType){
         case "SERVER_TYPE_MYSQL":
-            $this->server = new DBWrapper($data);
+            $this->server = new DBWrapper();
             
             break;
 
