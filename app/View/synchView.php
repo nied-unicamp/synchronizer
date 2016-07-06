@@ -3,6 +3,7 @@
 require_once '../Controller/diffController.php';
 require_once '../Controller/synchController.php';
 require_once '../Model/Request.php';
+require_once '../Model/TeleducInc.php';
 
 /**
  * This class mounts a html page for the page of the synchronizer, and calls the controller
@@ -88,13 +89,14 @@ class synchView {
 								$request->post['dbLogin'], $request->post['dbPassword']			
 							);
 		/*
-		 * TODO HERE: Generate confDbCache value with teleduc.inc path.
+		 * TODO HERE: Generate confDbCache value with teleduc.inc path in a save way!
 		 * */
-		
+		$teleducInc = new TeleducInc();
+		$this->confDBCache = $teleducInc->buildConfDBCache();
 		
 //These lines are the future calls. They dont work yet.		
 		$transactions = $controlsDiff->createDiff(
-													$this->confDB, $this->confDbCache, 
+													$this->confDB, $this->confDBCache, 
 													$request->post['targets'], $request->post['serverType']
 												);
 		
@@ -110,6 +112,7 @@ class synchView {
 		var_dump($externalList['coursemember']);
 	
 	}
+
 }
 
 $synchronizerPage = new synchView();
