@@ -32,8 +32,9 @@ class DBWrapper extends serverStrategy {
 					break;
 				
 				default:
-					echo "default";
-				break;
+ 					throw new PDOException("<h2>ERROR: Couldn't connect to database. Please check the information given about the external database.</h2>"); 
+ 					trigger_error ('<h2>Exception: ' . $e->getMessage() . '</h2><br>', E_USER_ERROR);
+					break;
 			}
 			
 			$result = $conn->query($query);

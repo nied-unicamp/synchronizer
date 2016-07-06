@@ -27,7 +27,7 @@ class diffController {
 	 * Returns a list with all courses, relations between course and membres, and users
 	 * from a database or similar.
 	 * 
-	 * @param $dbInfo A database or archive string identifier.
+	 * @param $dbInfo An array with info about a database, or an archive string identifier.
 	 * @param $syncTargets Specifies if the returned list shoul contain members, users or 
 	 * 		  course member relations.
 	 * @param $serverType Specifies if the source of data is a database, a archive or
@@ -59,6 +59,10 @@ class diffController {
 		try {
 				
 			$this->validateServer($serverType);
+			if(is_array($dbInfo))
+			{
+				$this->validateServer($dbInfo[0]);
+			}
 				
 		} catch (Exception $e) {
 				
@@ -119,7 +123,7 @@ class diffController {
 		$this->externalList = $this->configDB($confDB, $syncTargets, $serverType);
 		
 		// TODO Here, servertype has to be the internal teleduc's database? 
-		$this->cacheList = $this->configDB($confDbCache, $syncTargets, SERVER_TYPE_MYSQL);
+		$this->cacheList = $this->configDB($confDbCache, $syncTargets, 'SERVER_TYPE_MYSQL');
 		
 		/*
 		 * TODO redundant information in parameter $formatType? See DifferContext.php.
@@ -162,6 +166,11 @@ class diffController {
 	 * @return boolean
 	 */
 	public function validateServer($serverType){
+		
+		if(!isset($serverType) || $serverType == Null)
+		{
+			throw new Exception('Unkown server type for syncronization.');
+		}
 		
 		/*Array with valid server types.*/
 		$validTargets = array('SERVER_TYPE_MYSQL', 'json', 'xml', 'SERVER_TYPE_REST', 'csv');

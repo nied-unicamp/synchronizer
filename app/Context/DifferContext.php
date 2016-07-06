@@ -22,7 +22,7 @@ class DifferContext {
 	/**
 	 * TODO Auto-generated comment.
 	 */
-	private $dataStrategy = Null;
+	private $dataStrategy;
 
 	/**
 	 * TODO Auto-generated comment.
@@ -32,7 +32,7 @@ class DifferContext {
 		switch($dataType){
 			
 			case 'DATA_TYPE_JSON':
-			     $this->$dataStrategy = new JSONStrategy();
+			     $this->dataStrategy = new JSONStrategy();
 			     break;
 			
 			case 'DATA_TYPE_XML':
