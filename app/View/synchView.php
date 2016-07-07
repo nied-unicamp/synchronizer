@@ -95,13 +95,13 @@ class synchView {
 		$this->confDBCache = $teleducInc->buildConfDBCache();
 		
 //These lines are the future calls. They dont work yet.		
-		$transactions = $controlsDiff->createDiff(
-													$this->confDB, $this->confDBCache, 
-													$request->post['targets'], $request->post['serverType']
-												);
+// 		$transactions = $controlsDiff->createDiff(
+// 													$this->confDB, $this->confDBCache, 
+// 													$request->post['targets'], $request->post['serverType']
+// 												);
 		
-		// TODO Review parameters of the following line.
-		$controlsSync->synchronize($confTE, $serverType, $transactions);
+// 		// TODO Review parameters of the following line.
+// 		$controlsSync->synchronize($confTE, $serverType, $transactions);
 		
 		
 		
@@ -109,7 +109,7 @@ class synchView {
 		$externalList = $controlsDiff->configDB($this->confDB, $request->post['targets'], $request->post['serverType']);
 		
 		echo '<br>externalLIST:  ';
-		var_dump($externalList['coursemember']);
+		var_dump($externalList['courses']);
 	
 	}
 

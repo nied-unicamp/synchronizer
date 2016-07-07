@@ -163,7 +163,7 @@ class diffController {
 	 * @param string $serverType Contains a server type choosen by the user.
 	 * @throws Exception
 	 * 
-	 * @return boolean
+	 * @return void
 	 */
 	public function validateServer($serverType){
 		
@@ -177,7 +177,7 @@ class diffController {
 
 		if (in_array($serverType, $validTargets))
 		{
-			return true;
+			return;
 		}
 		throw new Exception('Unkown server type for syncronization: ' . $serverType);
 	}
