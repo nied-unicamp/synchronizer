@@ -7,11 +7,17 @@ require_once '../Strategy/serverStrategy.php';
  */
 class DBWrapper extends serverStrategy {
 
+	/*
+	 * TODO Create a method to use $conn->exec from PDO.
+	 * */
+	
+	
 	/**
 	 * Sends a query to the database.
 	 * 
 	 * @param $confDB A array containing the parameters that must be used for connection with PDO.
-	 * 			$confDB can be described as: $confDB = array(serverType, dbHost, dbPort, dbName, dbLogin, dbPassword).
+	 * 			$confDB can be described as: 
+	 * 			$confDB = array(serverType, dbHost, dbPort, dbName, dbLogin, dbPassword).
 	 * @param $query The query that will be sent to the database.
 	 * 
 	 * TODO Find a way to know if its necessary to use conn->query or conn->exec. 
@@ -32,7 +38,9 @@ class DBWrapper extends serverStrategy {
 					break;
 				
 				default:
- 					throw new PDOException("<h2>ERROR: Couldn't connect to database. Please check the information given about the external database.</h2>"); 
+ 					throw new PDOException(
+ 					"<h2>ERROR: Couldn't connect to database. Please check the information given about the external database.</h2>"
+ 										  ); 
  					trigger_error ('<h2>Exception: ' . $e->getMessage() . '</h2><br>', E_USER_ERROR);
 					break;
 			}
