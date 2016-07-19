@@ -10,7 +10,23 @@ class DBWrapper extends serverStrategy {
 	/*
 	 * TODO Create a method to use $conn->exec from PDO.
 	 * */
-	
+	public function operationOrder($confDB, $query) {
+		try {
+			/*
+			 * Use the value of $conf[0] (which contains serverType) to discover the database implementation and be able to connect.
+			 * TODO Implement this with strategy if someday the system allow the use of non mysql implementations.
+			 * */
+		
+			$conn = $this->createConnection($confDB);
+			return $conn->exec($query);
+		}
+		catch (PDOException $e) {
+				
+			echo "<h2>ERROR: Couldn't connect to database. Please check the information given about the external database.</h2>";
+			trigger_error ('<h2>Exception: ' . $e->getMessage() . '</h2><br>', E_USER_ERROR);
+				
+		}
+	}
 	
 	/**
 	 * Sends a query to the database.
@@ -31,20 +47,8 @@ class DBWrapper extends serverStrategy {
 			 * Use the value of $conf[0] (which contains serverType) to discover the database implementation and be able to connect.
 			 * TODO Implement this with strategy if someday the system allow the use of non mysql implementations.
 			 * */
-			switch ($confDB[0]) {
-				case "SERVER_TYPE_MYSQL":
-					$dbInfo = 'mysql:host=' . $confDB[1] . ';port=' . $confDB[2] . ';dbname=' . $confDB[3];
-					$conn = new PDO($dbInfo, $confDB[4], $confDB[5]);
-					break;
-				
-				default:
- 					throw new PDOException(
- 					"<h2>ERROR: Couldn't connect to database. Please check the information given about the external database.</h2>"
- 										  ); 
- 					trigger_error ('<h2>Exception: ' . $e->getMessage() . '</h2><br>', E_USER_ERROR);
-					break;
-			}
-			
+
+			$conn = $this->createConnection($confDB);
 			$result = $conn->query($query);
 			
 			if($result){
@@ -69,5 +73,20 @@ class DBWrapper extends serverStrategy {
 		
 		return $data;
 		
+	}
+	
+	public function createConnection($confDB){
+		switch ($confDB[0]) {
+			case "SERVER_TYPE_MYSQL":
+				$dbInfo = 'mysql:host=' . $confDB[1] . ';port=' . $confDB[2] . ';dbname=' . $confDB[3];
+				return new PDO($dbInfo, $confDB[4], $confDB[5]);
+		
+			default:
+				throw new PDOException(
+				"<h2>ERROR: Couldn't connect to database. Please check the information given about the external database.</h2>"
+						);
+						trigger_error ('<h2>Exception: ' . $e->getMessage() . '</h2><br>', E_USER_ERROR);
+						break;
+		}
 	}
 }

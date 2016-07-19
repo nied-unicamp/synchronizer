@@ -32,7 +32,6 @@ class serverContext {
 
         default:
             throw new Exception('Unable to create Strategy for Server Type '.$serverType);
-
         }
 
 
