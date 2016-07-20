@@ -63,7 +63,7 @@ class synchView {
 	/**
 	 * Calls controller method in order to synchronize.
 	 * 
-	 * @param $targets List of types of the data that should be syncrhronized. 
+	 * @param $targets List of types of the data that should be synchronized. 
 	 * 				   Actually, can contain the types "users", "courses" and "coursemember".
 	 * 				   Types passed are validated in the controller class.
 	 * 

@@ -8,40 +8,82 @@ class cacheDbDAO{
 		
 		$cacheManager = new DBWrapper();
 		
-		/*nome, login email*/
+		/*
+		 * Deletes users cache table, if exists.
+		 * */
 		if($cacheManager->operationOrder($confDbCache, "show tables like 'usersCache';")){
 			$cacheManager->operationOrder($confDbCache, 'drop table usersCache');
 		}
 		
-		/*cod_curso, nome_curso, categoria*/
+		/*
+		 * Deletes courses cache table, if exists.
+		 * */
 		if($cacheManager->operationOrder($confDbCache, "show tables like 'coursesCache';")){
-			$cacheManager->operationOrder($confDbCache, 'drop table usersCache');
+			$cacheManager->operationOrder($confDbCache, 'drop table coursesCache');
 		}
-		
-		/*cod_curso, nome, papel*/
-		if($cacheManager->operationOrder($confDbCache, "show tables like 'coursememberCache';")){
-			$cacheManager->operationOrder($confDbCache, 'drop table usersCache');
-		}
-		
-		$users = $cacheManager($confDbCache, 'select login, nome, email from Usuario');
 		
 		/*
-		 * TODO Discover sql query for getting course category.
+		 * Deletes coursemember relations cache table, if exists.
 		 * */
-		$courses = $cacheManager->operationOrder($confDbCache, 'select cod_curso, nome_curso from Cursos');
+		if($cacheManager->operationOrder($confDbCache, "show tables like 'coursememberCache';")){
+			$cacheManager->operationOrder($confDbCache, 'drop table coursememberCache');
+		}
 		
+		/*nome, login email*/
+		$users = $cacheManager($confDbCache, 'select login, nome, email from Usuario');
+		
+		/*cod_curso, nome_curso, categoria*/
+		$courses = $cacheManager->operationOrder($confDbCache, "
+				SELECT Cursos.cod_curso, Cursos.nome_curso, Cursos_pastas.pasta 
+				FROM Cursos 
+				LEFT JOIN Cursos_pastas 
+				ON Cursos.cod_pasta=Cursos_pastas.cod_pasta;");
+		
+		/*cod_curso, nome, papel*/
 		$coursemember = $cacheManager->operationOrder($confDbCache, "
 				SELECT Usuario.login, Cursos.nome_curso, Usuario_curso.tipo_usuario 
-					from Usuario_curso INNER JOIN Cursos 
-						ON Cursos.cod_curso=Usuario_curso.cod_curso LEFT OUTER JOIN Usuario 
-							ON cod_usuario_global=Usuario.cod_usuario;
+				from Usuario_curso 
+				INNER JOIN Cursos
+				ON Cursos.cod_curso=Usuario_curso.cod_curso LEFT OUTER JOIN Usuario 
+				ON cod_usuario_global=Usuario.cod_usuario;
 				");
+		
+		/*Login, nome, email*/
+		$cacheManager->operationOrder($confDbCache, "
+				CREATE TABLE usersCache
+				(
+				login varchar(128),
+				name varchar(128),
+				email varchar(128)
+				);
+				");
+		/*nome_curso, categoria*/
+		$cacheManager->operationOrder($confDbCache, "
+				CREATE TABLE coursesCache
+				(
+				courseName varchar(128),
+				category char(127)
+				);
+				");
+		
+		/*login, curso, papel*/
+		$cacheManager->operationOrder($confDbCache, "
+				CREATE TABLE usersCache
+				(
+				login varchar(128),
+				courseName varchar(128),
+				role varchar(128)
+				);
+				");
+		
+		
+		
 		/*
 		 * Possible algorithm:
 		 * 
-		 * Delete cache table;O K
-		 * Read data from default table;
-		 * Recreate cache table;
+		 * Delete cache table;OK
+		 * Read data from default table; OK
+		 * Recreate cache table; OK
 		 * Insert read values into cache table. 
 		 */
 		

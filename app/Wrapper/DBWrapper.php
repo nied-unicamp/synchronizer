@@ -75,7 +75,7 @@ class DBWrapper extends serverStrategy {
 		
 	}
 	
-	public function createConnection($confDB){
+	private function createConnection($confDB){
 		switch ($confDB[0]) {
 			case "SERVER_TYPE_MYSQL":
 				$dbInfo = 'mysql:host=' . $confDB[1] . ';port=' . $confDB[2] . ';dbname=' . $confDB[3];

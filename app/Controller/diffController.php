@@ -3,6 +3,9 @@
 require_once '../Context/DAOContext.php';
 require_once '../Context/DifferContext.php';
 
+/*TODO Create file for defining constants.*/
+//define('SERVER_TYPE_MYSQL', 'SERVER_TYPE_MYSQL');
+
 /**
  * This class validates the input given in the default page of synchronizer, call another 
  * classes's methods in order to load the databases's infos, and calls another classes's 
