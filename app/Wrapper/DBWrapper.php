@@ -3,14 +3,32 @@
 require_once '../Strategy/serverStrategy.php';
 
 /**
- * TODO Auto-generated comment.
+ * TODO Try to encapsulate trycatchs blocks; test bindValue.
  */
 class DBWrapper extends serverStrategy {
 
 	/*
 	 * TODO Create a method to use $conn->exec from PDO.
 	 * */
-	public function operationOrder($confDB, $query) {
+	public function operationOrder($confDB, $query, $prepare=false, $values=NULL) {
+		
+		if($prepare){
+			
+			$conn = $this->createConnection($confDB);
+			
+			$stmt = $conn->prepare($query);
+			
+			
+			/* Needs the & because bindParam expects a variable!
+			 * TODO Test with bindValue.*/
+ 			foreach ($values as $key => &$value) {
+				
+ 				$stmt->bindParam($key+1, $value);
+ 			}
+			
+			$stmt->execute();
+			
+		}
 		try {
 			/*
 			 * Use the value of $conf[0] (which contains serverType) to discover the database implementation and be able to connect.

@@ -5,6 +5,9 @@ require_once '../Controller/synchController.php';
 require_once '../Model/Request.php';
 require_once '../Model/TeleducInc.php';
 
+/*Temporary!!*/
+require_once '../DAO/cacheDBDAO.php';
+
 /**
  * This class mounts a html page for the page of the synchronizer, and calls the controller
  * method reponsible for the synchonization process.
@@ -106,10 +109,14 @@ class synchView {
 		
 		
 //		These lines are being used for testing.		
-		$externalList = $controlsDiff->configDB($this->confDB, $request->post['targets'], $request->post['serverType']);
+// 		$externalList = $controlsDiff->configDB($this->confDB, $request->post['targets'], $request->post['serverType']);
 		
-		echo '<br>externalLIST:  ';
-		var_dump($externalList['courses']);
+// 		echo '<br>externalLIST:  ';
+// 		var_dump($externalList['courses']);
+		
+		$cacheDAOtest = new cacheDBDAO();
+		
+		$cacheDAOtest->updateCacheDB($this->confDBCache);
 	
 	}
 
