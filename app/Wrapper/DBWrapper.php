@@ -12,29 +12,29 @@ class DBWrapper extends serverStrategy {
 	 * */
 	public function operationOrder($confDB, $query, $prepare=false, $values=NULL) {
 		
-		if($prepare){
-			
-			$conn = $this->createConnection($confDB);
-			
-			$stmt = $conn->prepare($query);
-			
-			
-			/* Needs the & because bindParam expects a variable!
-			 * TODO Test with bindValue.*/
- 			foreach ($values as $key => &$value) {
-				
- 				$stmt->bindParam($key+1, $value);
- 			}
-			
-			$stmt->execute();
-			
-		}
 		try {
+			
+			if($prepare){
+				
+				$conn = $this->createConnection($confDB);
+				$stmt = $conn->prepare($query);
+				
+				
+				/* Needs the & because bindParam expects a variable!
+				 * TODO Test with bindValue.*/
+	 			foreach ($values as $key => &$value) {
+					
+	 				$stmt->bindParam($key+1, $value);
+	 			}
+				
+				return $stmt->execute();
+				
+			}
+		
 			/*
 			 * Use the value of $conf[0] (which contains serverType) to discover the database implementation and be able to connect.
 			 * TODO Implement this with strategy if someday the system allow the use of non mysql implementations.
 			 * */
-		
 			$conn = $this->createConnection($confDB);
 			return $conn->exec($query);
 		}

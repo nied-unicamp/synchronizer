@@ -2,6 +2,7 @@
 
 require_once '../Context/DAOContext.php';
 require_once '../Context/DifferContext.php';
+require_once '../DAO/cacheDBDAO.php';
 
 /*TODO Create file for defining constants.*/
 //define('SERVER_TYPE_MYSQL', 'SERVER_TYPE_MYSQL');
@@ -124,6 +125,12 @@ class diffController {
 		$differentiator = new DifferContext('DATA_TYPE_JSON');
 		
 		$this->externalList = $this->configDB($confDB, $syncTargets, $serverType);
+		
+		/*
+		 * Update cache tables.
+		 * */
+		$cacheDaoUpdater = new cacheDBDAO();
+		$cacheDaoUpdater->updateCacheDB($this->confDBCache);
 		
 		// TODO Here, servertype has to be the internal teleduc's database? 
 		$this->cacheList = $this->configDB($confDbCache, $syncTargets, 'SERVER_TYPE_MYSQL');

@@ -7,14 +7,14 @@ require_once '../Strategy/serverStrategy.php';
  */
 class DBWrapper extends serverStrategy {
 
-	private $conn = NULL;
+	private static $conn = NULL;
 	/*
 	 * TODO Create a method to use $conn->exec from PDO.
 	 * */
 	
-	public function __construct($confBD){
-		$this->conn = $this->createConnection($confDB);
-	}
+// 	public function __construct($confBD){
+// 		$this->conn = $this->createConnection($confDB);
+// 	}
 	
 	public function operationOrder($confDB, $query, $prepare=false, $values=NULL) {
 		
@@ -25,13 +25,13 @@ class DBWrapper extends serverStrategy {
 			 * TODO Implement this with strategy if someday the system allow the use of non mysql implementations.
 			 * */
 			
-			if($this->conn == NULL)
-			{
+			//if($this->conn == NULL)
+			//{
 				$this->conn = $this->createConnection($confDB);
 				echo 'Criei agora a conexao.';
 				var_dump($this->conn);
 				echo '<br><br>';
-			}
+			//}
 			
 			if($prepare){
 				
@@ -80,13 +80,13 @@ class DBWrapper extends serverStrategy {
 			 * TODO Implement this with strategy if someday the system allow the use of non mysql implementations.
 			 * */
 
-			if($this->conn == NULL)
-			{
+			//if($this->conn == NULL)
+			//{
 				$this->conn = $this->createConnection($confDB);
 			//	echo 'Criei agora a conexao.';
 			//	var_dump($this->conn);
 			//	echo '<br><br>';
-			}
+			//}
 			
 			$result = $this->conn->query($query);
 			echo 'Quero executar: ';
@@ -129,6 +129,7 @@ class DBWrapper extends serverStrategy {
 		switch ($confDB[0]) {
 			case "SERVER_TYPE_MYSQL":
 				$dbInfo = 'mysql:host=' . $confDB[1] . ';port=' . $confDB[2] . ';dbname=' . $confDB[3];
+				
 				return new PDO($dbInfo, $confDB[4], $confDB[5], array(
     PDO::ATTR_PERSISTENT => true
 ));

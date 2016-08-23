@@ -12,6 +12,7 @@ class coursememberStrategy extends formatStrategy {
 	/**
 	 * Gets a list of all the data from the type defined in the construction 
 	 * of the object.
+	 * 
 	 *  @param $db Info Array/string	Contains an array with the database information,
 	 *  								or an string with a path to a file with data.
 	 *  @param $serverType string		Defines the type of the data source.

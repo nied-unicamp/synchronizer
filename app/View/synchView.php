@@ -5,9 +5,6 @@ require_once '../Controller/synchController.php';
 require_once '../Model/Request.php';
 require_once '../Model/TeleducInc.php';
 
-/*Temporary!!*/
-require_once '../DAO/cacheDBDAO.php';
-
 /**
  * This class mounts a html page for the page of the synchronizer, and calls the controller
  * method reponsible for the synchonization process.
@@ -28,7 +25,7 @@ class synchView {
 
 	/**
 	 * Shows synchronization page to user by loading html code on browser.
-	 * If a syncronization was requested, then calls a controller that synchronizes
+	 * If a synchronization was requested, then calls a controller that synchronizes
 	 * and loads another html page.
 	 */
 	public function createView() {
@@ -48,7 +45,7 @@ class synchView {
 			echo '<p>You asked for a sync.<p>';
 			
 			/*
-			 * Calls controller for synchronizig process.
+			 * Calls controller for synchronizing process.
 			 * */
 			$this->callController($request);
 			
@@ -98,25 +95,23 @@ class synchView {
 		$this->confDBCache = $teleducInc->buildConfDBCache();
 		
 //These lines are the future calls. They dont work yet.		
-// 		$transactions = $controlsDiff->createDiff(
-// 													$this->confDB, $this->confDBCache, 
-// 													$request->post['targets'], $request->post['serverType']
-// 												);
+		$transactions = $controlsDiff->createDiff(
+													$this->confDB, $this->confDBCache, 
+													$request->post['targets'], $request->post['serverType']
+												);
 		
-// 		// TODO Review parameters of the following line.
-// 		$controlsSync->synchronize($confTE, $serverType, $transactions);
+		// TODO Review parameters of the following line.
+		$controlsSync->synchronize($confTE, $serverType, $transactions);
+//		
 		
 		
-		
-//		These lines are being used for testing.		
+		//These lines are being used for testing.		
 // 		$externalList = $controlsDiff->configDB($this->confDB, $request->post['targets'], $request->post['serverType']);
 		
 // 		echo '<br>externalLIST:  ';
 // 		var_dump($externalList['courses']);
 		
-		$cacheDAOtest = new cacheDBDAO();
-		
-		$cacheDAOtest->updateCacheDB($this->confDBCache);
+
 	
 	}
 

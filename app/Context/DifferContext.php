@@ -7,18 +7,23 @@ require_once '../Strategy/dataStrategy.php';
  * TODO Auto-generated comment.
  */
 class DifferContext {
+	
 	/**
 	 * TODO Auto-generated comment.
 	 */
 	private $data;
+	
 	/**
 	 * TODO Auto-generated comment.
 	 */
 	private $dataType;
+	
 	/**
-	 * TODO Auto-generated comment.
+	 * Atomic operations that need to be done in teleduc's database
+	 * in order to obtain a synchronized stated.
 	 */
 	private $transactions;
+	
 	/**
 	 * TODO Auto-generated comment.
 	 */
@@ -51,6 +56,11 @@ class DifferContext {
 	 * given in the constructor of the object.
 	 */
 	public function diff($externalList, $cacheList, $formatType) {
+		
+		/*
+		 * Call this->dataStrategy->diff() method.
+		 * */
+		
 		return null;
 	}
 }

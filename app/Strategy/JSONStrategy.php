@@ -15,6 +15,13 @@ class JSONStrategy extends dataStrategy {
 	 * TODO Auto-generated comment.
 	 */
 	public function diff($externalList, $cacheList, $formatType) {
+		
+		/* 
+		 * Use father class method for obtain $this->transactions;
+		 * Return $this->transactions on json format.
+		 * 
+		 * */
+		
 		return null;
 	}
 }
