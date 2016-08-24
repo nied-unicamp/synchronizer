@@ -16,6 +16,14 @@ class transaction {
 	 */
 	private $operand;
 
+	public function __construct($operation, $operator, $operand) {
+		
+		$this->operation = $operation;
+		$this->operator = $operator;
+		$this->operand = $operand;
+		
+	}
+		
 	/**
 	 * TODO Auto-generated comment.
 	 */

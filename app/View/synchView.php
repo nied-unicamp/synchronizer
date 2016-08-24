@@ -88,28 +88,35 @@ class synchView {
 								$request->post['dbPort'], $request->post['dbName'], 
 								$request->post['dbLogin'], $request->post['dbPassword']			
 							);
-		/*
-		 * TODO HERE: Generate confDbCache value with teleduc.inc path in a save way!
-		 * */
-		$teleducInc = new TeleducInc();
-		$this->confDBCache = $teleducInc->buildConfDBCache();
 		
-//These lines are the future calls. They dont work yet.		
-		$transactions = $controlsDiff->createDiff(
-													$this->confDB, $this->confDBCache, 
-													$request->post['targets'], $request->post['serverType']
-												);
 		
-		// TODO Review parameters of the following line.
-		$controlsSync->synchronize($confTE, $serverType, $transactions);
-//		
+		
+		
+// 		/*
+// 		 * TODO HERE: Generate confDbCache value with teleduc.inc path in a save way!
+// 		 * */
+// 		$teleducInc = new TeleducInc();
+// 		$this->confDBCache = $teleducInc->buildConfDBCache();
+		
+// //These lines are the future calls. They dont work yet.		
+// 		$transactions = $controlsDiff->createDiff(
+// 													$this->confDB, $this->confDBCache, 
+// 													$request->post['targets'], $request->post['serverType']
+// 												);
+		
+// 		// TODO Review parameters of the following line.
+// 		$controlsSync->synchronize($confTE, $serverType, $transactions);
+// //		
+		
+		
+		
 		
 		
 		//These lines are being used for testing.		
-// 		$externalList = $controlsDiff->configDB($this->confDB, $request->post['targets'], $request->post['serverType']);
+ 		$externalList = $controlsDiff->configDB($this->confDB, $request->post['targets'], $request->post['serverType']);
 		
 // 		echo '<br>externalLIST:  ';
-// 		var_dump($externalList['courses']);
+ 		var_dump($externalList['coursemember'][1]);
 		
 
 	

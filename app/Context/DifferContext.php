@@ -56,10 +56,9 @@ class DifferContext {
 	 * given in the constructor of the object.
 	 */
 	public function diff($externalList, $cacheList, $formatType) {
-		
-		/*
-		 * Call this->dataStrategy->diff() method.
-		 * */
+
+		$this->dataStrategy->diff($externalList, $cacheList, $formatType);
+		$this->dataStrategy->getTransactions();
 		
 		return null;
 	}
