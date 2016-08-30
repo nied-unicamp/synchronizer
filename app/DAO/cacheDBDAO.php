@@ -27,6 +27,7 @@ class cacheDBDAO{
 		 * Read data from default tables; OK
 		 * Recreate cache table; OK
 		 * Insert read values into cache table. 
+		 * 
 		 */
 	}
 	
@@ -146,7 +147,7 @@ class cacheDBDAO{
 			*/
 			
 			$cacheManager->operationOrder(  $confDBCache,
-											"INSERT INTO coursesCache (login, courseName, role) VALUES (?,?,?)",
+											"INSERT INTO coursememberCache (login, courseName, role) VALUES (?,?,?)",
 											true,
 											array($value['login'], $value['courseName'], $value['role']));
 		}

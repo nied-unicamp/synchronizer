@@ -1,6 +1,8 @@
 <?php
 
 require_once '../Model/transaction.php';
+require_once '../Wrapper/DBWrapper.php';
+
 
 /**
  * TODO Auto-generated comment.
@@ -15,7 +17,7 @@ abstract class dataStrategy {
 	/**
 	 * Common procedure for creation of $this->transactions;
 	 */
-	public function diff($externalList, $cacheList, $formatType) {
+	public function diff($externalList, $cacheList, $formatType, $confDB) {
 		
 		$this->transactions = array();
 		
@@ -25,8 +27,7 @@ abstract class dataStrategy {
 			// $user is an array with keys login, name and email.
 			foreach ($externalList['users'] as $key => $user) 
 			{
-				
-				$transaction = $this->checkUser($user, $cacheList);
+				$transaction = $this->checkUser($user, $cacheList, $confDB);
 				if ($transaction != null)
 				{
 					array_push($this->transactions, $transaction);
@@ -40,55 +41,56 @@ abstract class dataStrategy {
 		*/
 		}
 		
-		if(isset($externalList['courses']))
-		{
+// 		if(isset($externalList['courses']))
+// 		{
+	
+// 			foreach ($externalList['courses'] as $key => $course)
+// 			{		
+// 				$transaction = $this->checkCourse($course, $cacheList);
+// 				if ($transaction != null)
+// 				{
+// 					array_push($this->transactions, $transaction);
+// 				}
+// 			}
 			
-			foreach ($externalList['courses'] as $key => $course)
-			{
 			
-				$transaction = $this->checkCourse($course, $cacheList);
-				if ($transaction != null)
-				{
-					array_push($this->transactions, $transaction);
-				}
-			}
-			
-			
-					/*
-	 *  	Search for each line from externalList on internal DB (with DB query)
-	 * 			If find or don't, do something (create transaction for create/update)
-	 * 		Search for each line from internallist on external DB (with DB query)
-	 * 			If don't find, do something (create transaction for delete on internal list)
-		*/
-		}
+// 					/*
+// 	 *  	Search for each line from externalList on internal DB (with DB query)
+// 	 * 			If find or don't, do something (create transaction for create/update)
+// 	 * 		Search for each line from internallist on external DB (with DB query)
+// 	 * 			If don't find, do something (create transaction for delete on internal list)
+// 		*/
+// 		}
 		
-		if(isset($externalList['coursemember']))
-		{
-					/*
-	 *  	Search for each line from externalList on internal DB (with DB query)
-	 * 			If find or don't, do something (create transaction for create/update)
-	 * 		Search for each line from internallist on external DB (with DB query)
-	 * 			If don't find, do something (create transaction for delete on internal list)
-		*/
-		}
+// 		if(isset($externalList['coursemember']))
+// 		{	
+// 					/*
+// 	 *  	Search for each line from externalList on internal DB (with DB query)
+// 	 * 			If find or don't, do something (create transaction for create/update)
+// 	 * 		Search for each line from internallist on external DB (with DB query)
+// 	 * 			If don't find, do something (create transaction for delete on internal list)
+// 		*/
+// 		}
 		
 		
 		
-		/* 
-		 * specific strategies will just return $this->transactions in the right format.
-		 *
-		 * Possible procedure:
-		 *
-		 *  For each target
-		 *  	Search for each line from external DB on internal DB (with DB query)
-		 * 			If find or don't, do something (create transaction for create/update)
-		 * 		Search for each line from internal DB on external DB (with DB query)
-		 * 			If don't find, do something (create transaction for delete)
-		 *
-		 *	Save $this->transactions in array format.
-		 */
+// 		/* 
+// 		 * specific strategies will just return $this->transactions in the right format.
+// 		 *
+// 		 * Possible procedure:
+// 		 *
+// 		 *  For each target
+// 		 *  	Search for each line from external DB on internal DB (with DB query)
+// 		 * 			If find or don't, do something (create transaction for create/update)
+// 		 * 		Search for each line from internal DB on external DB (with DB query)
+// 		 * 			If don't find, do something (create transaction for delete)
+// 		 *
+// 		 *	Save $this->transactions in array format.
+// 		 */
 		
-		return null;
+		//var_dump($this->transactions);
+
+		return $this->transactions;
 	}
 	
 	/**
@@ -102,35 +104,54 @@ abstract class dataStrategy {
 	 * false if ;
 	 * 
 	 * */
-	private function checkUser($user, $list)
+	private function checkUser($user, $list, $confDB)
 	{
-		foreach ($list['users'] as $key => $TEuser)
+
+		/*Search for $user in db and put data in TEuser*/
+		
+		$dbAccess = new DBWrapper();
+		/*TEMPORARY! Dont put in production with this!!!!!!*/
+		$TEuser = $dbAccess->dataRequest($confDB, "select * from usersCache where login='". $user['login'] . "';");
+		
+// 		var_dump($TEuser[0]);
+// 		echo "<br>";
+// 		var_dump($user);
+// 		echo "<br>";
+			
+		if($TEuser[0]['login'] == $user['login'])
 		{
-			if($TEuser[login] == $user['login'])
+			if($TEuser[0] == $user)
 			{
-				if($TEuser == $user)
-				{
-					return null;
-				}
-				return new transaction('update', 'users', $user);
+				return new transaction('do nothing!', 'users', $user);
+				//return null;
 			}
+			return new transaction('update', 'users', $user);
 		}
-		return new transaction('insert', 'user', $operand);
+		
+		return new transaction('insert', 'user', $user);
 	}
 	
-	private function checkCourse($course, $list)
+	
+	
+	
+	private function checkCourse($course, $list, $confDB)
 	{
-		foreach ($list['courses'] as $key => $TEcourse)
+		
+		/*Search for $user in db and put data in TEuser*/
+		
+		$dbAccess = new DBWrapper();
+		/*TEMPORARY! Dont put in production with this!!!!!!*/
+		$TEuser = $dbAccess->dataRequest($confDB, "select * from coursesCache where courseName='". $course['courseName'] . "';");
+		
+		if($TEuser[0]['courseName'] == $user['courseName'])
 		{
-			if($TEuser['courseName'] == $user['courseName'])
+			if($TEcourse[0] == $course)
 			{
-				if($TEcourse == $course)
-				{
-					return null;
-				}
-				return new transaction('update', 'course', $course);
+				return null;
 			}
+			return new transaction('update', 'course', $course);
 		}
+		
 		return new transaction('insert', 'course', $course);
 	}
 	
@@ -149,16 +170,6 @@ abstract class dataStrategy {
 			}
 		}
 		return new transaction('insert', 'coursemember', $course);
-	}
-	
-	
-	
-	
-	
-	
-	public function getTransactions()
-	{
-		return $this->transactions;
 	}
 	
 	

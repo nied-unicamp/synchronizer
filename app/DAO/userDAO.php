@@ -22,7 +22,7 @@ class userDAO implements abstractDAO {
 		//$recordsLoader->serverQuery($dbInfo, $query);
 		
 		//Temporary for learning and testing...
-		$query = 'select login, nome, email from Usuario';
+		$query = 'select login, nome AS name, email from Usuario';
 		
 		return $recordsLoader->serverQuery($dbInfo, $query);
 	}

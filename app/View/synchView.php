@@ -4,6 +4,12 @@ require_once '../Controller/diffController.php';
 require_once '../Controller/synchController.php';
 require_once '../Model/Request.php';
 require_once '../Model/TeleducInc.php';
+require_once '../DAO/cacheDBDAO.php';
+
+
+/*Just for tests!!*/
+require_once '../Wrapper/DBWrapper.php';
+
 
 /**
  * This class mounts a html page for the page of the synchronizer, and calls the controller
@@ -95,31 +101,59 @@ class synchView {
 // 		/*
 // 		 * TODO HERE: Generate confDbCache value with teleduc.inc path in a save way!
 // 		 * */
-// 		$teleducInc = new TeleducInc();
-// 		$this->confDBCache = $teleducInc->buildConfDBCache();
+ 		$teleducInc = new TeleducInc();
+ 		$this->confDBCache = $teleducInc->buildConfDBCache();
+ 		
+//  		$testCacheUpdater= new cacheDBDAO();
+//  		$testCacheUpdater->updateCacheDB($this->confDBCache);
 		
-// //These lines are the future calls. They dont work yet.		
-// 		$transactions = $controlsDiff->createDiff(
-// 													$this->confDB, $this->confDBCache, 
-// 													$request->post['targets'], $request->post['serverType']
-// 												);
+//These lines are the future calls. They dont work yet.		
+		$transactions = $controlsDiff->createDiff(
+													$this->confDB, $this->confDBCache, 
+													$request->post['targets'], $request->post['serverType']
+												);
 		
-// 		// TODO Review parameters of the following line.
-// 		$controlsSync->synchronize($confTE, $serverType, $transactions);
-// //		
+		var_dump($transactions);
+		echo "<br>";
+
+ 		
+ 		
+		// TODO Review parameters of the following line.
+		//$controlsSync->synchronize($confTE, $serverType, $transactions);
+//		
 		
 		
 		
 		
 		
 		//These lines are being used for testing.		
- 		$externalList = $controlsDiff->configDB($this->confDB, $request->post['targets'], $request->post['serverType']);
+// 		$externalList = $controlsDiff->configDB($this->confDB, $request->post['targets'], $request->post['serverType']);
 		
 // 		echo '<br>externalLIST:  ';
- 		var_dump($externalList['coursemember'][1]);
+// 		var_dump($externalList['coursemember'][1]);
 		
 
 	
+ 		
+ 		
+// TEST QUERY TIME! 		
+//  		set_time_limit ( 0 );
+//  		$testConn = new DBWrapper();
+//  		for ($i=0; $i<1000000; $i++)
+//  		{
+ 			
+//  		$testConn->dataRequest(  $this->confDBCache,
+//  				"SELECT * from coursesCache where courseName='Teste123'"
+ 						
+//  											 );
+ 	
+//  		}
+ 	
+//  		echo '<h1>'.$i.'</h1>';
+ 		
+ 		
+ 		
+ 		
 	}
 
 }

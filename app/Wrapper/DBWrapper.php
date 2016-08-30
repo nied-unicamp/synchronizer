@@ -13,7 +13,7 @@ class DBWrapper extends serverStrategy {
 	public function operationOrder($confDB, $query, $prepare=false, $values=NULL) {
 		
 		try {
-			
+
 			if($prepare){
 				
 				$conn = $this->createConnection($confDB);
@@ -26,7 +26,6 @@ class DBWrapper extends serverStrategy {
 					
 	 				$stmt->bindParam($key+1, $value);
 	 			}
-				
 				return $stmt->execute();
 				
 			}

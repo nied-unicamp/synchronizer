@@ -129,8 +129,8 @@ class diffController {
 		/*
 		 * Update cache tables.
 		 * */
-		$cacheDaoUpdater = new cacheDBDAO();
-		$cacheDaoUpdater->updateCacheDB($this->confDBCache);
+// 		$cacheDaoUpdater = new cacheDBDAO();
+// 		$cacheDaoUpdater->updateCacheDB($this->confDBCache);
 		
 		// TODO Here, servertype has to be the internal teleduc's database? 
 		$this->cacheList = $this->configDB($confDbCache, $syncTargets, 'SERVER_TYPE_MYSQL');
@@ -138,7 +138,7 @@ class diffController {
 		/*
 		 * TODO redundant information in parameter $formatType? See DifferContext.php.
 		 * */
-		return $differentiator->diff($externalList, $cacheList, $formatType);
+		return $differentiator->diff($this->externalList, $this->cacheList, null, $confDbCache);
 	}
 	
 	/**
