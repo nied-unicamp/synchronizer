@@ -11,13 +11,15 @@ class courseDAO implements abstractDAO {
 	 * TODO Auto-generated comment.
 	 */
 	public function getCourseList($dbInfo, $serverType) {
-		
+
 		$recordsLoader = new serverContext($serverType, 'courses');
-		
-		//Temporary for learning and testing...
-		
-		$query = 'select cod_curso, nome_curso from Cursos';
-		
+
+		$query = "
+				SELECT Cursos.nome_curso AS courseName, Cursos_pastas.pasta AS category
+				FROM Cursos
+				LEFT JOIN Cursos_pastas
+				ON Cursos.cod_pasta=Cursos_pastas.cod_pasta;";
+
 		return $recordsLoader->serverQuery($dbInfo, $query);
 	}
 
@@ -38,8 +40,8 @@ class courseDAO implements abstractDAO {
 	 */
 	public function deleteCourse($dbInfo, $serverType, $course) {
 	}
-	
+
 	public function serverQuery($string, $serverType){
-	
+
 	}
 }
