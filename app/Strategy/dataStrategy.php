@@ -7,10 +7,11 @@ require_once '../Wrapper/DBWrapper.php';
 /**
  * This class contains the algorithm that determines the necessary operations
  * for the stablishment of a synchronized stated with the external data.
- * Child classes will determine if the opreations needed will be represented
- * with an Json, xml or csv archive.
  * Operations needed are represented by an array of transactions in this class
  * father.
+ * For now, specific strategies will just return $this->transactions in the right format:
+ * child classes will determine if the opreations needed will be represented
+ * with an Json, xml or csv archive.
  */
 abstract class dataStrategy {
 
@@ -33,9 +34,16 @@ abstract class dataStrategy {
 
 		$this->transactions = array();
 
+		/* 
+		 * For each target:
+		 * 		
+		 *  	Search for each line from externalList on internal DB (with DB query)
+		 * 			If find or don't, do something (create transaction for create/update)
+		 * 
+		 * */
+		
 		if(isset($externalList['users']))
 		{
-
 			// $user is an array with keys login, name and email.
 			foreach ($externalList['users'] as $key => $user)
 			{
@@ -45,12 +53,6 @@ abstract class dataStrategy {
 					array_push($this->transactions, $transaction);
 				}
 			}
-		/*
-	 *  	Search for each line from externalList on internal DB (with DB query)
-	 * 			If find or don't, do something (create transaction for create/update)
-	 * 		Search for each line from internallist on external DB (with DB query)
-	 * 			If don't find, do something (create transaction for delete on internal list)
-		*/
 		}
 
 		if(isset($externalList['courses']))
@@ -64,15 +66,7 @@ abstract class dataStrategy {
 					array_push($this->transactions, $transaction);
 				}
 			}
-
-
-// 					/*
-// 	 *  	Search for each line from externalList on internal DB (with DB query)
-// 	 * 			If find or don't, do something (create transaction for create/update)
-// 	 * 		Search for each line from internallist on external DB (with DB query)
-// 	 * 			If don't find, do something (create transaction for delete on internal list)
-// 		*/
-// 		}
+ 		}
 
 		if(isset($externalList['coursemember']))
 		{
@@ -84,31 +78,7 @@ abstract class dataStrategy {
 					array_push($this->transactions, $transaction);
 				}
 			}
-					/*
-	 *  	Search for each line from externalList on internal DB (with DB query)
-	 * 			If find or don't, do something (create transaction for create/update)
-	 * 		Search for each line from internallist on external DB (with DB query)
-	 * 			If don't find, do something (create transaction for delete on internal list)
-		*/
 		}
-
-
-
-// 		/*
-// 		 * specific strategies will just return $this->transactions in the right format.
-// 		 *
-// 		 * Possible procedure:
-// 		 *
-// 		 *  For each target
-// 		 *  	Search for each line from external DB on internal DB (with DB query)
-// 		 * 			If find or don't, do something (create transaction for create/update)
-// 		 * 		Search for each line from internal DB on external DB (with DB query)
-// 		 * 			If don't find, do something (create transaction for delete)
-// 		 *
-// 		 *	Save $this->transactions in array format.
-// 		 */
-
-		//var_dump($this->transactions);
 
 		return $this->transactions;
 	}
@@ -125,32 +95,29 @@ abstract class dataStrategy {
 	 * */
 	private function checkUser($user, $list, $confDB)
 	{
-
+		
 		/*Search for $user in db and put data in TEuser*/
 
 		$dbAccess = new DBWrapper();
 		/*TEMPORARY! Dont put in production with this!!!!!!*/
 		$TEuser = $dbAccess->dataRequest($confDB, "select * from usersCache where login='". $user['login'] . "';");
-
-// 		var_dump($TEuser[0]);
-// 		echo "<br>";
-// 		var_dump($user);
-// 		echo "<br>";
-
+		
 		if($TEuser[0]['login'] == $user['login'])
 		{
-			if($TEuser[0] == $user)
+			$numOfLines=count($TEuser);
+			for($i = 0; $i < $numOfLines; $i = $i+1)
 			{
-				return new transaction('do nothing!', 'users', $user);
-				//return null;
+				if($TEuser[$i] == $user)
+				{
+					//return new transaction('do nothing!', 'users', $user);
+					return null;
+				}
 			}
 			return new transaction('update', 'users', $user);
 		}
 
 		return new transaction('insert', 'user', $user);
 	}
-
-
 
 	/**
 	 * Check if $course is inside $list and determines if a transaction is needed.
@@ -165,18 +132,29 @@ abstract class dataStrategy {
 	private function checkCourse($course, $list, $confDB)
 	{
 
+		/*Temporary measure. It wont be necessary if externalList element arrive here validated.*/
+		if($course['courseName'] == null)
+		{
+			return null;
+		}
+		
 		/*Search for $course in db and put data in TEusercourse*/
 
 		$dbAccess = new DBWrapper();
 		/*TEMPORARY! Dont put in production with this!!!!!!*/
 		$TEcourse = $dbAccess->dataRequest($confDB, "select * from coursesCache where courseName='". $course['courseName'] . "';");
 
+		
 		if($TEcourse[0]['courseName'] == $course['courseName'])
 		{
-			if($TEcourse[0] == $course)
+			$numOfLines=count($TEcourse);
+			for($i = 0; $i < $numOfLines; $i = $i + 1)
 			{
-				return new transaction('do nothing!', 'course', $course);
-				//return null;
+				if($TEcourse[$i] == $course)
+				{
+					//return new transaction('do nothing!', 'course', $course);
+					return null;
+				}
 			}
 			return new transaction('update', 'course', $course);
 		}
@@ -194,28 +172,37 @@ abstract class dataStrategy {
 	 * @return A transaction if necessary, or null otherwise.
 	 *
 	 * */
-	private function checkCourseMember($coursemember, $list)
+	private function checkCourseMember($coursemember, $list, $confDB)
 	{
 
+		/*Temporary measure. It wont be necessary if externalList element arrive here validated.*/
+		if($coursemember['login'] == null)
+		{
+			return null;
+		}
+		
 		/*Search for $coursemember in db and put data in TEcoursemember*/
 
 		$dbAccess = new DBWrapper();
 		/*TEMPORARY! Dont put in production with this!!!!!!*/
 		$TEcoursemember = $dbAccess->dataRequest($confDB, "select * from coursememberCache where courseName='". $coursemember['courseName'] . "' AND login='" . $coursemember['login'] . "';'");
 
+		
 		if($TEcoursemember[0]['courseName'] == $coursemember['courseName'] && $TEcoursemember[0]['login'] == $coursemember['login'])
 		{
-			if($TEcoursemember[0] == $coursemember)
+			
+			$numOfLines = count($TEcoursemember);
+			for($i=0; $i<$numOfLines; $i = $i + 1)
 			{
-				return new transaction('do nothing!', 'coursemember', $course);
-				//return null;
-			}
-			return new transaction('update', 'coursemember', $course);
+				if($TEcoursemember[$i] == $coursemember)
+				{
+					//return new transaction('do nothing!', 'coursemember', $coursemember);
+					return null;
+				}
+			}		
+			return new transaction('update', 'coursemember', $coursemember);
 		}
 
-		return new transaction('insert', 'coursemember', $course);
+		return new transaction('insert', 'coursemember', $coursemember);
 	}
-
-
-
 }
