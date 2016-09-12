@@ -20,7 +20,7 @@ class userStrategy extends formatStrategy {
 	 */
 	public function getList($dbInfo, $serverType) {
 		
-		/*
+		/**
 		 * This DAO object, atribute from a parent class, is created according to
 		 * the strategy.
 		 * */

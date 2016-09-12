@@ -85,9 +85,11 @@ class synchView {
 
 		$controlsSync = new synchController();
 
-		/*
+		
+		/**
 		 * Builds an array with all data known about a possible database choosen for source of external data.
 		 * TODO Put it inside a if according to the imput method for external data?
+		 * TODO Change this in order to use an object instead of an array! Code would be a lot more readble!!!
 		 * */
 		$this->confDB = array(
 								$request->post['serverType'], $request->post['dbHost'],

@@ -3,11 +3,11 @@
 require_once 'dataStrategy.php';
 
 /**
- * TODO Auto-generated comment.
+ * This class is responsible for converting the transactions list to JSON object.
  */
 class JSONStrategy extends dataStrategy {
 	/**
-	 * TODO Auto-generated comment.
+	 * Transactions list.
 	 */
 	private $transactions;
 
@@ -25,6 +25,11 @@ class JSONStrategy extends dataStrategy {
 // 		return null;
 // 	}
 	
+	/**
+	 * Return the transactions as JSON object.
+	 * 
+	 * @return A JSON object representing the transactions list.
+	 * */
 	public function getTransactions()
 	{
 		return json_encode($this->transactions);

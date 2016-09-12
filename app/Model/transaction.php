@@ -1,65 +1,55 @@
 <?php
 /**
- * TODO Auto-generated comment.
+ * This class represents a need operation in the internal database
+ * in order to obtain a synchronized state.
  */
 class transaction {
 	/**
-	 * TODO Auto-generated comment.
+	 * Represents what need to be done. Can be an update, an insertion or a deletion.000
 	 */
 	private $operation;
+	
 	/**
-	 * TODO Auto-generated comment.
+	 * Generically represents what kind of data has to be manipulated. Can be a course,
+	 * an user or a course-member relation.
 	 */
 	private $operator;
+	
 	/**
-	 * TODO Auto-generated comment.
+	 * Specifically represents the data to be manipulates. Expected to be an array with
+	 * data of a course, data of a user or data of a course-member relation.
 	 */
 	private $operand;
 
 	public function __construct($operation, $operator, $operand) {
 		
-		$this->operation = $operation;
-		$this->operator = $operator;
-		$this->operand = $operand;
+		$this->setOperation($operation);
+		$this->setOperator($operator);
+		$this->setOperand($operand);
 		
-	}
-		
-	/**
-	 * TODO Auto-generated comment.
-	 */
+	}	
+
 	public function getOperation() {
-		return "";
+		return $this->operation;
 	}
 
-	/**
-	 * TODO Auto-generated comment.
-	 */
 	public function getOperator() {
-		return "";
+		return $this->operator;
 	}
 
-	/**
-	 * TODO Auto-generated comment.
-	 */
 	public function getOperand() {
-		return "";
+		return $this->operand;
 	}
 
-	/**
-	 * TODO Auto-generated comment.
-	 */
 	public function setOperation($operation) {
+		$this->operation = $operation;
 	}
 
-	/**
-	 * TODO Auto-generated comment.
-	 */
 	public function setOperator($operator) {
+		$this->operator = $operator;
 	}
 
-	/**
-	 * TODO Auto-generated comment.
-	 */
 	public function setOperand($operand) {
+		$this->operand = $operand;
 	}
 }

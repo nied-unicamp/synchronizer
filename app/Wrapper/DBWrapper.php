@@ -94,6 +94,7 @@ class DBWrapper extends serverStrategy {
 	
 	private function createConnection($confDB){
 		switch ($confDB[0]) {
+			/*This is terrible... Change the code in order to use an object instead of an array for the $confDB!!!*/
 			case "SERVER_TYPE_MYSQL":
 				$dbInfo = 'mysql:host=' . $confDB[1] . ';port=' . $confDB[2] . ';dbname=' . $confDB[3];
 				return new PDO($dbInfo, $confDB[4], $confDB[5]);

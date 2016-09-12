@@ -2,6 +2,11 @@
 
 require_once '../Wrapper/DBWrapper.php';
 
+/**
+ * This class does the manipulation from CacheDB's data. 
+ * CacheDB in this class's name represents the three tables 
+ * created in order to represent the teleduc's internal data.
+ */
 class cacheDBDAO{
 
 
@@ -32,21 +37,21 @@ class cacheDBDAO{
 	}
 
 	private function deleteCacheIfExists($cacheManager, $confDBCache) {
-		/*
+		/**
 		 * Deletes users cache table, if exists.
 		 * */
 		if(!$cacheManager->operationOrder($confDBCache, "show tables like 'usersCache';")){
 			$cacheManager->operationOrder($confDBCache, 'drop table usersCache');
 		}
 
-		/*
+		/**
 		 * Deletes courses cache table, if exists.
 		 * */
 		if(!$cacheManager->operationOrder($confDBCache, "show tables like 'coursesCache';")){
 			$cacheManager->operationOrder($confDBCache, 'drop table coursesCache');
 		}
 
-		/*
+		/**
 		 * Deletes coursemember relations cache table, if exists.
 		 * */
 		if(!$cacheManager->operationOrder($confDBCache, "show tables like 'coursememberCache';")){
