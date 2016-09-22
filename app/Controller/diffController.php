@@ -63,9 +63,10 @@ class diffController {
 		try {
 
 			$this->validateServer($serverType);
-			if(is_array($dbInfo))
+			if (is_a($dbInfo, 'DBInfo'))
+			//if(is_array($dbInfo))
 			{
-				$this->validateServer($dbInfo[0]);
+				$this->validateServer($dbInfo->getserverType());
 			}
 
 		} catch (Exception $e) {
@@ -94,7 +95,7 @@ class diffController {
 
 			/*
 			 * Uses the object created to get the data list, and puts that list in an array with all
-			 * the other data from other targets
+			 * the other data from other targets.
 			 * */
 			$databaseData[$target] = $differentiator->getList($dbInfo, $serverType);
 
@@ -129,8 +130,8 @@ class diffController {
 		/*
 		 * Update cache tables.
 		 * */
-// 		$cacheDaoUpdater = new cacheDBDAO();
-// 		$cacheDaoUpdater->updateCacheDB($this->confDBCache);
+ 		$cacheDaoUpdater = new cacheDBDAO();
+ 		$cacheDaoUpdater->updateCacheDB($confDbCache);
 
 		// TODO Here, servertype has to be the internal teleduc's database?
 		$this->cacheList = $this->configDB($confDbCache, $syncTargets, 'SERVER_TYPE_MYSQL');

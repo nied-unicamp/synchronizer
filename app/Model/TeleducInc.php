@@ -1,5 +1,7 @@
 <?php
 
+require_once 'DBInfo.php';
+
 class TeleducInc {
 	
 	private $dbHost;
@@ -22,11 +24,13 @@ class TeleducInc {
 	}
 	
 	public function buildConfDBCache(){
-		return array(
-						'SERVER_TYPE_MYSQL', $this->dbHost, 
-						$this->dbPort, $this->dbName, 
-						$this->dbLogin, $this->dbPassword		
-					);
+// 		return array(
+// 						'SERVER_TYPE_MYSQL', $this->dbHost, 
+// 						$this->dbPort, $this->dbName, 
+// 						$this->dbLogin, $this->dbPassword		
+// 					);
+		return new DBInfo('SERVER_TYPE_MYSQL', $this->dbHost, $this->dbPort, 
+							$this->dbName, $this->dbLogin,  $this->dbPassword);
 	}
 	
 	//TODO Create getters!!!

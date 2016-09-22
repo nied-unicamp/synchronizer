@@ -7,9 +7,6 @@ require_once '../Strategy/serverStrategy.php';
  */
 class DBWrapper extends serverStrategy {
 
-	/*
-	 * TODO Create a method to use $conn->exec from PDO.
-	 * */
 	public function operationOrder($confDB, $query, $prepare=false, $values=NULL) {
 		
 		try {
@@ -30,10 +27,6 @@ class DBWrapper extends serverStrategy {
 				
 			}
 		
-			/*
-			 * Use the value of $conf[0] (which contains serverType) to discover the database implementation and be able to connect.
-			 * TODO Implement this with strategy if someday the system allow the use of non mysql implementations.
-			 * */
 			$conn = $this->createConnection($confDB);
 			return $conn->exec($query);
 		}
@@ -60,10 +53,6 @@ class DBWrapper extends serverStrategy {
 		$data = array();
 		
 		try {
-			/*
-			 * Use the value of $conf[0] (which contains serverType) to discover the database implementation and be able to connect.
-			 * TODO Implement this with strategy if someday the system allow the use of non mysql implementations.
-			 * */
 
 			$conn = $this->createConnection($confDB);
 			$result = $conn->query($query);
@@ -92,12 +81,18 @@ class DBWrapper extends serverStrategy {
 		
 	}
 	
+	
 	private function createConnection($confDB){
-		switch ($confDB[0]) {
-			/*This is terrible... Change the code in order to use an object instead of an array for the $confDB!!!*/
+			
+		/*
+		 * Use the value of $conf->getServerType to discover the database implementation and be able to connect.
+		 * TODO Implement this with strategy if someday the system allow the use of non mysql implementations.
+		 * */
+		switch ($confDB->getserverType()) {
 			case "SERVER_TYPE_MYSQL":
-				$dbInfo = 'mysql:host=' . $confDB[1] . ';port=' . $confDB[2] . ';dbname=' . $confDB[3];
-				return new PDO($dbInfo, $confDB[4], $confDB[5]);
+// 				$dbInfo = 'mysql:host=' . $confDB[1] . ';port=' . $confDB[2] . ';dbname=' . $confDB[3];
+				$dbInfo = 'mysql:host=' . $confDB->getdbHost() . ';port=' . $confDB-> getdbPort() . ';dbname=' . $confDB->getdbName();
+				return new PDO($dbInfo, $confDB->getdbLogin(), $confDB->getdbPassword());
 		
 			default:
 				throw new PDOException(

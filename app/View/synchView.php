@@ -5,6 +5,7 @@ require_once '../Controller/synchController.php';
 require_once '../Model/Request.php';
 require_once '../Model/TeleducInc.php';
 require_once '../DAO/cacheDBDAO.php';
+require_once '../Model/DBInfo.php';
 
 
 /*Just for tests!!*/
@@ -63,6 +64,7 @@ class synchView {
 		 * Loads default page for synchronizer configuration.
 		 * */
 		include "../Layout/sync.html";
+		
 		return;
 	}
 
@@ -91,17 +93,19 @@ class synchView {
 		 * TODO Put it inside a if according to the imput method for external data?
 		 * TODO Change this in order to use an object instead of an array! Code would be a lot more readble!!!
 		 * */
-		$this->confDB = array(
-								$request->post['serverType'], $request->post['dbHost'],
-								$request->post['dbPort'], $request->post['dbName'],
-								$request->post['dbLogin'], $request->post['dbPassword']
-							);
-
+// 		$this->confDB = array(
+// 								$request->post['serverType'], $request->post['dbHost'],
+// 								$request->post['dbPort'], $request->post['dbName'],
+// 								$request->post['dbLogin'], $request->post['dbPassword']
+// 							);
+		$this->confDB = new DBInfo($request->post['serverType'], $request->post['dbHost'], 
+									$request->post['dbPort'], $request->post['dbName'], 
+									$request->post['dbLogin'], $request->post['dbPassword']);
 
 
 
 // 		/*
-// 		 * TODO HERE: Generate confDbCache value with teleduc.inc path in a save way!
+// 		 * Generate confDbCache value with teleduc.inc path in a save way!
 // 		 * */
  		$teleducInc = new TeleducInc();
  		$this->confDBCache = $teleducInc->buildConfDBCache();
@@ -116,6 +120,7 @@ class synchView {
 												);
 
 		var_dump($transactions);
+		
 		echo "<br>";
 
 
