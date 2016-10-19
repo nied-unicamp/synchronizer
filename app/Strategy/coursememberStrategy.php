@@ -17,7 +17,7 @@ class coursememberStrategy extends formatStrategy {
 	 *  								or an string with a path to a file with data.
 	 *  @param $serverType string		Defines the type of the data source.
 	 */
-	public function getList($dbInfo, $serverType) {
+	public function getList($dbInfo, $serverType, $internal=0) {
 		
 		/*
 		 * This DAO object, atribute from a parent class, is created according to
@@ -25,6 +25,6 @@ class coursememberStrategy extends formatStrategy {
 		 * */
 		$this->daoObject = new coursememberDAO();
 		
-		return $this->daoObject->getCourseMemberList($dbInfo, $serverType);
+		return $this->daoObject->getCourseMemberList($dbInfo, $serverType, $internal);
 	}
 }

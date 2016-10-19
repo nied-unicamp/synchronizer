@@ -18,7 +18,7 @@ class userStrategy extends formatStrategy {
 	 *  								or an string with a path to a file with data.
 	 *  @param $serverType string		Defines the type of the data source.
 	 */
-	public function getList($dbInfo, $serverType) {
+	public function getList($dbInfo, $serverType, $internal) {
 		
 		/**
 		 * This DAO object, atribute from a parent class, is created according to
@@ -26,6 +26,6 @@ class userStrategy extends formatStrategy {
 		 * */
 		$this->daoObject = new userDAO();
 		
-		return $this->daoObject->getUserList($dbInfo, $serverType);
+		return $this->daoObject->getUserList($dbInfo, $serverType, $internal);
 	}
 }

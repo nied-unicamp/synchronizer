@@ -39,7 +39,7 @@ class diffController {
 	 *
 	 * @return
 	 */
-	public function configDB($dbInfo, $syncTargets, $serverType) {
+	public function configDB($dbInfo, $syncTargets, $serverType, $internal = 0) {
 
 		$databaseData = array();
 
@@ -97,7 +97,7 @@ class diffController {
 			 * Uses the object created to get the data list, and puts that list in an array with all
 			 * the other data from other targets.
 			 * */
-			$databaseData[$target] = $differentiator->getList($dbInfo, $serverType);
+			$databaseData[$target] = $differentiator->getList($dbInfo, $serverType, $internal);
 
 			unset($differentiator);
 		}
@@ -134,7 +134,7 @@ class diffController {
  		$cacheDaoUpdater->updateCacheDB($confDbCache);
 
 		// TODO Here, servertype has to be the internal teleduc's database?
-		$this->cacheList = $this->configDB($confDbCache, $syncTargets, 'SERVER_TYPE_MYSQL');
+		$this->cacheList = $this->configDB($confDbCache, $syncTargets, 'SERVER_TYPE_MYSQL', 1);
 
 		/*
 		 * TODO redundant information in parameter $formatType? See DifferContext.php.

@@ -51,8 +51,8 @@ class DAOContext {
 	 * @param $dbInfo array 		An array containing all known information about the source of the data.
 	 * @param $serverType string 	Defines the type of the source of data.
 	 */
-	public function getList($dbInfo, $serverType) {
+	public function getList($dbInfo, $serverType, $internal=0) {
 		
-		return $this->formatStrategy->getList($dbInfo, $serverType);
+		return $this->formatStrategy->getList($dbInfo, $serverType, $internal);
 	}
 }
