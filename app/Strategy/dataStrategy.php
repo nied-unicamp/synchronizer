@@ -4,6 +4,13 @@ require_once '../Model/transaction.php';
 require_once '../Wrapper/DBWrapper.php';
 
 
+/*
+ * TODO
+ * External confDB has to arrive here, to be used in differ method.
+ * Test searchingDeletions before create the sql query inside each check method. 
+ * 
+ * */
+
 /**
  * This class contains the algorithm that determines the necessary operations
  * for the stablishment of a synchronized stated with the external data.
@@ -31,9 +38,23 @@ abstract class dataStrategy {
 	 * a synchronized state of the system with the external data.
 	 */
 	public function diff($externalList, $cacheList, $formatType, $confDB) {
+		
+		//var_dump($externalList);
+		
+		$this->differ($externalList, $cacheList, $formatType, $confDB);
+		$this->differ($cacheList, $externalList, $formatType, $confDB, 1);
+		return $this->transactions;
+	}	
 
-		$this->transactions = array();
-
+	
+	private function differ($externalList, $cacheList, $formatType, $confDB, $searchingDeletions=0) {
+		
+		if(!isset($this->transactions))
+		{
+			echo "Entrei aqui so uma vez ta.\n";
+			$this->transactions = array();
+		}
+		
 		/* 
 		 * For each target:
 		 * 		
@@ -47,7 +68,7 @@ abstract class dataStrategy {
 			// $user is an array with keys login, name and email.
 			foreach ($externalList['users'] as $key => $user)
 			{
-				$transaction = $this->checkUser($user, $cacheList, $confDB);
+				$transaction = $this->checkUser($user, $cacheList, $confDB, $searchingDeletions);
 				if ($transaction != null)
 				{
 					array_push($this->transactions, $transaction);
@@ -60,7 +81,7 @@ abstract class dataStrategy {
 
 			foreach ($externalList['courses'] as $key => $course)
 			{
-				$transaction = $this->checkCourse($course, $cacheList, $confDB);
+				$transaction = $this->checkCourse($course, $cacheList, $confDB, $searchingDeletions);
 				if ($transaction != null)
 				{
 					array_push($this->transactions, $transaction);
@@ -72,7 +93,7 @@ abstract class dataStrategy {
 		{
 			foreach ($externalList['coursemember'] as $key => $coursemember)
 			{
-				$transaction = $this->checkCourseMember($coursemember, $cacheList, $confDB);
+				$transaction = $this->checkCourseMember($coursemember, $cacheList, $confDB, $searchingDeletions);
 				if ($transaction != null)
 				{
 					array_push($this->transactions, $transaction);
@@ -93,7 +114,7 @@ abstract class dataStrategy {
 	 * @return A transaction if necessary, or null otherwise.
 	 *
 	 * */
-	private function checkUser($user, $list, $confDB)
+	private function checkUser($user, $list, $confDB, $searchingDeletions)
 	{
 		
 		/*Search for $user in db and put data in TEuser*/
@@ -113,9 +134,16 @@ abstract class dataStrategy {
 					return null;
 				}
 			}
+			if($searchingDeletions)
+			{
+				return null;
+			}
 			return new transaction('update', 'users', $user);
 		}
-
+		if($searchingDeletions)
+		{
+			return new transaction('delete', 'user', $user);
+		}
 		return new transaction('insert', 'user', $user);
 	}
 
@@ -129,7 +157,7 @@ abstract class dataStrategy {
 	 * @return A transaction if necessary, or null otherwise.
 	 *
 	 * */
-	private function checkCourse($course, $list, $confDB)
+	private function checkCourse($course, $list, $confDB, $searchingDeletions)
 	{
 
 		/*Temporary measure. It wont be necessary if externalList element arrive here validated.*/
@@ -156,9 +184,17 @@ abstract class dataStrategy {
 					return null;
 				}
 			}
+			
+			if($searchingDeletions)
+			{
+				return null;
+			}
 			return new transaction('update', 'course', $course);
 		}
-
+		if($searchingDeletions)
+		{
+			return new transaction('delete', 'course', $course);
+		}
 		return new transaction('insert', 'course', $course);
 	}
 
@@ -172,7 +208,7 @@ abstract class dataStrategy {
 	 * @return A transaction if necessary, or null otherwise.
 	 *
 	 * */
-	private function checkCourseMember($coursemember, $list, $confDB)
+	private function checkCourseMember($coursemember, $list, $confDB, $searchingDeletions)
 	{
 
 		/*Temporary measure. It wont be necessary if externalList element arrive here validated.*/
@@ -199,10 +235,19 @@ abstract class dataStrategy {
 					//return new transaction('do nothing!', 'coursemember', $coursemember);
 					return null;
 				}
+			}
+			if($searchingDeletions)
+			{
+				return null;
 			}		
 			return new transaction('update', 'coursemember', $coursemember);
 		}
 
+		if($searchingDeletions)
+		{
+			return new transaction('delete', 'coursemember', $coursemember);
+		}
+		
 		return new transaction('insert', 'coursemember', $coursemember);
 	}
 }
