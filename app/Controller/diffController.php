@@ -139,7 +139,7 @@ class diffController {
 		/*
 		 * TODO redundant information in parameter $formatType? See DifferContext.php.
 		 * */
-		return $differentiator->diff($this->externalList, $this->cacheList, null, $confDbCache);
+		return $differentiator->diff($this->externalList, $this->cacheList, null, $confDbCache, $confDB);
 	}
 
 	/**

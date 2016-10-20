@@ -6,8 +6,8 @@ require_once '../Wrapper/DBWrapper.php';
 
 /*
  * TODO
- * External confDB has to arrive here, to be used in differ method.
- * Test searchingDeletions before create the sql query inside each check method. 
+ * External confDB has to arrive here, to be used in differ method. yes
+ * Test searchingDeletions before create the sql query inside each check method.  yes
  * 
  * */
 
@@ -37,23 +37,17 @@ abstract class dataStrategy {
 	 * @return List with transactions needed to be perform in order to obtain
 	 * a synchronized state of the system with the external data.
 	 */
-	public function diff($externalList, $cacheList, $formatType, $confDB) {
+	public function diff($externalList, $cacheList, $formatType, $confDB, $confExternalDB) {
 		
 		//var_dump($externalList);
-		
+		$this->transactions = array();
 		$this->differ($externalList, $cacheList, $formatType, $confDB);
-		$this->differ($cacheList, $externalList, $formatType, $confDB, 1);
+		$this->differ($cacheList, $externalList, $formatType, $confExternalDB, 1);
 		return $this->transactions;
 	}	
 
 	
 	private function differ($externalList, $cacheList, $formatType, $confDB, $searchingDeletions=0) {
-		
-		if(!isset($this->transactions))
-		{
-			echo "Entrei aqui so uma vez ta.\n";
-			$this->transactions = array();
-		}
 		
 		/* 
 		 * For each target:
@@ -105,6 +99,62 @@ abstract class dataStrategy {
 	}
 
 	/**
+	 * This method returns the data that will be compared to each element of the read list.
+	 * The return can be used to compare external list data in order to find needed insertions and updates,
+	 * and to compare the internal list data in order to find needed deletions.
+	 * 
+	 * @param $dataTarget string Can be 'users', 'courses' and 'coursemember'; indicates which type of data
+	 * has to be returned.
+	 * @param $searchingDeletions boolean Indicates if the data will has to be read from internal or external database.
+	 * 
+	 * @return The exactly return value from the sql query containing all users, courses or coursemember relations.'
+	 * 
+	 * TODO Change unsafe sql concatenation, use the right pdo call.
+	 * */
+	private function getData($dataTarget, $filtersForSearch, $confDB, $searchingDeletions)
+	{
+		$dbAccess = new DBWrapper();
+		
+		/* For each return value: search for $dataTarget in db and return data. */
+		switch ($dataTarget) {
+			case 'users':
+				if($searchingDeletions)
+				{
+					return $dbAccess->dataRequest($confDB, "select * from users where login='". $filtersForSearch['login'] . "';");
+				}
+				return $dbAccess->dataRequest($confDB, "select * from usersCache where login='". $filtersForSearch['login'] . "';");
+			
+			
+			case 'courses':
+				if($searchingDeletions)
+				{
+					return $dbAccess->dataRequest($confDB, "select * from courses where courseName='". $filtersForSearch['courseName'] . "';");
+				}
+				return $dbAccess->dataRequest($confDB, "select * from coursesCache where courseName='". $filtersForSearch['courseName'] . "';");
+				
+			case 'coursemember':
+				if($searchingDeletions)
+				{
+					return $dbAccess->dataRequest($confDB, 
+												  			"select * from coursemember where courseName='". 
+												 			 $filtersForSearch['courseName'] . "' AND login='" . 
+												 			 $filtersForSearch['login'] . "';'");
+				}
+				return $dbAccess->dataRequest($confDB, 
+												  		"select * from coursememberCache where courseName='". 
+												 		 $filtersForSearch['courseName'] . "' AND login='" . 
+												 		 $filtersForSearch['login'] . "';'");
+			
+			default:
+				/* 
+				 * TODO Put it inside try-catch.
+				 * */
+				echo "FATAL ERROR. UNEXPECTED DATA TARGETED FOR DATABASE COMPARISON STRATEGY.";
+			break;
+		}
+	}
+	
+	/**
 	 * Check if $user is inside $list and determines if a transaction is needed.
 	 *
 	 * @param $user list An array with keys login, name and email.
@@ -112,18 +162,15 @@ abstract class dataStrategy {
 	 * @param $confDB An array with information for teleduc's database access.
 	 *
 	 * @return A transaction if necessary, or null otherwise.
-	 *
 	 * */
 	private function checkUser($user, $list, $confDB, $searchingDeletions)
 	{
 		
-		/*Search for $user in db and put data in TEuser*/
-
-		$dbAccess = new DBWrapper();
 		/*TEMPORARY! Dont put in production with this!!!!!!*/
-		$TEuser = $dbAccess->dataRequest($confDB, "select * from usersCache where login='". $user['login'] . "';");
+		//$TEuser = $dbAccess->dataRequest($confDB, "select * from usersCache where login='". $user['login'] . "';");
+		$TEuser = $this->getData('users', $user, $confDB, $searchingDeletions);
 		
-		if($TEuser[0]['login'] == $user['login'])
+		if(isset($TEuser[0]) && $TEuser[0]['login'] == $user['login'])
 		{
 			$numOfLines=count($TEuser);
 			for($i = 0; $i < $numOfLines; $i = $i+1)
@@ -155,7 +202,6 @@ abstract class dataStrategy {
 	 * @param $confDB An array with information for teleduc's database access.
 	 *
 	 * @return A transaction if necessary, or null otherwise.
-	 *
 	 * */
 	private function checkCourse($course, $list, $confDB, $searchingDeletions)
 	{
@@ -166,14 +212,11 @@ abstract class dataStrategy {
 			return null;
 		}
 		
-		/*Search for $course in db and put data in TEusercourse*/
-
-		$dbAccess = new DBWrapper();
 		/*TEMPORARY! Dont put in production with this!!!!!!*/
-		$TEcourse = $dbAccess->dataRequest($confDB, "select * from coursesCache where courseName='". $course['courseName'] . "';");
-
+		//$TEcourse = $dbAccess->dataRequest($confDB, "select * from coursesCache where courseName='". $course['courseName'] . "';");
+		$TEcourse = $this->getData('courses', $course, $confDB, $searchingDeletions);
 		
-		if($TEcourse[0]['courseName'] == $course['courseName'])
+		if(isset($TEcourse[0]) && $TEcourse[0]['courseName'] == $course['courseName'])
 		{
 			$numOfLines=count($TEcourse);
 			for($i = 0; $i < $numOfLines; $i = $i + 1)
@@ -206,7 +249,6 @@ abstract class dataStrategy {
 	 * @param $confDB An array with information for teleduc's database access.
 	 *
 	 * @return A transaction if necessary, or null otherwise.
-	 *
 	 * */
 	private function checkCourseMember($coursemember, $list, $confDB, $searchingDeletions)
 	{
@@ -217,14 +259,14 @@ abstract class dataStrategy {
 			return null;
 		}
 		
-		/*Search for $coursemember in db and put data in TEcoursemember*/
 
 		$dbAccess = new DBWrapper();
-		/*TEMPORARY! Dont put in production with this!!!!!!*/
-		$TEcoursemember = $dbAccess->dataRequest($confDB, "select * from coursememberCache where courseName='". $coursemember['courseName'] . "' AND login='" . $coursemember['login'] . "';'");
-
 		
-		if($TEcoursemember[0]['courseName'] == $coursemember['courseName'] && $TEcoursemember[0]['login'] == $coursemember['login'])
+		/*TEMPORARY! Dont put in production with this!!!!!!*/
+		//$TEcoursemember = $dbAccess->dataRequest($confDB, "select * from coursememberCache where courseName='". $coursemember['courseName'] . "' AND login='" . $coursemember['login'] . "';'");
+		$TEcoursemember = $this->getData('coursemember', $coursemember, $confDB, $searchingDeletions);
+		
+		if(isset($TEcoursemember[0]) && $TEcoursemember[0]['courseName'] == $coursemember['courseName'] && $TEcoursemember[0]['login'] == $coursemember['login'])
 		{
 			
 			$numOfLines = count($TEcoursemember);

@@ -55,9 +55,9 @@ class DifferContext {
 	 * TODO Redundant information in parameter $formatType? This information is
 	 * given in the constructor of the object.
 	 */
-	public function diff($externalList, $cacheList, $formatType, $confDB) {
+	public function diff($externalList, $cacheList, $formatType, $confDB, $confExternalDB) {
 
-		return $this->dataStrategy->diff($externalList, $cacheList, $formatType, $confDB);
+		return $this->dataStrategy->diff($externalList, $cacheList, $formatType, $confDB, $confExternalDB);
 		/*Shoul return getTransactions from JSON or XML or CSV strategy.*/
 	}
 }
