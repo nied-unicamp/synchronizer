@@ -3,7 +3,7 @@
  * This class represents a need operation in the internal database
  * in order to obtain a synchronized state.
  */
-class transaction {
+class transaction implements JsonSerializable {
 	/**
 	 * Represents what need to be done. Can be an update, an insertion or a deletion.000
 	 */
@@ -51,5 +51,16 @@ class transaction {
 
 	public function setOperand($operand) {
 		$this->operand = $operand;
+	}
+	
+	public function jsonSerialize()
+	{
+		return [
+				'transaction' => [
+						'operation' => $this->operation,
+						'operator' => $this->operator,
+						'operand' => $this->operand
+				]
+		];
 	}
 }

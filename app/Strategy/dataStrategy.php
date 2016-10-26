@@ -26,7 +26,7 @@ abstract class dataStrategy {
 	 * An array with all the necessary transactions for the execution of
 	 * the sync process.
 	 */
-	private $transactions;
+	protected $transactions;
 
 	/**
 	 * Common procedure for creation of $this->transactions;
@@ -40,6 +40,8 @@ abstract class dataStrategy {
 	public function diff($externalList, $cacheList, $formatType, $confDB, $confExternalDB) {
 		
 		//var_dump($externalList);
+		//var_dump($cacheList);
+		
 		$this->transactions = array();
 		$this->differ($externalList, $cacheList, $formatType, $confDB);
 		$this->differ($cacheList, $externalList, $formatType, $confExternalDB, 1);
@@ -62,7 +64,7 @@ abstract class dataStrategy {
 			// $user is an array with keys login, name and email.
 			foreach ($externalList['users'] as $key => $user)
 			{
-				$transaction = $this->checkUser($user, $cacheList, $confDB, $searchingDeletions);
+				$transaction = $this->checkUser($user, /*$cacheList,*/ $confDB, $searchingDeletions);
 				if ($transaction != null)
 				{
 					array_push($this->transactions, $transaction);
@@ -75,7 +77,7 @@ abstract class dataStrategy {
 
 			foreach ($externalList['courses'] as $key => $course)
 			{
-				$transaction = $this->checkCourse($course, $cacheList, $confDB, $searchingDeletions);
+				$transaction = $this->checkCourse($course, /*$cacheList,*/ $confDB, $searchingDeletions);
 				if ($transaction != null)
 				{
 					array_push($this->transactions, $transaction);
@@ -87,7 +89,7 @@ abstract class dataStrategy {
 		{
 			foreach ($externalList['coursemember'] as $key => $coursemember)
 			{
-				$transaction = $this->checkCourseMember($coursemember, $cacheList, $confDB, $searchingDeletions);
+				$transaction = $this->checkCourseMember($coursemember, /*$cacheList,*/ $confDB, $searchingDeletions);
 				if ($transaction != null)
 				{
 					array_push($this->transactions, $transaction);
@@ -163,7 +165,7 @@ abstract class dataStrategy {
 	 *
 	 * @return A transaction if necessary, or null otherwise.
 	 * */
-	private function checkUser($user, $list, $confDB, $searchingDeletions)
+	private function checkUser($user, /*$list,*/ $confDB, $searchingDeletions)
 	{
 		
 		/*TEMPORARY! Dont put in production with this!!!!!!*/
@@ -203,7 +205,7 @@ abstract class dataStrategy {
 	 *
 	 * @return A transaction if necessary, or null otherwise.
 	 * */
-	private function checkCourse($course, $list, $confDB, $searchingDeletions)
+	private function checkCourse($course, /*$list,*/ $confDB, $searchingDeletions)
 	{
 
 		/*Temporary measure. It wont be necessary if externalList element arrive here validated.*/
@@ -250,7 +252,7 @@ abstract class dataStrategy {
 	 *
 	 * @return A transaction if necessary, or null otherwise.
 	 * */
-	private function checkCourseMember($coursemember, $list, $confDB, $searchingDeletions)
+	private function checkCourseMember($coursemember, /*$list,*/ $confDB, $searchingDeletions)
 	{
 
 		/*Temporary measure. It wont be necessary if externalList element arrive here validated.*/

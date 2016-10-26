@@ -120,6 +120,8 @@ class synchView {
 												);
 
 		var_dump($transactions);
+		//var_dump(json_decode($transactions));
+		//echo $transactions;
 		
 		echo "<br>";
 

@@ -57,7 +57,9 @@ class DifferContext {
 	 */
 	public function diff($externalList, $cacheList, $formatType, $confDB, $confExternalDB) {
 
-		return $this->dataStrategy->diff($externalList, $cacheList, $formatType, $confDB, $confExternalDB);
+		//return $this->dataStrategy->diff($externalList, $cacheList, $formatType, $confDB, $confExternalDB);
+		$this->dataStrategy->diff($externalList, $cacheList, $formatType, $confDB, $confExternalDB);
+		return $this->dataStrategy->getTransactions();
 		/*Shoul return getTransactions from JSON or XML or CSV strategy.*/
 	}
 }

@@ -9,7 +9,7 @@ class JSONStrategy extends dataStrategy {
 	/**
 	 * Transactions list.
 	 */
-	private $transactions;
+	//private $transactions;
 
 	/**
 	 * TODO Auto-generated comment.
@@ -32,6 +32,10 @@ class JSONStrategy extends dataStrategy {
 	 * */
 	public function getTransactions()
 	{
-		return json_encode($this->transactions);
+		return $this->transactions;
+		//$visibleTransactions = $this->transactions;
+		//$returno = json_encode($this->transactions);
+		//echo json_last_error();
+		//return $returno;
 	}
 }
