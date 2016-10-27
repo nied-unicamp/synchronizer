@@ -45,12 +45,14 @@ class userDAO implements abstractDAO {
 	 * TODO Auto-generated comment.
 	 */
 	public function updateUser($dbInfo, $serverType, $user) {
+		
 	}
 
 	/**
 	 * TODO Auto-generated comment.
 	 */
 	public function deleteUser($dbInfo, $serverType, $user) {
+		
 	}
 	
 	public function serverQuery($string, $serverType){

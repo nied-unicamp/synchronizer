@@ -10,32 +10,36 @@ class synchController {
 	/**
 	 * TODO Auto-generated comment.
 	 */
-	private $transactions;
+	//private $transactions;
 	/**
 	 * TODO Auto-generated comment.
 	 */
-	private $singleTransaction;
+	//private $singleTransaction;
 	/**
 	 * TODO Auto-generated comment.
 	 */
-	private $iterator;
+	//private $iterator;
 
 	/**
 	 * TODO Auto-generated comment.
 	 */
 	public function synchronize($confTE, $serverType, $transactions) {
 		
-		$doIteration = new transactionIterator($transactions);
-		$doTransInDB = new transactionDAO();
-		//echo "Numero de transacoes dentro do iterador: " . $doIteration->numOfTrans . "<br>";
+		$transIterator = new transactionIterator($transactions);
+		$transRealizer = new transactionDAO();
+		//echo "Numero de transacoes dentro do iterador: " . $transIterator->numOfTrans . "<br>";
 		
-		while($doIteration->hasNext())
+		while($transIterator->hasNext())
 		{
-			var_dump($doIteration->current());
-			echo "<br>";
-			$doIteration->next();
+			
+			//var_dump($transIterator->current());
+			//echo "<br>";
+			
+			$transRealizer->doTransaction($confTE, $serverType, $transIterator->current());
+			$transIterator->next();
+			
 		}
 		
-		return false;
+		return true;
 	}
 }
