@@ -13,7 +13,7 @@ class transaction implements JsonSerializable {
 	 * Generically represents what kind of data has to be manipulated. Can be a course,
 	 * an user or a course-member relation.
 	 */
-	private $operator;
+	private $dataType;
 	
 	/**
 	 * Specifically represents the data to be manipulates. Expected to be an array with
@@ -21,10 +21,10 @@ class transaction implements JsonSerializable {
 	 */
 	private $operand;
 
-	public function __construct($operation, $operator, $operand) {
+	public function __construct($operation, $dataType, $operand) {
 		
 		$this->setOperation($operation);
-		$this->setOperator($operator);
+		$this->setdataType($dataType);
 		$this->setOperand($operand);
 		
 	}	
@@ -33,8 +33,8 @@ class transaction implements JsonSerializable {
 		return $this->operation;
 	}
 
-	public function getOperator() {
-		return $this->operator;
+	public function getdataType() {
+		return $this->dataType;
 	}
 
 	public function getOperand() {
@@ -45,8 +45,8 @@ class transaction implements JsonSerializable {
 		$this->operation = $operation;
 	}
 
-	public function setOperator($operator) {
-		$this->operator = $operator;
+	public function setdataType($dataType) {
+		$this->dataType = $dataType;
 	}
 
 	public function setOperand($operand) {
@@ -58,7 +58,7 @@ class transaction implements JsonSerializable {
 		return [
 				'transaction' => [
 						'operation' => $this->operation,
-						'operator' => $this->operator,
+						'dataType' => $this->dataType,
 						'operand' => $this->operand
 				]
 		];

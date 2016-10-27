@@ -119,7 +119,8 @@ class synchView {
 													$request->post['targets'], $request->post['serverType']
 												);
 
-		var_dump($transactions);
+		echo "Numero real de transactions:" . count($transactions) . "<br>";
+		//var_dump($transactions);
 		//var_dump(json_decode($transactions));
 		//echo $transactions;
 		
@@ -128,7 +129,10 @@ class synchView {
 
 
 		// TODO Review parameters of the following line.
+		//OLD
 		//$controlsSync->synchronize($confTE, $serverType, $transactions);
+		
+		$controlsSync->synchronize($this->confDBCache, $request->post['serverType'], $transactions);
 //
 
 

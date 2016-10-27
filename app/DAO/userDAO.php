@@ -38,6 +38,7 @@ class userDAO implements abstractDAO {
 	 * TODO Auto-generated comment.
 	 */
 	public function addUser($dbInfo, $serverType, $user) {
+		
 	}
 
 	/**

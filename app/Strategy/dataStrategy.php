@@ -187,7 +187,7 @@ abstract class dataStrategy {
 			{
 				return null;
 			}
-			return new transaction('update', 'users', $user);
+			return new transaction('update', 'user', $user);
 		}
 		if($searchingDeletions)
 		{
