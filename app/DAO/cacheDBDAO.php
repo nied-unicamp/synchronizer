@@ -36,25 +36,26 @@ class cacheDBDAO{
 		 */
 	}
 
-	private function deleteCacheIfExists($cacheManager, $confDBCache) {
+	public function deleteCacheIfExists($cacheManager, $confDBCache) {
 		/**
 		 * Deletes users cache table, if exists.
 		 * */
-		if(!$cacheManager->operationOrder($confDBCache, "show tables like 'usersCache';")){
+		if($cacheManager->tableExists($confDBCache, "usersCache")){
 			$cacheManager->operationOrder($confDBCache, 'drop table usersCache');
+			echo "<h1>REMOVI UMA TABELA QUE EXISTE.</h1><br>";
 		}
 
 		/**
 		 * Deletes courses cache table, if exists.
 		 * */
-		if(!$cacheManager->operationOrder($confDBCache, "show tables like 'coursesCache';")){
+		if($cacheManager->tableExists($confDBCache, "coursesCache")){
 			$cacheManager->operationOrder($confDBCache, 'drop table coursesCache');
 		}
 
 		/**
 		 * Deletes coursemember relations cache table, if exists.
 		 * */
-		if(!$cacheManager->operationOrder($confDBCache, "show tables like 'coursememberCache';")){
+		if($cacheManager->tableExists($confDBCache, "coursememberCache")){
 			$cacheManager->operationOrder($confDBCache, 'drop table coursememberCache');
 		}
 	}

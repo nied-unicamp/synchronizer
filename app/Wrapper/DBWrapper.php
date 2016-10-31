@@ -5,8 +5,13 @@ require_once '../Strategy/serverStrategy.php';
 /**
  * TODO Try to encapsulate trycatchs blocks; test bindValue.
  */
+
+
+
 class DBWrapper extends serverStrategy {
 
+	private $executionReturnValue;
+	
 	public function operationOrder($confDB, $query, $prepare=false, $values=NULL) {
 		
 		try {
@@ -23,7 +28,22 @@ class DBWrapper extends serverStrategy {
 					
 	 				$stmt->bindParam($key+1, $value);
 	 			}
-				return $stmt->execute();
+	 			
+	 			$this->executionReturnValue = $stmt->execute();
+	 			
+	 			if($this->executionReturnValue)
+	 			{
+	 				$data = array();
+	 				while($row = $stmt->fetch(PDO::FETCH_ASSOC))
+	 				{
+	 					array_push($data, $row);
+	 				}	
+	 				return $data;
+	 			}
+				throw new PDOException(
+				"<h2>ERROR: Couldn't execute query.</h2>"
+						);
+						trigger_error ('<h2>Exception: ' . $e->getMessage() . '</h2><br>', E_USER_ERROR);
 				
 			}
 		
@@ -81,6 +101,31 @@ class DBWrapper extends serverStrategy {
 		
 	}
 	
+	public function tableExists($confDB, $tableName)
+	{
+		$pdo = $this->createConnection($confDB);
+		
+		$query = "SHOW TABLES LIKE :tablename";
+		$safeQuerier = $pdo->prepare($query);
+		$safeQuerier->bindParam(":tablename", $tableName,  PDO::PARAM_STR);
+		
+		$sqlResult = $safeQuerier->execute();
+		
+		if($sqlResult)
+		{
+			$row = $safeQuerier->fetch(PDO::FETCH_NUM);
+			if ($row[0]) {
+				//table was found
+				return true;
+			} 
+			//table was not found
+			return false;
+		}
+		
+		//some PDO error occurred
+		echo("Could not check if table exists, Error: ".var_export($pdo->errorInfo(), true));
+		return false;
+	}
 	
 	private function createConnection($confDB){
 			

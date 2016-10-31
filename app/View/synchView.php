@@ -113,13 +113,42 @@ class synchView {
 //  		$testCacheUpdater= new cacheDBDAO();
 //  		$testCacheUpdater->updateCacheDB($this->confDBCache);
 
+//  		echo 'confDBCache:<br>';
+//  		var_dump($this->confDBCache);
+//  		echo '<br><br>';
+
+ 		
+ 		
+//  		$cacheManager = new DBWrapper();
+//  		echo 'Retorno da consulta:<br>';
+//  		var_dump($cacheManager->operationOrder($this->confDBCache, "select * from usersCache where login=?;", true, array('admtele')));
+		
+
+ 		
+ 		
+// 		echo '<br><br>';
+// 		echo 'confDB:<br>';
+// 		var_dump($this->confDB);
+// 		echo '<br><br>';
+// 		echo 'teste da funcao verificadora da existencia de tabela:<br>';
+// 		var_dump($cacheManager->tableExists($this->confDBCache, "usersCache"));
+// 		echo '<br><br>';
+		
+// 		$testecacheDBDAO = new cacheDBDAO();
+// 		$testecacheDBDAO->deleteCacheIfExists($cacheManager, $this->confDBCache);
+		
+		
+		
+		
+		
+		
 //These lines are the future calls. They dont work yet.
 		$transactions = $controlsDiff->createDiff(
 													$this->confDB, $this->confDBCache,
 													$request->post['targets'], $request->post['serverType']
 												);
 
-		echo "Numero real de transactions:" . count($transactions) . "<br>";
+		echo "<br><br>Numero real de transactions:" . count($transactions) . "<br>";
 		//var_dump($transactions);
 		//var_dump(json_decode($transactions));
 		//echo $transactions;

@@ -34,6 +34,12 @@ class userDAO implements abstractDAO {
 		return $recordsLoader->serverQuery($dbInfo, $query);
 	}
 
+	public function getUserByLogin($dbInfo, $serverType, $internal)
+	{
+		//$confDB, "select * from users where login='". $filtersForSearch['login'] . "';"
+		
+	}
+	
 	/**
 	 * TODO Auto-generated comment.
 	 */
