@@ -79,7 +79,7 @@ class diffController {
 		/*
 		 * Iterates thougth the targets, getting a list of the data for each target.
 		 * */
-		foreach($syncTargets as $key => $target)
+		foreach($syncTargets as $target)
 		{
 			/*
 			 * Creates a object according to the target information.

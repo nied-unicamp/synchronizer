@@ -261,9 +261,6 @@ abstract class dataStrategy {
 			return null;
 		}
 		
-
-		$dbAccess = new DBWrapper();
-		
 		/*TEMPORARY! Dont put in production with this!!!!!!*/
 		//$TEcoursemember = $dbAccess->dataRequest($confDB, "select * from coursememberCache where courseName='". $coursemember['courseName'] . "' AND login='" . $coursemember['login'] . "';'");
 		$TEcoursemember = $this->getData('coursemember', $coursemember, $confDB, $searchingDeletions);

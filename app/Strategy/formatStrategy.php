@@ -2,7 +2,7 @@
 /**
  * TODO Auto-generated comment.
  */
-class formatStrategy {
+abstract class formatStrategy {
 
 	private $daoObject;
 	

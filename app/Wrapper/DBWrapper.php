@@ -23,7 +23,8 @@ class DBWrapper extends serverStrategy {
 				
 				
 				/* Needs the & because bindParam expects a variable!
-				 * TODO Test with bindValue.*/
+				 * TODO Test with bindValue.
+				 * TODO Try catch here.*/
 	 			foreach ($values as $key => &$value) {
 					
 	 				$stmt->bindParam($key+1, $value);
@@ -40,10 +41,9 @@ class DBWrapper extends serverStrategy {
 	 				}	
 	 				return $data;
 	 			}
-				throw new PDOException(
-				"<h2>ERROR: Couldn't execute query.</h2>"
-						);
-						trigger_error ('<h2>Exception: ' . $e->getMessage() . '</h2><br>', E_USER_ERROR);
+	 			
+				throw new PDOException("<h2>ERROR: Couldn't execute query.</h2>");
+				//trigger_error ('<h2>Exception: ' . $e->getMessage() . '</h2><br>', E_USER_ERROR);
 				
 			}
 		
@@ -103,7 +103,12 @@ class DBWrapper extends serverStrategy {
 	
 	public function tableExists($confDB, $tableName)
 	{
-		$pdo = $this->createConnection($confDB);
+		//TODO Try catch here.
+		try {
+			$pdo = $this->createConnection($confDB);
+		} catch (Exception $e) {
+			trigger_error ('<h2>Exception: ' . $e->getMessage() . '</h2><br>', E_USER_ERROR);
+		}
 		
 		$query = "SHOW TABLES LIKE :tablename";
 		$safeQuerier = $pdo->prepare($query);
@@ -143,7 +148,6 @@ class DBWrapper extends serverStrategy {
 				throw new PDOException(
 				"<h2>ERROR: Couldn't connect to database. Please check the information given about the external database.</h2>"
 						);
-						trigger_error ('<h2>Exception: ' . $e->getMessage() . '</h2><br>', E_USER_ERROR);
 						break;
 		}
 	}

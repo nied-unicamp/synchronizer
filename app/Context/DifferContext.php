@@ -9,23 +9,13 @@ require_once '../Strategy/dataStrategy.php';
 class DifferContext {
 
 	/**
-	 * TODO Auto-generated comment.
-	 */
-	private $data;
-
-	/**
-	 * TODO Auto-generated comment.
+	 * Desired data type when returning the transactions list.
 	 */
 	private $dataType;
 
 	/**
-	 * Atomic operations that need to be done in teleduc's database
-	 * in order to obtain a synchronized stated.
-	 */
-	private $transactions;
-
-	/**
-	 * TODO Auto-generated comment.
+	 * Strategy generated on construction according to the desired data type when 
+	 * returning the transactions list.
 	 */
 	private $dataStrategy;
 
@@ -34,6 +24,8 @@ class DifferContext {
 	 */
 	public function __construct($dataType) {
 
+		$this->dataType = $dataType;
+		
 		switch($dataType){
 
 			case 'DATA_TYPE_JSON':
