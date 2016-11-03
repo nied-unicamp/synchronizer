@@ -34,12 +34,13 @@ class DBWrapper extends serverStrategy {
 	 			
 	 			if($this->executionReturnValue)
 	 			{
-	 				$data = array();
-	 				while($row = $stmt->fetch(PDO::FETCH_ASSOC))
-	 				{
-	 					array_push($data, $row);
-	 				}	
-	 				return $data;
+// 	 				$data = array();
+// 	 				while($row = $stmt->fetch(PDO::FETCH_ASSOC))
+// 	 				{
+// 	 					array_push($data, $row);
+// 	 				}	
+// 	 				return $data;
+					return $this->dataFetch($stmt);
 	 			}
 	 			
 				throw new PDOException("<h2>ERROR: Couldn't execute query.</h2>");
@@ -68,9 +69,15 @@ class DBWrapper extends serverStrategy {
 	 * 
 	 * TODO Find a way to know if its necessary to use conn->query or conn->exec. 
 	 */
-	public function dataRequest($confDB, $query) {
+	public function dataRequest($confDB, $query, $values=NULL) {
 		
-		$data = array();
+		//$data = array();
+		
+		if($values != NULL)
+		{
+			var_dump($values);
+			return $this->operationOrder($confDB, $query, true, $values);
+		}
 		
 		try {
 
@@ -78,14 +85,7 @@ class DBWrapper extends serverStrategy {
 			$result = $conn->query($query);
 			
 			if($result){
-				
-				/*
-				 * Build an array with a row in each element. Each row is also a array with the data
-				 * of the line from the table.
-				 * */
-				while($row = $result->fetch(PDO::FETCH_ASSOC)){
-					array_push($data, $row);
-				}			
+				return $this->dataFetch($result);			
 			}
 			
 		} 
@@ -97,8 +97,23 @@ class DBWrapper extends serverStrategy {
 		}
 
 		
-		return $data;
+		//return $data;
 		
+	}
+	
+	private function  dataFetch($result)
+	{
+		$data = array();
+		
+		/*
+		 * Build an array with a row in each element. Each row is also a array with the data
+		 * of the line from the table.
+		 * */
+		while($row = $result->fetch(PDO::FETCH_ASSOC)){
+			array_push($data, $row);
+		}
+		
+		return $data;
 	}
 	
 	public function tableExists($confDB, $tableName)

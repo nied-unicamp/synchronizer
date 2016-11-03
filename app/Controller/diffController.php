@@ -130,8 +130,8 @@ class diffController {
 		/*
 		 * Update cache tables.
 		 * */
- 		//$cacheDaoUpdater = new cacheDBDAO();
- 		//$cacheDaoUpdater->updateCacheDB($confDbCache);
+ 		$cacheDaoUpdater = new cacheDBDAO();
+ 		$cacheDaoUpdater->updateCacheDB($confDbCache);
 
 		// TODO Here, servertype has to be the internal teleduc's database?
 		$this->cacheList = $this->configDB($confDbCache, $syncTargets, 'SERVER_TYPE_MYSQL', 1);

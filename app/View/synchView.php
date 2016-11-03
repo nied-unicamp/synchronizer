@@ -119,11 +119,12 @@ class synchView {
 
  		
  		
-//  		$cacheManager = new DBWrapper();
-//  		echo 'Retorno da consulta:<br>';
-//  		var_dump($cacheManager->operationOrder($this->confDBCache, "select * from usersCache where login=?;", true, array('admtele')));
-		
-
+   		$cacheManager = new DBWrapper();
+//   		echo 'Retorno da consulta:<br>';
+//   		var_dump($cacheManager->operationOrder($this->confDBCache, "select * from usersCache where login=?;", true, array('admtele')));
+//   		echo '<br><br>';
+   		echo 'Retorno da megaconsulta:<br>';
+   		var_dump($cacheManager->dataRequest($this->confDBCache, "select * from usersCache where login=?", array('admtele')));
  		
  		
 // 		echo '<br><br>';

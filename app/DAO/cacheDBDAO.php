@@ -42,7 +42,6 @@ class cacheDBDAO{
 		 * */
 		if($cacheManager->tableExists($confDBCache, "usersCache")){
 			$cacheManager->operationOrder($confDBCache, 'drop table usersCache');
-			echo "<h1>REMOVI UMA TABELA QUE EXISTE.</h1><br>";
 		}
 
 		/**
