@@ -1,6 +1,6 @@
 <?php
 
-require_once '../Wrapper/DBWrapper.php';
+require_once dirname(__FILE__) . '/../Wrapper/DBWrapper.php';
 
 /**
  * This class does the manipulation from CacheDB's data. 
@@ -41,28 +41,28 @@ class cacheDBDAO{
 		 * Deletes users cache table, if exists.
 		 * */
 		if($cacheManager->tableExists($confDBCache, "usersCache")){
-			$cacheManager->operationOrder($confDBCache, 'drop table usersCache');
+			$cacheManager->manipulateData($confDBCache, 'drop table usersCache');
 		}
 
 		/**
 		 * Deletes courses cache table, if exists.
 		 * */
 		if($cacheManager->tableExists($confDBCache, "coursesCache")){
-			$cacheManager->operationOrder($confDBCache, 'drop table coursesCache');
+			$cacheManager->manipulateData($confDBCache, 'drop table coursesCache');
 		}
 
 		/**
 		 * Deletes coursemember relations cache table, if exists.
 		 * */
 		if($cacheManager->tableExists($confDBCache, "coursememberCache")){
-			$cacheManager->operationOrder($confDBCache, 'drop table coursememberCache');
+			$cacheManager->manipulateData($confDBCache, 'drop table coursememberCache');
 		}
 	}
 
 	private function createCacheTables($cacheManager, $confDBCache) {
 
 		/*Login, nome, email*/
-		$cacheManager->operationOrder($confDBCache, "
+		$cacheManager->manipulateData($confDBCache, "
 				CREATE TABLE usersCache
 				(
 				login varchar(128),
@@ -71,7 +71,7 @@ class cacheDBDAO{
 				);
 				");
 		/*nome_curso, categoria*/
-		$cacheManager->operationOrder($confDBCache, "
+		$cacheManager->manipulateData($confDBCache, "
 				CREATE TABLE coursesCache
 				(
 				courseName varchar(128),
@@ -80,7 +80,7 @@ class cacheDBDAO{
 				");
 
 		/*login, curso, papel*/
-		$cacheManager->operationOrder($confDBCache, "
+		$cacheManager->manipulateData($confDBCache, "
 				CREATE TABLE coursememberCache
 				(
 				login varchar(128),
@@ -123,7 +123,7 @@ class cacheDBDAO{
 // 			echo '<br>
 // 					';
 
-			$cacheManager->operationOrder(  $confDBCache,
+			$cacheManager->manipulateData(  $confDBCache,
 											"INSERT INTO usersCache (login, name, email) VALUES (?,?,?)",
 											true,
 											array($value['login'], $value['name'], $value['email']));
@@ -136,7 +136,7 @@ class cacheDBDAO{
 			echo '<br>
 					';
 			*/
-			$cacheManager->operationOrder(  $confDBCache,
+			$cacheManager->manipulateData(  $confDBCache,
 											"INSERT INTO coursesCache (courseName, category) VALUES (?,?)",
 											true,
 											array($value['courseName'], $value['category']));
@@ -151,7 +151,7 @@ class cacheDBDAO{
 					';
 			*/
 
-			$cacheManager->operationOrder(  $confDBCache,
+			$cacheManager->manipulateData(  $confDBCache,
 											"INSERT INTO coursememberCache (login, courseName, role) VALUES (?,?,?)",
 											true,
 											array($value['login'], $value['courseName'], $value['role']));

@@ -1,8 +1,8 @@
 <?php
 
-require_once '../Strategy/userStrategy.php';
-require_once '../Strategy/courseStrategy.php';
-require_once '../Strategy/coursememberStrategy.php';
+require_once dirname(__FILE__) . '/../Strategy/userStrategy.php';
+require_once dirname(__FILE__) . '/../Strategy/courseStrategy.php';
+require_once dirname(__FILE__) . '/../Strategy/coursememberStrategy.php';
 
 
 /**

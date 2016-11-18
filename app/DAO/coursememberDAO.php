@@ -1,6 +1,6 @@
 <?php
 
-require_once '../Context/serverContext.php';
+require_once dirname(__FILE__) . '/../Context/serverContext.php';
 
 /**
  * TODO Auto-generated comment.

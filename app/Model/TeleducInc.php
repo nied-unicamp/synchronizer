@@ -1,6 +1,6 @@
 <?php
 
-require_once 'DBInfo.php';
+require_once dirname(__FILE__) . '/DBInfo.php';
 
 class TeleducInc {
 	

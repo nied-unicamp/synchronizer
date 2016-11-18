@@ -1,7 +1,7 @@
 <?php
 
-require_once '../Wrapper/DBWrapper.php';
-require_once '../Wrapper/restfulWrapper.php';
+require_once dirname(__FILE__) . '/../Wrapper/DBWrapper.php';
+require_once dirname(__FILE__) . '/../Wrapper/restfulWrapper.php';
 
 /**
  * TODO Auto-generated comment.

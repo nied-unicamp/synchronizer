@@ -1,15 +1,15 @@
 <?php
 
-require_once '../Controller/diffController.php';
-require_once '../Controller/synchController.php';
-require_once '../Model/Request.php';
-require_once '../Model/TeleducInc.php';
-require_once '../DAO/cacheDBDAO.php';
-require_once '../Model/DBInfo.php';
+require_once dirname(__FILE__) . '/../Controller/diffController.php';
+require_once dirname(__FILE__) . '/../Controller/synchController.php';
+require_once dirname(__FILE__) . '/../Model/Request.php';
+require_once dirname(__FILE__) . '/../Model/TeleducInc.php';
+require_once dirname(__FILE__) . '/../DAO/cacheDBDAO.php';
+require_once dirname(__FILE__) . '/../Model/DBInfo.php';
 
 
 /*Just for tests!!*/
-require_once '../Wrapper/DBWrapper.php';
+require_once dirname(__FILE__) . '/../Wrapper/DBWrapper.php';
 
 
 /**
@@ -47,7 +47,8 @@ class synchView {
 		 * */
 		if(isset($request->post['targets']))
 		{
-			include "../Layout/synchronizingHeader.html";
+			include dirname(__FILE__) . '/../Layout/synchronizingHeader.html';
+			//include '../Layout/synchronizingHeader.html';
 
 			echo '<p>You asked for a sync.<p>';
 
@@ -63,7 +64,7 @@ class synchView {
 		/*
 		 * Loads default page for synchronizer configuration.
 		 * */
-		include "../Layout/sync.html";
+		include dirname(__FILE__) . '/../Layout/sync.html';
 		
 		return;
 	}
@@ -121,7 +122,7 @@ class synchView {
  		
    		$cacheManager = new DBWrapper();
 //   		echo 'Retorno da consulta:<br>';
-//   		var_dump($cacheManager->operationOrder($this->confDBCache, "select * from usersCache where login=?;", true, array('admtele')));
+//   		var_dump($cacheManager->manipulateData($this->confDBCache, "select * from usersCache where login=?;", true, array('admtele')));
 //   		echo '<br><br>';
    		echo 'Retorno da megaconsulta:<br>';
    		var_dump($cacheManager->dataRequest($this->confDBCache, "select * from usersCache where login=?", array('admtele')));

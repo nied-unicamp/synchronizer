@@ -1,7 +1,7 @@
 <?php
 
-require_once '../Model/transaction.php';
-require_once '../Wrapper/DBWrapper.php';
+require_once dirname(__FILE__) . '/../Model/transaction.php';
+require_once dirname(__FILE__) . '/../Wrapper/DBWrapper.php';
 
 
 /*

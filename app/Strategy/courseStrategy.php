@@ -1,8 +1,8 @@
 <?php
 
-require_once 'formatStrategy.php';
-require_once '../DAO/abstractDAO.php';
-require_once '../DAO/courseDAO.php';
+require_once dirname(__FILE__) . '/formatStrategy.php';
+require_once dirname(__FILE__) . '/../DAO/abstractDAO.php';
+require_once dirname(__FILE__) . '/../DAO/courseDAO.php';
 
 /**
  * Specific strategy for getting the course list from data source.

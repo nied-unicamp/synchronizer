@@ -1,7 +1,7 @@
 <?php
 
-require_once '../Strategy/JSONStrategy.php';
-require_once '../Strategy/dataStrategy.php';
+require_once dirname(__FILE__) . '/../Strategy/JSONStrategy.php';
+require_once dirname(__FILE__) . '/../Strategy/dataStrategy.php';
 
 /**
  * TODO Auto-generated comment.

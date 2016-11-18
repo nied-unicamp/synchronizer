@@ -1,7 +1,7 @@
 <?php
 
-require_once '../Iterator/transactionIterator.php';
-require_once '../DAO/transactionDAO.php';
+require_once dirname(__FILE__) . '/../Iterator/transactionIterator.php';
+require_once dirname(__FILE__) . '/../DAO/transactionDAO.php';
 
 /**
  * TODO Auto-generated comment.

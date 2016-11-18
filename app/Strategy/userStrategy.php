@@ -1,8 +1,8 @@
 <?php
 
-require_once 'formatStrategy.php';
-require_once '../DAO/abstractDAO.php';
-require_once '../DAO/userDAO.php';
+require_once dirname(__FILE__) . '/formatStrategy.php';
+require_once dirname(__FILE__) . '/../DAO/abstractDAO.php';
+require_once dirname(__FILE__) . '/../DAO/userDAO.php';
 
 /**
  * Specific strategy for getting the user list from data source.

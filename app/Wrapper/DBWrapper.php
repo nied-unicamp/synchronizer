@@ -1,18 +1,22 @@
 <?php
 
-require_once '../Strategy/serverStrategy.php';
+require_once dirname(__FILE__) . '/../Strategy/serverStrategy.php';
 
 /**
- * TODO Try to encapsulate trycatchs blocks; test bindValue.
- */
-
-
-
+ * This class is the responsible for the database access using PDO.
+ * */
 class DBWrapper extends serverStrategy {
-
-	private $executionReturnValue;
 	
-	public function operationOrder($confDB, $query, $prepare=false, $values=NULL) {
+	/**
+	 * Manipulates data in the the database.
+	 *
+	 * @param $confDB A array containing the parameters that must be used for connection with PDO.
+	 * 			$confDB can be described as:
+	 * 			$confDB = array(serverType, dbHost, dbPort, dbName, dbLogin, dbPassword).
+	 * @param $query The query that will be sent to the database.
+	 *
+	 */
+	public function manipulateData($confDB, $query, $prepare=false, $values=NULL) {
 		
 		try {
 
@@ -29,22 +33,13 @@ class DBWrapper extends serverStrategy {
 					
 	 				$stmt->bindParam($key+1, $value);
 	 			}
-	 			
-	 			$this->executionReturnValue = $stmt->execute();
-	 			
-	 			if($this->executionReturnValue)
+	 				 			
+	 			if($stmt->execute())
 	 			{
-// 	 				$data = array();
-// 	 				while($row = $stmt->fetch(PDO::FETCH_ASSOC))
-// 	 				{
-// 	 					array_push($data, $row);
-// 	 				}	
-// 	 				return $data;
 					return $this->dataFetch($stmt);
 	 			}
 	 			
 				throw new PDOException("<h2>ERROR: Couldn't execute query.</h2>");
-				//trigger_error ('<h2>Exception: ' . $e->getMessage() . '</h2><br>', E_USER_ERROR);
 				
 			}
 		
@@ -60,7 +55,7 @@ class DBWrapper extends serverStrategy {
 	}
 	
 	/**
-	 * Sends a query to the database.
+	 * Requests data to the database.
 	 * 
 	 * @param $confDB A array containing the parameters that must be used for connection with PDO.
 	 * 			$confDB can be described as: 
@@ -76,7 +71,7 @@ class DBWrapper extends serverStrategy {
 		if($values != NULL)
 		{
 			var_dump($values);
-			return $this->operationOrder($confDB, $query, true, $values);
+			return $this->manipulateData($confDB, $query, true, $values);
 		}
 		
 		try {
@@ -118,7 +113,7 @@ class DBWrapper extends serverStrategy {
 	
 	public function tableExists($confDB, $tableName)
 	{
-		//TODO Try catch here.
+		
 		try {
 			$pdo = $this->createConnection($confDB);
 		} catch (Exception $e) {
@@ -147,15 +142,20 @@ class DBWrapper extends serverStrategy {
 		return false;
 	}
 	
-	private function createConnection($confDB){
-			
+	
+	/**
+	 * 
+	 * @param DBInfo $confDB Information used in database connection.
+	 * @throws PDOException In case of error when trying to establish connection.
+	 * @return PDO Object that represents a connection to the database.
+	 */
+	private function createConnection($confDB){	
 		/*
 		 * Use the value of $conf->getServerType to discover the database implementation and be able to connect.
 		 * TODO Implement this with strategy if someday the system allow the use of non mysql implementations.
 		 * */
 		switch ($confDB->getserverType()) {
 			case "SERVER_TYPE_MYSQL":
-// 				$dbInfo = 'mysql:host=' . $confDB[1] . ';port=' . $confDB[2] . ';dbname=' . $confDB[3];
 				$dbInfo = 'mysql:host=' . $confDB->getdbHost() . ';port=' . $confDB-> getdbPort() . ';dbname=' . $confDB->getdbName();
 				return new PDO($dbInfo, $confDB->getdbLogin(), $confDB->getdbPassword());
 		

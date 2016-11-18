@@ -1,6 +1,6 @@
 <?php
 
-require_once 'dataStrategy.php';
+require_once dirname(__FILE__) . '/dataStrategy.php';
 
 /**
  * This class is responsible for converting the transactions list to JSON object.

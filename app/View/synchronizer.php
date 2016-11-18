@@ -314,7 +314,7 @@ function askForDataInfo()
   echo("                  </tr>");
   echo("                  <tr class=\"head\">\n");
   /////////////////Please select what do you want to syncronize.
-  echo("                    <td align=\"center\"><b>Please select what do you want to syncronize.</b></td>\n");
+  echo("                    <td align=\"center\"><b>Please select what do you want to synchronize.</b></td>\n");
   echo("                  </tr>\n");
   echo("                  <tr>");
   echo("                    <td align=\"center\" style=\"border:none;\">\n");
