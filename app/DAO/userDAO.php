@@ -1,12 +1,20 @@
 <?php
 
 require_once dirname(__FILE__) . '/../Context/serverContext.php';
+require_once dirname(__FILE__) . '/../Wrapper/DBWrapper.php';
 
 /**
- * TODO Auto-generated comment.
+ * Class used when getting user data from database.
  */
 class userDAO implements abstractDAO {
 
+	private $dbAccess;
+	
+	public function __construct()
+	{
+		$this->dbAccess = new DBWrapper();
+	}
+	
 	/**
 	 * TODO Auto-generated comment.
 	 */
@@ -34,10 +42,20 @@ class userDAO implements abstractDAO {
 		return $recordsLoader->serverQuery($dbInfo, $query);
 	}
 
-	public function getUserByLogin($dbInfo, $serverType, $internal)
+	/**
+	 * Only for sql database. 
+	 * */
+	public function getUserByLogin($dbInfo, $internal, $login)
 	{
 		//$confDB, "select * from users where login='". $filtersForSearch['login'] . "';"
+
+		if($internal)
+		{
+			return $this->dbAccess->manipulateData($dbInfo, 'SELECT login, name, email FROM Usuario WHERE login=?', true, array($login));
+			//return $this->dbAccess->manipulateData($dbInfo, 'SELECT * FROM users WHERE login=?', true, array($login));
+		}
 		
+		return $this->dbAccess->manipulateData($dbInfo, 'SELECT * FROM users WHERE login=?', true, array($login));
 	}
 	
 	/**

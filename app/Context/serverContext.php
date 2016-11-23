@@ -34,7 +34,6 @@ class serverContext {
             throw new Exception('Unable to create Strategy for Server Type '.$serverType);
         }
 
-
 	}
 
 	/**

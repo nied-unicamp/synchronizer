@@ -1,7 +1,13 @@
 <?php
 
 require_once dirname(__FILE__) . '/../Model/transaction.php';
-require_once dirname(__FILE__) . '/../Wrapper/DBWrapper.php';
+require_once dirname(__FILE__) . '/../DAO/userDAO.php';
+require_once dirname(__FILE__) . '/../DAO/courseDAO.php';
+require_once dirname(__FILE__) . '/../DAO/coursememberDAO.php';
+
+
+//require_once dirname(__FILE__) . '/../Wrapper/DBWrapper.php';
+
 
 
 /*
@@ -115,37 +121,47 @@ abstract class dataStrategy {
 	 * */
 	private function getData($dataTarget, $filtersForSearch, $confDB, $searchingDeletions)
 	{
-		$dbAccess = new DBWrapper();
+		//$dbAccess = new DBWrapper();
 		
 		/* For each return value: search for $dataTarget in db and return data. */
 		switch ($dataTarget) {
 			case 'users':
+				$userGetterDAO = new userDAO();
 				if($searchingDeletions)
 				{
-					return $dbAccess->dataRequest($confDB, "select * from users where login='". $filtersForSearch['login'] . "';");
+					return $userGetterDAO->getUserByLogin($confDB, false, $filtersForSearch['login']);
+					//return $dbAccess->dataRequest($confDB, "select * from users where login='". $filtersForSearch['login'] . "';");
 				}
-				return $dbAccess->dataRequest($confDB, "select * from usersCache where login='". $filtersForSearch['login'] . "';");
+				return $userGetterDAO->getUserByLogin($confDB, true, $filtersForSearch['login']);
+				//return $dbAccess->dataRequest($confDB, "select * from usersCache where login='". $filtersForSearch['login'] . "';");
 			
 			
 			case 'courses':
+				$courseGetterDAO = new courseDAO();
 				if($searchingDeletions)
 				{
-					return $dbAccess->dataRequest($confDB, "select * from courses where courseName='". $filtersForSearch['courseName'] . "';");
+					return $courseGetterDAO->getCourseByName($confDB, false, $filtersForSearch['courseName']);
+					//return $dbAccess->dataRequest($confDB, "select * from courses where courseName='". $filtersForSearch['courseName'] . "';");
 				}
-				return $dbAccess->dataRequest($confDB, "select * from coursesCache where courseName='". $filtersForSearch['courseName'] . "';");
+				return $courseGetterDAO->getCourseByName($confDB, true, $filtersForSearch['courseName']);
+				//return $dbAccess->dataRequest($confDB, "select * from coursesCache where courseName='". $filtersForSearch['courseName'] . "';");
 				
 			case 'coursemember':
+				$coursememberGetterDAO = new coursememberDAO();
 				if($searchingDeletions)
 				{
-					return $dbAccess->dataRequest($confDB, 
-												  			"select * from coursemember where courseName='". 
-												 			 $filtersForSearch['courseName'] . "' AND login='" . 
-												 			 $filtersForSearch['login'] . "';'");
+					return $coursememberGetterDAO->getCourseMemberByPair($confDB, false, $filtersForSearch['courseName'], $filtersForSearch['login']);
+// 					return $dbAccess->dataRequest($confDB, 
+// 												  			"select * from coursemember where courseName='". 
+// 												 			 $filtersForSearch['courseName'] . "' AND login='" . 
+// 												 			 $filtersForSearch['login'] . "';'");
 				}
-				return $dbAccess->dataRequest($confDB, 
-												  		"select * from coursememberCache where courseName='". 
-												 		 $filtersForSearch['courseName'] . "' AND login='" . 
-												 		 $filtersForSearch['login'] . "';'");
+				return $coursememberGetterDAO->getCourseMemberByPair($confDB, true, $filtersForSearch['courseName'], $filtersForSearch['login']);
+				
+// 				return $dbAccess->dataRequest($confDB, 
+// 												  		"select * from coursememberCache where courseName='". 
+// 												 		 $filtersForSearch['courseName'] . "' AND login='" . 
+// 												 		 $filtersForSearch['login'] . "';'");
 			
 			default:
 				/* 

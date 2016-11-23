@@ -7,6 +7,13 @@ require_once dirname(__FILE__) . '/../Context/serverContext.php';
  */
 class courseDAO implements abstractDAO {
 
+	private $dbAccess;
+	
+	public function __construct()
+	{
+		$this->dbAccess = new DBWrapper();
+	}
+	
 	/**
 	 * TODO Auto-generated comment.
 	 */
@@ -29,6 +36,24 @@ class courseDAO implements abstractDAO {
 		return $recordsLoader->serverQuery($dbInfo, $query);
 	}
 
+	public function getCourseByName($dbInfo, $internal, $courseName)
+	{
+		if($internal)
+		{
+			$query = "SELECT Cursos.nome_curso AS courseName, Cursos_pastas.pasta AS category 
+					FROM Cursos 
+					LEFT JOIN Cursos_pastas 
+					ON Cursos.cod_pasta=Cursos_pastas.cod_pasta 
+					WHERE Cursos.nome_curso=?";
+			
+			//$query = 'SELECT * FROM coursesCache where courseName=?';
+			
+			return $this->dbAccess->manipulateData($dbInfo, $query, true, array($courseName));
+		}
+		
+		return $this->dbAccess->manipulateData($dbInfo, 'SELECT * FROM courses WHERE courseName=?', true, array($courseName));
+	}
+	
 	/**
 	 * TODO Auto-generated comment.
 	 */
