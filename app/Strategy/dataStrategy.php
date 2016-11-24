@@ -147,16 +147,16 @@ abstract class dataStrategy {
 				//return $dbAccess->dataRequest($confDB, "select * from coursesCache where courseName='". $filtersForSearch['courseName'] . "';");
 				
 			case 'coursemember':
-				$coursememberGetterDAO = new coursememberDAO();
+				$courmemberGetterDAO = new coursememberDAO();
 				if($searchingDeletions)
 				{
-					return $coursememberGetterDAO->getCourseMemberByPair($confDB, false, $filtersForSearch['courseName'], $filtersForSearch['login']);
+					return $courmemberGetterDAO->getCourseMemberByPair($confDB, false, $filtersForSearch['courseName'], $filtersForSearch['login']);
 // 					return $dbAccess->dataRequest($confDB, 
 // 												  			"select * from coursemember where courseName='". 
 // 												 			 $filtersForSearch['courseName'] . "' AND login='" . 
 // 												 			 $filtersForSearch['login'] . "';'");
 				}
-				return $coursememberGetterDAO->getCourseMemberByPair($confDB, true, $filtersForSearch['courseName'], $filtersForSearch['login']);
+				return $courmemberGetterDAO->getCourseMemberByPair($confDB, true, $filtersForSearch['courseName'], $filtersForSearch['login']);
 				
 // 				return $dbAccess->dataRequest($confDB, 
 // 												  		"select * from coursememberCache where courseName='". 
