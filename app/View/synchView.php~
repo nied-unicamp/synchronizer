@@ -94,22 +94,55 @@ class synchView {
 		 * TODO Put it inside a if according to the imput method for external data?
 		 * TODO Change this in order to use an object instead of an array! Code would be a lot more readble!!!
 		 * */
+// 		$this->confDB = array(
+// 								$request->post['serverType'], $request->post['dbHost'],
+// 								$request->post['dbPort'], $request->post['dbName'],
+// 								$request->post['dbLogin'], $request->post['dbPassword']
+// 							);
 		$this->confDB = new DBInfo($request->post['serverType'], $request->post['dbHost'], 
 									$request->post['dbPort'], $request->post['dbName'], 
 									$request->post['dbLogin'], $request->post['dbPassword']);
 
+
+
 // 		/*
-// 		 * Generate confDbCache value with teleduc.inc path in a safe way!
+// 		 * Generate confDbCache value with teleduc.inc path in a save way!
 // 		 * */
  		$teleducInc = new TeleducInc();
  		$this->confDBCache = $teleducInc->buildConfDBCache();
-	
-   	$cacheManager = new DBWrapper();
-//   	echo 'Retorno da consulta:<br>';
-//   	var_dump($cacheManager->manipulateData($this->confDBCache, "select * from usersCache where login=?;", true, array('admtele')));
-//   	echo '<br><br>';
-   	echo 'Retorno da megaconsulta:<br>';
-   	var_dump($cacheManager->dataRequest($this->confDBCache, "select * from usersCache where login=?", array('admtele')));
+
+//  		$testCacheUpdater= new cacheDBDAO();
+//  		$testCacheUpdater->updateCacheDB($this->confDBCache);
+
+//  		echo 'confDBCache:<br>';
+//  		var_dump($this->confDBCache);
+//  		echo '<br><br>';
+
+ 		
+ 		
+   		$cacheManager = new DBWrapper();
+//   		echo 'Retorno da consulta:<br>';
+//   		var_dump($cacheManager->manipulateData($this->confDBCache, "select * from usersCache where login=?;", true, array('admtele')));
+//   		echo '<br><br>';
+   		echo 'Retorno da megaconsulta:<br>';
+   		var_dump($cacheManager->dataRequest($this->confDBCache, "select * from usersCache where login=?", array('admtele')));
+ 		
+ 		
+// 		echo '<br><br>';
+// 		echo 'confDB:<br>';
+// 		var_dump($this->confDB);
+// 		echo '<br><br>';
+// 		echo 'teste da funcao verificadora da existencia de tabela:<br>';
+// 		var_dump($cacheManager->tableExists($this->confDBCache, "usersCache"));
+// 		echo '<br><br>';
+		
+// 		$testecacheDBDAO = new cacheDBDAO();
+// 		$testecacheDBDAO->deleteCacheIfExists($cacheManager, $this->confDBCache);
+		
+		
+		
+		
+		
 		
 //These lines are the future calls. They dont work yet.
 		$transactions = $controlsDiff->createDiff(
@@ -120,6 +153,7 @@ class synchView {
 		echo "<br><br>Numero real de transactions:" . count($transactions) . "<br>";
 		//var_dump($transactions);
 		//var_dump(json_decode($transactions));
+		//echo $transactions;
 		
 		echo "<br>";
 
@@ -132,11 +166,19 @@ class synchView {
 		$controlsSync->synchronize($this->confDBCache, $request->post['serverType'], $transactions);
 //
 
+
+
+
+
 		//These lines are being used for testing.
 // 		$externalList = $controlsDiff->configDB($this->confDB, $request->post['targets'], $request->post['serverType']);
 
 // 		echo '<br>externalLIST:  ';
 // 		var_dump($externalList['coursemember'][1]);
+
+
+
+
 
 // TEST QUERY TIME!
 //  		set_time_limit ( 0 );
@@ -152,7 +194,12 @@ class synchView {
 //  		}
 
 //  		echo '<h1>'.$i.'</h1>';
+
+
+
+
 	}
+
 }
 
 $synchronizerPage = new synchView();
