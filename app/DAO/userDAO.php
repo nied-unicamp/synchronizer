@@ -25,11 +25,6 @@ class userDAO implements abstractDAO {
 		} catch (Exception $e) {
 			trigger_error ('<h2>Exception: ' . $e->getMessage() . '</h2><br>', E_USER_ERROR);
 		}
-			
-		
-		//$recordsLoader->serverQuery($dbInfo, $query);
-		
-		//Temporary for learning and testing...
 		
 		if($internal)
 		{
@@ -47,19 +42,17 @@ class userDAO implements abstractDAO {
 	 * */
 	public function getUserByLogin($dbInfo, $internal, $login)
 	{
-		//$confDB, "select * from users where login='". $filtersForSearch['login'] . "';"
-
 		if($internal)
 		{
 			return $this->dbAccess->manipulateData($dbInfo, 'SELECT login, name, email FROM Usuario WHERE login=?', true, array($login));
-			//return $this->dbAccess->manipulateData($dbInfo, 'SELECT * FROM users WHERE login=?', true, array($login));
 		}
 		
 		return $this->dbAccess->manipulateData($dbInfo, 'SELECT * FROM users WHERE login=?', true, array($login));
 	}
 	
 	/**
-	 * TODO Auto-generated comment.
+	 * Adds a user to the database.
+	 * @param $user An user object.
 	 */
 	public function addUser($dbInfo, $serverType, $user) {
 		
