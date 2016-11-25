@@ -1,8 +1,3 @@
-Criar todas as categorias listadas.
-	Usar uma consulta que retorne todas as roles distintas entre si.
-	Testar se ela já existe antes de criar.
-	Não remover categorias por enquanto.
-
 Para cada curso:
 	Confirmar a existência de um coordenador para esse curso.
 	Confirmar que este curso não está duplicado.
@@ -10,14 +5,19 @@ Para cada curso:
 Para cada Usuário:
 	Confirmar que esse usuário não está duplicado.
 
+Criar todas as categorias listadas.
+	Usar uma consulta que retorne todas as roles distintas entre si.
+	Testar se ela já existe antes de criar.
+	Não remover categorias por enquanto.
+
 Criar transacoes de sincronizacao.
-	Vai ser preciso criar a transacao de religamento para coursemember desligado.
+	Vai ser preciso criar a transacao de religamento caso haja coursemember com desligado.
 
 Sincronizar Usuários.
-	Para criar usuario: usar a funcao ??, declarada em ??, arquivo do TE4.
+	Para criar usuario: usar a funcao CadastraDadosUsuarioDinamic, declarada em pagina_inicial/inicial.inc, arquivo do TE4. Sera preciso usar uma cópia modificada da função, para não envolver xajax(desnecessário pois nao havera feedback em navegador), nem alguns testes já feitos pelo synch.
 	Para remover um usuario:
-		- desliga-lo: usar a funcao ??, declarada em ??, arquivo do TE4.
-		- desativar seu portfolio: usar a funcao ??, declarada em ??, arquivo do TE4.
+		- desliga-lo: usar a funcao ??, declarada em ??, arquivo do TE4. (buscar em desligamento de usuário, na administracao de curso)
+		- desativar seu portfolio: usar a funcao ??, declarada em ??, arquivo do TE4. (buscar em desativar portfolio, na administracao de curso)
 
 Sincronizer Cursos.
 	Ao criar curso, buscar um coordenador na criação.
@@ -26,6 +26,6 @@ Sincronizer Cursos.
 Sincronizar relacões coursemember
 	Testar se a relação já existe antes de inserir: o TE4 não faz isso,
 	e o coordenador já vai estar inserido no seu curso.
-	Usar a funcao ??, declarada em ??, arquivo do TE4.
+	Usar a funcao ??, declarada em ??, arquivo do TE4. (buscar no cadastro de usuario da administracao de curso)
 
 
