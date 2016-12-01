@@ -5,6 +5,9 @@ Para cada curso:
 Para cada Usuário:
 	Confirmar que esse usuário não está duplicado.
 
+Para cada relação course-member:
+	Verificar que o member é um usuário descrito na tabela de usuários.
+
 Criar todas as categorias listadas.
 	Usar uma consulta que retorne todas as roles distintas entre si.
 	Testar se ela já existe antes de criar.
@@ -21,11 +24,12 @@ Sincronizar Usuários.
 
 Sincronizer Cursos.
 	Ao criar curso, buscar um coordenador na criação.
-	Usar a função CriarBaseDoCurso, declarada em administracao/admin.php, arquivo do TE4.
+	Usar a função CriarBaseDoCurso, declarada em administracao/admin.inc, arquivo do TE4.
 
 Sincronizar relacões coursemember
 	Testar se a relação já existe antes de inserir: o TE4 não faz isso,
 	e o coordenador já vai estar inserido no seu curso.
-	Usar a funcao ??, declarada em ??, arquivo do TE4. (buscar no cadastro de usuario da administracao de curso)
+	Usar a funcao CadastrarUsuarioExistente, declarada em cursos/aplic/administracao/administracao.inc, arquivo do TE4.
+		Essa funcao exige que o usuario ja esteja cadastrado. Como a sincronizacao de usuarios ja vai ter acontecido, entao isso nao sera problema.
 
 
