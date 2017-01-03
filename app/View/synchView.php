@@ -108,8 +108,7 @@ class synchView {
 //   	echo 'Retorno da consulta:<br>';
 //   	var_dump($cacheManager->manipulateData($this->confDBCache, "select * from usersCache where login=?;", true, array('admtele')));
 //   	echo '<br><br>';
-   	echo 'Retorno da megaconsulta:<br>';
-   	var_dump($cacheManager->dataRequest($this->confDBCache, "select * from usersCache where login=?", array('admtele')));
+
 		
 //These lines are the future calls. They dont work yet.
 		$transactions = $controlsDiff->createDiff(
@@ -118,7 +117,7 @@ class synchView {
 												);
 
 		echo "<br><br>Numero real de transactions:" . count($transactions) . "<br>";
-		//var_dump($transactions);
+		var_dump($transactions);
 		//var_dump(json_decode($transactions));
 		
 		echo "<br>";

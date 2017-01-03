@@ -1,6 +1,8 @@
 <?php
 
 require_once dirname(__FILE__) . '/../Model/transaction.php';
+require_once dirname(__FILE__) . '/../Model/user.php';
+require_once dirname(__FILE__) . '/../DAO/userDAO.php';
 // require_once '../Model/user.php';
 // require_once '../Model/course.php';
 // require_once '../Model/user.php';
@@ -43,6 +45,12 @@ class transactionDAO{
 		switch ($transaction->getdataType()) {
 		
 			case 'user':
+				$userData = $transaction->getOperand();
+				$user = new User($userData['login'], $userData['name'], $userData['email']);
+				
+				$userInserter = new userDAO();
+				$userInserter->addUser($user);
+				
 				/* Build sql query */
 				break;
 					

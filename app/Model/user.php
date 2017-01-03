@@ -2,7 +2,7 @@
 /**
  * Class thar represents an user.
  */
-class user {
+class User {
 	private $login;
 	private $name;
 	private $email;

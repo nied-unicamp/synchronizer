@@ -39,7 +39,7 @@ class DBWrapper extends serverStrategy {
 					return $this->dataFetch($stmt);
 	 			}
 	 			
-				throw new PDOException("<h2>ERROR: Couldn't execute query.</h2>");
+				throw new PDOException("Couldn't execute query: <u>" . $query . "</u> in database <u>" . $confDB->getdbName() . "</u>");
 				
 			}
 		
@@ -48,7 +48,7 @@ class DBWrapper extends serverStrategy {
 		}
 		catch (PDOException $e) {
 				
-			echo "<h2>ERROR: Couldn't connect to database. Please check the information given about the external database.</h2>";
+			echo "<h2>ERROR: " . $e->getMessage() ."<br>Couldn't connect to database. Please check the information given about the external database.</h2>";
 			trigger_error ('<h2>Exception: ' . $e->getMessage() . '</h2><br>', E_USER_ERROR);
 				
 		}
