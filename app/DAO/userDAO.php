@@ -63,7 +63,6 @@ class userDAO implements abstractDAO {
 		
 		VerificaAutenticacaoAdministracao();
 		
-		echo "Oieee";
 		$sock=Conectar("");
 		 
 		$cod_usuario=RetornaProximoCodigo($sock,"Usuario");
@@ -73,14 +72,20 @@ class userDAO implements abstractDAO {
 		$login=$user->getLogin();
 		$nome=$user->getName();
 		$email=$user->getEmail();
-		 
+
+		echo "Nome: ".$nome." <br>";
 		 
 		$query="insert into Usuario (cod_usuario,login,senha,nome,rg,email,telefone,endereco,cidade,estado,pais,
 		data_nasc,  sexo, local_trab,profissao,cod_escolaridade,informacoes,data_inscricao,cod_lingua,confirmacao)
-		values
-		 
-		('.$cod_usuario.','".$login."','".$senha."','.$nome.','0','".$email."','0','0','0','sp','br'," . time() . ",'U','uai','loglog',
-			'777','none'," . time() . ",'1','')";
+		values	(" . 
+		
+		$cod_usuario . ",'" . $login . "','" . $senha . "','" . $nome . "','0','" . $email . 
+		"','0','Informe...','Informe...','XX','Informe...'," . 
+		time() . ",'U','Informe...','Informe...','777','Informe...'," . 
+		time() . ",'1','')";
+		
+		echo "<br><br>Consulta:<br>".$query."<br><br>";
+		
 		 
 		$res=Enviar($sock,$query);
 		$lista_frases=RetornaListaDeFrases($sock,0);
