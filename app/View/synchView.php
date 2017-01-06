@@ -7,11 +7,6 @@ require_once dirname(__FILE__) . '/../Model/TeleducInc.php';
 require_once dirname(__FILE__) . '/../DAO/cacheDBDAO.php';
 require_once dirname(__FILE__) . '/../Model/DBInfo.php';
 
-// TelEduc 4 imports.
-require  dirname(__FILE__) . "/../../../../cursos/aplic/bibliotecas/geral.inc";
-require  dirname(__FILE__) . "/../../../../administracao/admin.inc";
-
-
 /*Just for tests!!*/
 require_once dirname(__FILE__) . '/../Wrapper/DBWrapper.php';
 //ini_set('display_errors', 'On');
@@ -61,7 +56,9 @@ class synchView {
 			 * Calls controller for synchronizing process.
 			 * */
 			$this->callController($request);
-
+			
+			// Here, put some message after sync conclusion.
+			
 			//echo "</body>\n</html>";
 			return;
 		}
