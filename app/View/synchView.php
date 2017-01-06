@@ -7,9 +7,14 @@ require_once dirname(__FILE__) . '/../Model/TeleducInc.php';
 require_once dirname(__FILE__) . '/../DAO/cacheDBDAO.php';
 require_once dirname(__FILE__) . '/../Model/DBInfo.php';
 
+// TelEduc 4 imports.
+require  dirname(__FILE__) . "/../../../../cursos/aplic/bibliotecas/geral.inc";
+require  dirname(__FILE__) . "/../../../../administracao/admin.inc";
+
 
 /*Just for tests!!*/
 require_once dirname(__FILE__) . '/../Wrapper/DBWrapper.php';
+//ini_set('display_errors', 'On');
 
 
 /**
@@ -47,17 +52,17 @@ class synchView {
 		 * */
 		if(isset($request->post['targets']))
 		{
-			include dirname(__FILE__) . '/../Layout/synchronizingHeader.html';
+			//include dirname(__FILE__) . '/../Layout/synchronizingHeader.html';
 			//include '../Layout/synchronizingHeader.html';
 
-			echo '<p>You asked for a sync.<p>';
+			//echo '<p>You asked for a sync.<p>';
 
 			/*
 			 * Calls controller for synchronizing process.
 			 * */
 			$this->callController($request);
 
-			echo "</body>\n</html>";
+			//echo "</body>\n</html>";
 			return;
 		}
 
@@ -116,11 +121,11 @@ class synchView {
 													$request->post['targets'], $request->post['serverType']
 												);
 
-		echo "<br><br>Numero real de transactions:" . count($transactions) . "<br>";
-		var_dump($transactions);
+	//	//echo "<br><br>Numero real de transactions:" . count($transactions) . "<br>";
+	//	//var_dump($transactions);
 		//var_dump(json_decode($transactions));
 		
-		echo "<br>";
+	//	//echo "<br>";
 
 
 
@@ -153,6 +158,6 @@ class synchView {
 //  		echo '<h1>'.$i.'</h1>';
 	}
 }
-
+VerificaAutenticacaoAdministracao();
 $synchronizerPage = new synchView();
 $synchronizerPage->createView();

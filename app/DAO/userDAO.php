@@ -3,10 +3,6 @@
 require_once dirname(__FILE__) . '/../Context/serverContext.php';
 require_once dirname(__FILE__) . '/../Wrapper/DBWrapper.php';
 
-ini_set('display_errors', 'On');
-require  dirname(__FILE__) . "/../../../../cursos/aplic/bibliotecas/geral.inc";
-require  dirname(__FILE__) . "/../../../../cursos/aplic/administracao/administracao.inc";
-
 /**
  * Class used when getting user data from database.
  */
@@ -72,30 +68,31 @@ class userDAO implements abstractDAO {
 		$login=$user->getLogin();
 		$nome=$user->getName();
 		$email=$user->getEmail();
-
-		echo "Nome: ".$nome." <br>";
 		 
+///////////		MUDAR PARA USAR PDO.
 		$query="insert into Usuario (cod_usuario,login,senha,nome,rg,email,telefone,endereco,cidade,estado,pais,
 		data_nasc,  sexo, local_trab,profissao,cod_escolaridade,informacoes,data_inscricao,cod_lingua,confirmacao)
 		values	(" . 
 		
+		// Isso vai virar um array com os dados parametros para a funcao dataRequest.
 		$cod_usuario . ",'" . $login . "','" . $senha . "','" . $nome . "','0','" . $email . 
-		"','0','Informe...','Informe...','XX','Informe...'," . 
-		time() . ",'U','Informe...','Informe...','777','Informe...'," . 
+		"','0','...','...','XX','...'," . 
+		time() . ",'U','...','...','777','...'," . 
 		time() . ",'1','')";
 		
-		echo "<br><br>Consulta:<br>".$query."<br><br>";
-		
-		 
+		//echo "<br><br>Consulta:<br>".$query."<br><br>";
+			 
 		$res=Enviar($sock,$query);
+///////////		
+		
 		$lista_frases=RetornaListaDeFrases($sock,0);
-		Desconectar($sock);
+		//Desconectar($sock);
 		 
 		$remetente="TelEduc";
 		$destino=$email;
 		 
-		$sock=Conectar("");
-		 
+		//$sock=Conectar("");
+
 		$query="select valor from Config where item='host'";
 		$res=Enviar($sock,$query);
 		$linha=RetornaLinha($res);

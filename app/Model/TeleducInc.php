@@ -13,7 +13,8 @@ class TeleducInc {
 
 	public function __construct()
 	{
-		include 'teleduc.inc';
+		//include 'teleduc.inc';
+		require_once dirname(__FILE__) . '/../../../../../config/teleduc.inc';
 		
 		$this->dbHost = $_SESSION['dbhost'];
 		$this->dbPort = $_SESSION['dbport'];
