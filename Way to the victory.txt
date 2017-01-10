@@ -1,12 +1,19 @@
-Para cada curso:
-	Confirmar a existência de um coordenador para esse curso.
-	Confirmar que este curso não está duplicado.
-	
-Para cada Usuário:
-	Confirmar que esse usuário não está duplicado.
 
-Para cada relação course-member:
-	Verificar que o member é um usuário descrito na tabela de usuários.
+# Testes do sync; não usam código do TE4.
+# Para cada curso:
+#	Confirmar a existência de um coordenador para esse curso.
+#	Confirmar que este curso não está duplicado.
+#	
+# Para cada Usuário:
+#	Confirmar que esse usuário não está duplicado.
+#		Conferir duplicacao de logins e de emails.
+#
+# Para cada relação course-member:
+#	Verificar que o member é um usuário descrito na tabela de usuários.
+#	Verificar que o course é um curso descrito na tabela de cursos.
+
+
+
 
 Criar todas as categorias listadas.
 	Usar uma consulta que retorne todas as roles distintas entre si.
@@ -17,11 +24,9 @@ Criar transacoes de sincronizacao.
 	Vai ser preciso criar a transacao de religamento caso haja coursemember com desligado.
 
 Sincronizar Usuários.
-	# Nao...Para criar usuario: usar a funcao CadastraDadosUsuarioDinamic, declarada em pagina_inicial/inicial.inc, arquivo do TE4. Sera preciso usar uma cópia modificada da função, para não envolver xajax(desnecessário pois nao havera feedback em navegador), nem alguns testes já feitos pelo synch.
-	# SIM: CadastrarUsuario(
-	Para remover um usuario:
-		- desliga-lo: usar a funcao ??, declarada em ??, arquivo do TE4. (buscar em desligamento de usuário, na administracao de curso)
-		- desativar seu portfolio: usar a funcao ??, declarada em ??, arquivo do TE4. (buscar em desativar portfolio, na administracao de curso)
+	A criação de novo usuário está pronta!
+	A remoção de usuário é remoção dele do TE e não de um curso; se um user for removido, todos os coursemembers que o contém devem ser removidos.
+		NÂO ENVOLVER admtele na REMOçÃO
 
 Sincronizer Cursos.
 	Ao criar curso, buscar um coordenador na criação.
@@ -32,5 +37,7 @@ Sincronizar relacões coursemember
 	e o coordenador já vai estar inserido no seu curso.
 	Usar a funcao CadastrarUsuarioExistente, declarada em cursos/aplic/administracao/administracao.inc, arquivo do TE4.
 		Essa funcao exige que o usuario ja esteja cadastrado. Como a sincronizacao de usuarios ja vai ter acontecido, entao isso nao sera problema.
-
+	Para remover um usuario:
+	- desliga-lo: usar a funcao ??, declarada em ??, arquivo do TE4. (buscar em desligamento de usuário, na administracao de curso)
+	- desativar seu portfolio: usar a funcao ??, declarada em ??, arquivo do TE4. (buscar em desativar portfolio, na administracao de curso)
 

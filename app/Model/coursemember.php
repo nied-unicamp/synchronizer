@@ -7,9 +7,9 @@
  */
 class coursemember {
 	
-	private login;
-	private course;
-	private role;
+	private $login;
+	private $course;
+	private $role;
 	
 	public function __construct($login, $course, $role)
 	{
