@@ -44,7 +44,47 @@ class errorController {
 	
 	public function searchErrors()
 	{
-		return true;
+		var_dump($this->externalList);
+		
+		// Iterates in externalList['courses'], for each course, searches for a cordinatorin the external db with coursemembers
+															 //searches in DB and verify if returns only 1 course
+		if(isset($this->externalList['courses']))
+		{			
+			foreach ($this->externalList['courses'] as $type => $data)
+			{
+				// searches for a cordinator for $data['course']
+				
+				
+				// seraches for $data['course'] in external courses db and certificates that only 1 result is returned.
+				
+				
+			}
+		}
+		
+		// Iterates in externalList['users'], for each user, searches in DB and verify if returns only 1 user
+		if(isset($this->externalList['users']))
+		{
+			foreach ($this->externalList['users'] as $type => $data)
+			{
+				// seraches for $data['login'] in external users db and certificates that only 1 result is returned.
+				
+				// seraches for $data['email'] in external users db and certificates that only 1 result is returned.
+				
+			}
+		}
+		
+		// Iterar em externalList['coursemember'], para cada coursemember ver se o user esta na tabela externa de users, 
+																	//   e ver se o curso esta na tabela externa de cursos.
+		if(isset($this->externalList['coursemember']))
+		{
+			foreach ($this->externalList['coursemember'] as $type => $data)
+			{
+				//buscar um adm
+				
+			}
+		}
+		
+		return false;
 	}
 	
 	private function showErrors()
