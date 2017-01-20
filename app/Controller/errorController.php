@@ -46,17 +46,22 @@ class errorController {
 	{
 		var_dump($this->externalList);
 		
-		// Iterates in externalList['courses'], for each course, searches for a cordinatorin the external db with coursemembers
+		// Iterates in externalList['courses'], for each course, searches for a cordinator in the external db with coursemembers
 															 //searches in DB and verify if returns only 1 course
 		if(isset($this->externalList['courses']))
 		{			
-			foreach ($this->externalList['courses'] as $type => $data)
+
+			foreach ($this->externalList['courses'] as $key => $course)
 			{
-				// searches for a cordinator for $data['course']
 				
+				$courseDAOObject = new courseDAO();
+				$cordinators = $courseDAOObject->getCourseCordList($this->confDB, false, $course['courseName']);
 				
-				// seraches for $data['course'] in external courses db and certificates that only 1 result is returned.
-				
+				if(empty($cordinators))
+				{
+					$this->errorsFound = true;
+					array_push($this->coursesWithoutCord, $course['courseName']);
+				}
 				
 			}
 		}
@@ -67,6 +72,7 @@ class errorController {
 			foreach ($this->externalList['users'] as $type => $data)
 			{
 				// seraches for $data['login'] in external users db and certificates that only 1 result is returned.
+				
 				
 				// seraches for $data['email'] in external users db and certificates that only 1 result is returned.
 				

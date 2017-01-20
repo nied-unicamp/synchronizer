@@ -9,7 +9,7 @@ class errorView {
 	public function __construct($errorData)
 	{
 		echo "<h1>The sync couldn't be performed.</h1>";
-		echo "<h2>The problems are descripted bellow</h2>";
+		echo "<h2>The problems are descripted bellow.</h2>";
 		$this->printErrors($errorData);
 	}
 	

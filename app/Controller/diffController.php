@@ -127,7 +127,7 @@ class diffController {
 		$differentiator = new DifferContext('DATA_TYPE_JSON');
 
 		$this->externalList = $this->configDB($confDB, $syncTargets, $serverType);
-
+		
 		/*
 		 * Update cache tables.
 		 * */
@@ -136,7 +136,7 @@ class diffController {
 
 		////Here, test external data with erroController. 
 		///////The process will require externalList and sql queryes.
-		$errorSearcher = new errorController($this->externalList, confDB);
+		$errorSearcher = new errorController($this->externalList, $confDB);
 		$errorSearcher->searchErrors();
 		
 		// TODO Here, servertype has to be the internal teleduc's database?

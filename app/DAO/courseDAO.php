@@ -14,6 +14,25 @@ class courseDAO implements abstractDAO {
 		$this->dbAccess = new DBWrapper();
 	}
 	
+	public function getCourseCordList($dbInfo, $internal, $courseName)
+	{
+		if($internal)
+		{
+			$query = "SELECT Usuario.login from Usuario_curso 
+					  INNER JOIN Cursos ON Cursos.cod_curso=Usuario_curso.cod_curso 
+					  LEFT OUTER JOIN Usuario ON cod_usuario_global=Usuario.cod_usuario 
+					  WHERE Usuario_curso.tipo_usuario='F' AND Cursos.nome_curso=? and not Usuario.login='admtele';";
+				
+				
+			return $this->dbAccess->manipulateData($dbInfo, $query, true, array($courseName));
+		}
+		
+		return $this->dbAccess->manipulateData($dbInfo, 
+				                               "SELECT login FROM coursemember WHERE role='F' AND courseName=?", 
+												true, 
+												array($courseName));
+	}
+	
 	/**
 	 * TODO Auto-generated comment.
 	 */

@@ -41,3 +41,4 @@ Sincronizar relacões coursemember
 	- desliga-lo: usar a funcao ??, declarada em ??, arquivo do TE4. (buscar em desligamento de usuário, na administracao de curso)
 	- desativar seu portfolio: usar a funcao ??, declarada em ??, arquivo do TE4. (buscar em desativar portfolio, na administracao de curso)
 
+	- por ultimo, criar coursemembers do admtele se ele nao exisir.

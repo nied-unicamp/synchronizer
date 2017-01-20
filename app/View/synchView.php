@@ -155,6 +155,9 @@ class synchView {
 //  		echo '<h1>'.$i.'</h1>';
 	}
 }
+
+//ini_set('display_errors', 1);
+
 VerificaAutenticacaoAdministracao();
 $synchronizerPage = new synchView();
 $synchronizerPage->createView();
