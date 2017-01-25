@@ -15,9 +15,9 @@ class errorView {
 	
 	private function printErrors($errorData)
 	{
-		foreach($erroData as $type => $errorInfo)
+		foreach($errorData as $type => $errorInfo)
 		{
-			switch ($key) {
+			switch ($type) {
 				case 'coursesWithoutCord':
 					$this->notifyErrorOneData($errorInfo, "<h3>The following courses don't have a cordinator in the external database:</h3>");
 					break;

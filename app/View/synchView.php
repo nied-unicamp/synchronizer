@@ -156,7 +156,7 @@ class synchView {
 	}
 }
 
-//ini_set('display_errors', 1);
+ini_set('display_errors', 1);
 
 VerificaAutenticacaoAdministracao();
 $synchronizerPage = new synchView();

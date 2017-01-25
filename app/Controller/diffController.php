@@ -139,6 +139,12 @@ class diffController {
 		$errorSearcher = new errorController($this->externalList, $confDB);
 		$errorSearcher->searchErrors();
 		
+		if($errorSearcher->errorFound())
+		{
+			$errorSearcher->showErrors();
+			exit;
+		}
+		
 		// TODO Here, servertype has to be the internal teleduc's database?
 		$this->cacheList = $this->configDB($confDbCache, $syncTargets, 'SERVER_TYPE_MYSQL', 1);
 

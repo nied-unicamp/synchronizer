@@ -93,47 +93,82 @@ class errorController {
 		return false;
 	}
 	
-	private function showErrors()
+	public function showErrors()
 	{
-		$errorPresenter = new errorView(
-								array(
-										'coursesWithoutCord'=> $this->coursesWithoutCord,
-										'duplicateNameOfCourses'=> $this->duplicateNameOfCourses,
-										'duplicateLogins'=> $this->duplicateLogins,
-										'duplicateEmails'=> $this->duplicateEmails,
-										'noDescribedCourse'=> $this->noDescribedCourse,
-										'noDescribedUser'=> $this->noDescribedUser
-									)
-							);
+		
+		$errorData = array();
+
+		if(!empty($this->coursesWithoutCord))
+		{
+			$errorData['coursesWithoutCord'] = $this->coursesWithoutCord;
+		}
+		if(!empty($this->duplicateNameOfCourses))
+		{
+			$errorData['duplicateNameOfCourses'] = $this->duplicateNameOfCourses;
+		}
+		if(!empty($this->duplicateLogins))
+		{
+			$errorData['duplicateLogins'] = $this->duplicateLogins;
+		}
+		if(!empty($this->duplicateEmails))
+		{
+			$errorData['duplicateEmails'] = $this->duplicateEmails;
+		}
+		if(!empty($this->noDescribedCourse))
+		{
+			$errorData['noDescribedCourse'] = $this->noDescribedCourse;
+		}
+		if(!empty($this->noDescribedUser))
+		{
+			$errorData['noDescribedUser'] = $this->noDescribedUser;
+		}
+		
+		
+		$errorPresenter = new errorView($errorData);
+// 		$errorPresenter = new errorView(
+// 								array(
+// 										'coursesWithoutCord'=> $this->coursesWithoutCord,
+// 										'duplicateNameOfCourses'=> $this->duplicateNameOfCourses,
+// 										'duplicateLogins'=> $this->duplicateLogins,
+// 										'duplicateEmails'=> $this->duplicateEmails,
+// 										'noDescribedCourse'=> $this->noDescribedCourse,
+// 										'noDescribedUser'=> $this->noDescribedUser
+// 									)
+// 							);
+		
 		exit();
 	}
 	
-	function foundMissingCord($couseName)
+	public function errorFound(){
+		return $this->errorsFound;
+	}
+	
+	private function foundMissingCord($couseName)
 	{
 		array_push($this->coursesWithoutCord, $couseName);
 	} 
 	
-	function foundDuplicateCourse($couseName, $appearences)
+	private function foundDuplicateCourse($couseName, $appearences)
 	{
 		array_push($this->duplicateNameOfCourses, array('Course name'=>$couseName, 'appearences'=>$appearences));
 	}
 	
-	function foundDuplicatedLogin($login, $appearences)
+	private function foundDuplicatedLogin($login, $appearences)
 	{
 		array_push($this->duplicateLogins, array('login'=>$login,'appearences'=>$appearences));
 	}
 	
-	function foundDuplicateEmail($email, $appearences)
+	private function foundDuplicateEmail($email, $appearences)
 	{
 		array_push($this->duplicateEmails, array('email'=>$email, 'appearences'=>$appearences));
 	}
 	
-	function foundNoDescribedCourse($courseName)
+	private function foundNoDescribedCourse($courseName)
 	{
 		array_push($this->noDescribedCourse, $courseName);
 	}
 	
-	function foundNoDescribedUser($login)
+	private function foundNoDescribedUser($login)
 	{
 		array_push($this->noDescribedUser, $login);
 	}
