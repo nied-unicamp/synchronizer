@@ -3,6 +3,7 @@
 require_once dirname(__FILE__) . '/../View/errorView.php';
 require_once dirname(__FILE__) . '/../DAO/userDAO.php';
 require_once dirname(__FILE__) . '/../DAO/courseDAO.php';
+require_once dirname(__FILE__) . '/../DAO/userDAO.php';
 
 /**
  * This class contains the errors thar must be showed to the user.
@@ -44,7 +45,12 @@ class errorController {
 	
 	public function searchErrors()
 	{
+		echo "VARDUMP DE EXTERNALLIST<br>";
 		var_dump($this->externalList);
+		echo "<br><br>";
+		
+		$courseDAOObject = new courseDAO();
+		$userDAOObject = new userDAO();
 		
 		// Iterates in externalList['courses'], for each course, searches for a cordinator in the external db with coursemembers
 															 //searches in DB and verify if returns only 1 course
@@ -53,8 +59,8 @@ class errorController {
 
 			foreach ($this->externalList['courses'] as $key => $course)
 			{
+				// Search for coordinator
 				
-				$courseDAOObject = new courseDAO();
 				$cordinators = $courseDAOObject->getCourseCordList($this->confDB, false, $course['courseName']);
 				
 				if(empty($cordinators))
@@ -63,19 +69,41 @@ class errorController {
 					array_push($this->coursesWithoutCord, $course['courseName']);
 				}
 				
+				// Verify no repeated course
+				$coursesWithThisName = $courseDAOObject->getCourseByName($this->confDB, false, $course['courseName']);
+				
+
+				
+				$this->checkDuplicateData($coursesWithThisName, $this->duplicateNameOfCourses, $course, 'courseName');
+						
+// 				if(count($coursesWithThisName) != 1)// Should verify if course still existes before it?!
+// 				{
+// 					$this->errorsFound = true;
+					
+// 					if(in_array(array('Course name' => $course['courseName'], 'Appearences' => count($coursesWithThisName)), $this->duplicateNameOfCourses))
+// 					{
+// 						continue;
+// 					}
+					
+// 					array_push($this->duplicateNameOfCourses, array('Course name' => $course['courseName'], 'Appearences' => count($coursesWithThisName)));
+// 				}
 			}
 		}
 		
 		// Iterates in externalList['users'], for each user, searches in DB and verify if returns only 1 user
 		if(isset($this->externalList['users']))
 		{
-			foreach ($this->externalList['users'] as $type => $data)
+			
+			foreach ($this->externalList['users'] as $userData)
 			{
-				// seraches for $data['login'] in external users db and certificates that only 1 result is returned.
+				// searches for $userData['login'] in external users db and certificates that only 1 result is returned.
+				$usersWithThisLogin = $userDAOObject->getUserByLogin($this->confDB, false, $userData['login']);
+				$this->checkDuplicateData($usersWithThisLogin, $this->duplicateLogins, $userData, 'login');
 				
 				
-				// seraches for $data['email'] in external users db and certificates that only 1 result is returned.
-				
+				// searches for $userData['email'] in external users db and certificates that only 1 result is returned.
+				$usersWithThisEmail = $userDAOObject->getUserByEmail($this->confDB, false, $userData['email']);
+				$this->checkDuplicateData($usersWithThisEmail, $this->duplicateEmails, $userData, 'email');
 			}
 		}
 		
@@ -85,8 +113,9 @@ class errorController {
 		{
 			foreach ($this->externalList['coursemember'] as $type => $data)
 			{
-				//buscar um adm
+				// search user
 				
+				// search course
 			}
 		}
 		
@@ -171,5 +200,29 @@ class errorController {
 	private function foundNoDescribedUser($login)
 	{
 		array_push($this->noDescribedUser, $login);
+	}
+	
+	/**
+	 * Check if a courseName, a login or an email is used more than once in the array returned from a query in the external database.
+	 * 
+	 * @param $data Can be course or userData, array with data.
+	 * @param $dataKey Type of data that is being tested; can be course, name or login.
+	 * @param &$duplicatesRegister One of the this classes attributes that stores duplicated info. 
+	 * @param $appearencesOfThisData Returned array with each appearence of the data identified by $data[$dataKey]
+	 * */
+	private function checkDuplicateData($appearencesOfThisData, &$duplicatesRegister, $data, $dataKey)
+	{
+		
+		if(count($appearencesOfThisData) != 1)
+		{
+			$this->errorsFound = true;
+				
+			if(in_array(array($dataKey => $data[$dataKey], 'Appearences' => count($appearencesOfThisData)), $duplicatesRegister))
+			{
+				return;
+			}
+			
+			array_push($duplicatesRegister, array($dataKey => $data[$dataKey], 'Appearences' => count($appearencesOfThisData)));
+		}
 	}
 }

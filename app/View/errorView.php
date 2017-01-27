@@ -23,15 +23,15 @@ class errorView {
 					break;
 					
 				case 'duplicateNameOfCourses':
-					$this->notifyErrorMulData($errorInfo, "<h3>The following course names were used more than once:</h3>");
+					$this->notifyErrorMulData($errorInfo, "<h3>The following course names were used more than once:</h3>", array('Course Name', 'Appearences'));
 					break;
 					
 				case 'duplicateLogins':
-					$this->notifyErrorMulData($errorInfo, "<h3>The following logins were used more than once:</h3>");
+					$this->notifyErrorMulData($errorInfo, "<h3>The following logins were used more than once:</h3>", array('Login', 'Appearences'));
 					break;
 					
 				case 'duplicateEmails':
-					$this->notifyErrorMulData($errorInfo, "<h3>The following email were used more than once:</h3>");
+					$this->notifyErrorMulData($errorInfo, "<h3>The following email addresses were used more than once:</h3>", array('Email', 'Appearences'));
 					break;
 					
 				case 'noDescribedCourse':
@@ -56,17 +56,28 @@ class errorView {
 		}
 	}
 	
-	private function notifyErrorMulData($errorInfo, $message){
+	private function notifyErrorMulData($errorInfo, $message, $columns){
 		echo $message;
+		
+		echo "<table style='border: 1px solid black;'>";
+		
+		echo "	<tr>
+					<th>" . $columns[0] . "</th>
+					<th>" . $columns[1] . "</th>
+				</tr>
+				<tr>";
+		
 		foreach ($errorInfo as $data)
 		{	
-			echo "<p>";
+			//echo "<p>";
 			foreach ($data as $key => $info)
 			{
-				echo $key . ": " . $info . "; ";
+				echo "<td>" . $info . "</td>";
 			}
-			echo "</p>";
+			//echo "</p>";
 		}
+		
+		echo "</tr></table>";
 	}
 	
 	
