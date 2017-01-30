@@ -45,11 +45,11 @@ class transactionDAO{
 		switch ($transaction->getdataType()) {
 		
 			case 'user':
-				//$userData = $transaction->getOperand();
-				//$user = new User($userData['login'], $userData['name'], $userData['email']);
+				$userData = $transaction->getOperand();
+				$user = new User($userData['login'], $userData['name'], $userData['email']);
 				
-				//$userInserter = new userDAO();
-				//$userInserter->addUser($user);
+				$userInserter = new userDAO();
+				$userInserter->addUser($user);
 				
 				break;
 					

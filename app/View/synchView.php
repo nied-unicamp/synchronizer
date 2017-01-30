@@ -55,6 +55,12 @@ class synchView {
 			/*
 			 * Calls controller for synchronizing process.
 			 * */
+			
+
+			
+			
+			
+			
 			$this->callController($request);
 			
 			// Here, put some message after sync conclusion.
@@ -67,6 +73,11 @@ class synchView {
 		 * Loads default page for synchronizer configuration.
 		 * */
 		include dirname(__FILE__) . '/../Layout/sync.html';
+		
+		//echo "<h4>TESTE DE CRIAÇÃO DE CURSO</h4>";
+			
+		//CriarBaseDoCurso("O TESTE SUPREMO DA CRIAÇÂO DE CURSO", 300,           '',         'Junior',          '',     '',     '',     37);
+		//CriarBaseDoCurso($nome_curso,                           $num_alunos,   $cod_pasta, $nome_coordenador, $email, $login, $senha, $cod_usuario)
 		
 		return;
 	}

@@ -169,18 +169,7 @@ class errorController {
 			$errorData['invalidRoles'] = $this->invalidRoles;
 		}
 		
-		
 		$errorPresenter = new errorView($errorData);
-// 		$errorPresenter = new errorView(
-// 								array(
-// 										'coursesWithoutCord'=> $this->coursesWithoutCord,
-// 										'duplicateNameOfCourses'=> $this->duplicateNameOfCourses,
-// 										'duplicateLogins'=> $this->duplicateLogins,
-// 										'duplicateEmails'=> $this->duplicateEmails,
-// 										'noDescribedCourse'=> $this->noDescribedCourse,
-// 										'noDescribedUser'=> $this->noDescribedUser
-// 									)
-// 							);
 		
 		exit();
 	}
