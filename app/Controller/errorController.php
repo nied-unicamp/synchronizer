@@ -111,11 +111,29 @@ class errorController {
 																	//   e ver se o curso esta na tabela externa de cursos.
 		if(isset($this->externalList['coursemember']))
 		{
-			foreach ($this->externalList['coursemember'] as $type => $data)
+			foreach ($this->externalList['coursemember'] as $type => $coursemember)
 			{
 				// search user
+				$userInCourse = $userDAOObject->getUserByLogin($this->confDB, false, $coursemember['login']);
+				
+				if(empty($userInCourse))
+				{
+					$this->errorsFound = true;
+					
+					array_push($this->noDescribedUser, array('login' => $coursemember['login'], 'course' => $coursemember['courseName']));
+				}
 				
 				// search course
+				$coursesWithThisName = $courseDAOObject->getCourseByName($this->confDB, false, $coursemember['courseName']);
+				
+				if(empty($userInCourse))
+				{
+					$this->errorsFound = true;
+					
+					array_push($this->noDescribedCourse, $coursemember['courseName']);
+					
+
+				}
 			}
 		}
 		

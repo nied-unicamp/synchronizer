@@ -35,11 +35,11 @@ class errorView {
 					break;
 					
 				case 'noDescribedCourse':
-					
+					$this->notifyErrorOneData($errorInfo, "<h3>The following courses have users but weren't described in external database:</h3>");
 					break;
 					
 				case 'noDescribedUser':
-					
+					$this->notifyErrorMulData($errorInfo, "<h3>The following users appear in courses but weren't described in external database:</h3>", array('User Login', 'Course Where Appears'));
 					break;
 					
 				default:
