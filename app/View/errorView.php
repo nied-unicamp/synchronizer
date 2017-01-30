@@ -19,7 +19,7 @@ class errorView {
 		{
 			switch ($type) {
 				case 'coursesWithoutCord':
-					$this->notifyErrorOneData($errorInfo, "<h3>The following courses don't have a cordinator in the external database:</h3>");
+					$this->notifyErrorOneData($errorInfo, "<h3>The following courses don't have a coordinator in the external database:</h3>");
 					break;
 					
 				case 'duplicateNameOfCourses':
@@ -39,7 +39,11 @@ class errorView {
 					break;
 					
 				case 'noDescribedUser':
-					$this->notifyErrorMulData($errorInfo, "<h3>The following users appear in courses but weren't described in external database:</h3>", array('User Login', 'Course Where Appears'));
+					$this->notifyErrorMulData($errorInfo, "<h3>The following users appear in courses but weren't described in external database:</h3>", array('Login', 'Course'));
+					break;
+					
+				case 'invalidRoles':					
+					$this->notifyErrorOneData($errorInfo, "<h3>The following invalid or unmapped roles appeared:</h3>");
 					break;
 					
 				default:

@@ -4,6 +4,7 @@ require_once dirname(__FILE__) . '/../View/errorView.php';
 require_once dirname(__FILE__) . '/../DAO/userDAO.php';
 require_once dirname(__FILE__) . '/../DAO/courseDAO.php';
 require_once dirname(__FILE__) . '/../DAO/userDAO.php';
+require_once dirname(__FILE__) . '/../DAO/coursememberDAO.php';
 
 /**
  * This class contains the errors thar must be showed to the user.
@@ -28,6 +29,7 @@ class errorController {
 	private $duplicateEmails;
 	private $noDescribedCourse;
 	private $noDescribedUser;
+	private $invalidRoles;
 
 	function __construct($externalList, $confDB)
 	{
@@ -41,6 +43,8 @@ class errorController {
 		$this->duplicateEmails = array();
 		$this->noDescribedCourse = array();
 		$this->noDescribedUser = array();
+		
+		$this->invalidRoles = array();
 	}
 	
 	public function searchErrors()
@@ -72,21 +76,7 @@ class errorController {
 				// Verify no repeated course
 				$coursesWithThisName = $courseDAOObject->getCourseByName($this->confDB, false, $course['courseName']);
 				
-
-				
 				$this->checkDuplicateData($coursesWithThisName, $this->duplicateNameOfCourses, $course, 'courseName');
-						
-// 				if(count($coursesWithThisName) != 1)// Should verify if course still existes before it?!
-// 				{
-// 					$this->errorsFound = true;
-					
-// 					if(in_array(array('Course name' => $course['courseName'], 'Appearences' => count($coursesWithThisName)), $this->duplicateNameOfCourses))
-// 					{
-// 						continue;
-// 					}
-					
-// 					array_push($this->duplicateNameOfCourses, array('Course name' => $course['courseName'], 'Appearences' => count($coursesWithThisName)));
-// 				}
 			}
 		}
 		
@@ -131,11 +121,16 @@ class errorController {
 					$this->errorsFound = true;
 					
 					array_push($this->noDescribedCourse, $coursemember['courseName']);
-					
-
 				}
 			}
 		}
+		
+		// verify that all roles are valid.
+		$rolesGetter = new coursememberDAO();
+		
+		$AllRoles = $rolesGetter->getAllExternalRoles($this->confDB);
+		
+		$this->validadeRoles($AllRoles);
 		
 		return false;
 	}
@@ -168,6 +163,10 @@ class errorController {
 		if(!empty($this->noDescribedUser))
 		{
 			$errorData['noDescribedUser'] = $this->noDescribedUser;
+		}
+		if(!empty($this->invalidRoles))
+		{
+			$errorData['invalidRoles'] = $this->invalidRoles;
 		}
 		
 		
@@ -241,6 +240,22 @@ class errorController {
 			}
 			
 			array_push($duplicatesRegister, array($dataKey => $data[$dataKey], 'Appearences' => count($appearencesOfThisData)));
+		}
+	}
+	
+	private function validadeRoles($AllRoles)
+	{
+		foreach ($AllRoles as $role)
+		{
+			if ($role != 'V' && $role != 'Z' && $role != 'A' && $role != 'F')
+			{
+				if ($role != 'v' && $role != 'z' && $role != 'a' && $role != 'f')
+				{
+					$this->errorsFound = true;
+					
+					array_push($this->invalidRoles, $role['role']);
+				}
+			}
 		}
 	}
 }

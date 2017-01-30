@@ -60,6 +60,14 @@ class coursememberDAO implements abstractDAO {
 											   array($courseName, $login));
 	}
 	
+	public function getAllExternalRoles($dbInfo)
+	{
+		
+		$query="select distinct role from coursemember";
+		
+		return $this->dbAccess->dataRequest($dbInfo, $query);
+	}
+	
 	/**
 	 * TODO Auto-generated comment.
 	 */
