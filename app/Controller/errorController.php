@@ -178,35 +178,7 @@ class errorController {
 		return $this->errorsFound;
 	}
 	
-	private function foundMissingCord($couseName)
-	{
-		array_push($this->coursesWithoutCord, $couseName);
-	} 
-	
-	private function foundDuplicateCourse($couseName, $appearences)
-	{
-		array_push($this->duplicateNameOfCourses, array('Course name'=>$couseName, 'appearences'=>$appearences));
-	}
-	
-	private function foundDuplicatedLogin($login, $appearences)
-	{
-		array_push($this->duplicateLogins, array('login'=>$login,'appearences'=>$appearences));
-	}
-	
-	private function foundDuplicateEmail($email, $appearences)
-	{
-		array_push($this->duplicateEmails, array('email'=>$email, 'appearences'=>$appearences));
-	}
-	
-	private function foundNoDescribedCourse($courseName)
-	{
-		array_push($this->noDescribedCourse, $courseName);
-	}
-	
-	private function foundNoDescribedUser($login)
-	{
-		array_push($this->noDescribedUser, $login);
-	}
+
 	
 	/**
 	 * Check if a courseName, a login or an email is used more than once in the array returned from a query in the external database.
