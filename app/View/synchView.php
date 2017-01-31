@@ -9,6 +9,7 @@ require_once dirname(__FILE__) . '/../Model/DBInfo.php';
 
 /*Just for tests!!*/
 require_once dirname(__FILE__) . '/../Wrapper/DBWrapper.php';
+require_once dirname(__FILE__) . '/../DAO/courseDAO.php';
 //ini_set('display_errors', 'On');
 
 
@@ -77,7 +78,12 @@ class synchView {
 		//echo "<h4>TESTE DE CRIAÇÃO DE CURSO</h4>";
 			
 		//CriarBaseDoCurso("O TESTE SUPREMO DA CRIAÇÂO DE CURSO 4",   300,           1,         'Junior',          '',     '',     '',     37);
-		//CriarBaseDoCurso($nome_curso,                           $num_alunos,   $cod_pasta, $nome_coordenador, $email, $login, $senha, $cod_usuario)
+		//CriarBaseDoCurso($nome_curso,                               $num_alunos,   $cod_pasta, $nome_coordenador, $email, $login, $senha, $cod_usuario)
+		
+		$criadorDeCurso = new courseDAO();
+		
+		$criadorDeCurso->addCourse("O TESTE SUPREMO DA CRIAÇÂO DE CURSO AGORAVAI",   300,           NULL,         'Junior',          'aristeujnr@gmail.com',     '',     '',     37);
+		
 		
 		return;
 	}

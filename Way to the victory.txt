@@ -31,6 +31,7 @@ Sincronizar Usuários.
 Sincronizer Cursos.
 	Ao criar curso, buscar um coordenador na criação.
 	Usar a função CriarBaseDoCurso, declarada em administracao/admin.inc, arquivo do TE4.
+	A criação de curso já funciona para categorias já existentes. É preciso cadastrar categorias.
 
 Sincronizar relacões coursemember
 	Testar se a relação já existe antes de inserir: o TE4 não faz isso,
