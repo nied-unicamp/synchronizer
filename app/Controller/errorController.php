@@ -186,21 +186,21 @@ class errorController {
 	 * @param $data Can be course or userData, array with data.
 	 * @param $dataKey Type of data that is being tested; can be course, name or login.
 	 * @param &$duplicatesRegister One of the this classes attributes that stores duplicated info. 
-	 * @param $appearencesOfThisData Returned array with each appearence of the data identified by $data[$dataKey]
+	 * @param $timesDataAppears Returned array with each appearence of the data identified by $data[$dataKey]
 	 * */
-	private function checkDuplicateData($appearencesOfThisData, &$duplicatesRegister, $data, $dataKey)
+	private function checkDuplicateData($timesDataAppears, &$duplicatesRegister, $data, $dataKey)
 	{
 		
-		if(count($appearencesOfThisData) != 1)
+		if(count($timesDataAppears) != 1)
 		{
 			$this->errorsFound = true;
 				
-			if(in_array(array($dataKey => $data[$dataKey], 'Appearences' => count($appearencesOfThisData)), $duplicatesRegister))
+			if(in_array(array($dataKey => $data[$dataKey], 'Appearences' => count($timesDataAppears)), $duplicatesRegister))
 			{
 				return;
 			}
 			
-			array_push($duplicatesRegister, array($dataKey => $data[$dataKey], 'Appearences' => count($appearencesOfThisData)));
+			array_push($duplicatesRegister, array($dataKey => $data[$dataKey], 'Appearences' => count($timesDataAppears)));
 		}
 	}
 	
