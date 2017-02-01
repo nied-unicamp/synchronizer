@@ -77,13 +77,13 @@ class transactionDAO{
 				
 				$coord = $coordList[0];
 				
-				$coordData = $this->userDAOObject->getUserByLogin($this->confExtData, false, $coord['login']);
+				$coordData = $this->userDAOObject->getUserByLogin($this->confExtData, false, $coord);
 	
 				$coordCode = $this->userDAOObject->getUserCodeByLogin($dbInfo, $coord['login']);
 
 				$categoryCode = $this->categoryDAOObj->getCategoryCode($dbInfo, $courseData['category']);
 				
-				$this->courseDAOObject->addCourse($courseData['courseName'], 300, $categoryCode, $coord['name'], $coord['email'], $coord['login'], NULL, $coordCode);
+				$this->courseDAOObject->addCourse($courseData['courseName'], 300, $categoryCode, $coordData['name'], $coordData['email'], $coordData['login'], NULL, $coordCode);
 
 				break;
 					
