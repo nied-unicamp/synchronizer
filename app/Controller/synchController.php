@@ -23,10 +23,10 @@ class synchController {
 	/**
 	 * TODO Auto-generated comment.
 	 */
-	public function synchronize($confTE, $serverType, $transactions) {
+	public function synchronize($confTE, $confExtData, $serverType, $transactions) {
 		
 		$transIterator = new transactionIterator($transactions);
-		$transRealizer = new transactionDAO();
+		$transRealizer = new transactionDAO($confExtData);
 		//echo "Numero de transacoes dentro do iterador: " . $transIterator->numOfTrans . "<br>";
 		
 		while($transIterator->hasNext())

@@ -49,6 +49,11 @@ class userDAO implements abstractDAO {
 		
 		return $this->dbAccess->manipulateData($dbInfo, 'SELECT * FROM users WHERE login=?', true, array($login));
 	}
+	
+	public function getUserCodeByLogin($dbInfo, $login)
+	{
+		return $this->dbAccess->manipulateData(dbInfo, "select cod_usuario from Usuario where login=?", true, array($login));
+	}
 
 	public function getUserByEmail($dbInfo, $internal, $email)
 	{

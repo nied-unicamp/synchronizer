@@ -3,15 +3,32 @@
 require_once dirname(__FILE__) . '/../Model/transaction.php';
 require_once dirname(__FILE__) . '/../Model/user.php';
 require_once dirname(__FILE__) . '/../DAO/userDAO.php';
-// require_once '../Model/user.php';
-// require_once '../Model/course.php';
-// require_once '../Model/user.php';
+require_once dirname(__FILE__) . '/../DAO/categoryDAO.php';
+require_once dirname(__FILE__) . '/../Model/user.php';
+require_once dirname(__FILE__) . '/../Model/course.php';
+require_once dirname(__FILE__) . '/../Model/user.php';
 
 /**
  * TODO Auto-generated comment.
  */
 class transactionDAO{
 
+	private $userDAOObject;
+	private $courseDAOObject;
+	private $courmemberDAOObj;
+	private $categoryDAOObj;
+	private $confExtData;
+	
+	public function __construct($confExtData)
+	{
+		$this->userDAOObject = new userDAO();
+		$this->courseDAOObject = new courseDAO();
+		$this->courmemberDAOObj = new coursememberDAO();
+		$this->categoryDAOObj = new categoryDAO();
+		
+		$this->confExtData = $confExtData;
+	}
+	
 	/**
 	 * TODO Auto-generated comment.
 	 */
@@ -48,17 +65,35 @@ class transactionDAO{
 				$userData = $transaction->getOperand();
 				$user = new User($userData['login'], $userData['name'], $userData['email']);
 				
-				$userInserter = new userDAO();
-				$userInserter->addUser($user);
+				//$userInserter = new userDAO();
+				$this->userDAOObject->addUser($user);
 				
 				break;
 					
 			case 'course':
-				/* Build sql query */
+
+				$courseData = $transaction->getOperand();
+				$coordList = $this->courseDAOObject->getCourseCordList($this->confExtData, false, $courseData['courseName']);
+				
+				$coord = $coordList[0];
+				
+				$coordData = $this->userDAOObject->getUserByLogin($this->confExtData, false, $coord['login']);
+	
+				$coordCode = $this->userDAOObject->getUserCodeByLogin($dbInfo, $coord['login']);
+
+				$categoryCode = $this->categoryDAOObj->getCategoryCode($dbInfo, $courseData['category']);
+				
+				$this->courseDAOObject->addCourse($courseData['courseName'], 300, $categoryCode, $coord['name'], $coord['email'], $coord['login'], NULL, $coordCode);
+
 				break;
 					
 			case 'coursemember':
-				/* Build sql query */
+				
+				break;
+				
+			case 'category':
+				//$categoryInserter = new categoryDAO();
+				$this->categoryDAOObj->insertCategory($dbInfo, $transaction->getOperand());
 				break;
 					
 			default:

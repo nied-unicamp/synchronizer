@@ -11,7 +11,7 @@ class transaction implements JsonSerializable {
 	
 	/**
 	 * Generically represents what kind of data has to be manipulated. Can be a course,
-	 * an user or a course-member relation.
+	 * an user, a course-member relation, or a category.
 	 */
 	private $dataType;
 	

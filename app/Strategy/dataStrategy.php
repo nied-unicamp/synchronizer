@@ -4,7 +4,7 @@ require_once dirname(__FILE__) . '/../Model/transaction.php';
 require_once dirname(__FILE__) . '/../DAO/userDAO.php';
 require_once dirname(__FILE__) . '/../DAO/courseDAO.php';
 require_once dirname(__FILE__) . '/../DAO/coursememberDAO.php';
-
+require_once dirname(__FILE__) . '/../DAO/categoryDAO.php';
 
 //require_once dirname(__FILE__) . '/../Wrapper/DBWrapper.php';
 
@@ -49,11 +49,29 @@ abstract class dataStrategy {
 		//var_dump($cacheList);
 		
 		$this->transactions = array();
+		
+		$this->categoryTransactions($confExternalDB, $confDB);
+		
 		$this->differ($externalList, $cacheList, $formatType, $confDB);
 		$this->differ($cacheList, $externalList, $formatType, $confExternalDB, 1);
 		return $this->transactions;
 	}	
 
+	private function categoryTransactions($confExtDB, $confDB)
+	{
+		$categoryFinder = new categoryDAO();
+		
+		$categories = $categoryFinder->getExtCategories($confExtDB);
+		
+		foreach ($categories as $category)
+		{
+			if($categoryFinder->isNewCategory($confDB, $category))
+			{
+				array_push($this->transactions, new transaction('insert', 'category', $category));
+				//$categoryFinder->insertCategory($confDB, $category); NAO, isso eh no dotransactions!
+			}
+		}
+	}
 	
 	private function differ($externalList, $cacheList, $formatType, $confDB, $searchingDeletions=0) {
 		
@@ -184,8 +202,6 @@ abstract class dataStrategy {
 	private function checkUser($user, /*$list,*/ $confDB, $searchingDeletions)
 	{
 		
-		/*TEMPORARY! Dont put in production with this!!!!!!*/
-		//$TEuser = $dbAccess->dataRequest($confDB, "select * from usersCache where login='". $user['login'] . "';");
 		$TEuser = $this->getData('users', $user, $confDB, $searchingDeletions);
 		
 		if(isset($TEuser[0]) && $TEuser[0]['login'] == $user['login'])

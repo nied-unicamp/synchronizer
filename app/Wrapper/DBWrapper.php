@@ -70,7 +70,6 @@ class DBWrapper extends serverStrategy {
 		
 		if($values != NULL)
 		{
-			var_dump($values);
 			return $this->manipulateData($confDB, $query, true, $values);
 		}
 		

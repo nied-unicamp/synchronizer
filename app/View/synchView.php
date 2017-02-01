@@ -11,7 +11,7 @@ require_once dirname(__FILE__) . '/../Model/DBInfo.php';
 require_once dirname(__FILE__) . '/../Wrapper/DBWrapper.php';
 require_once dirname(__FILE__) . '/../DAO/courseDAO.php';
 //ini_set('display_errors', 'On');
-
+ini_set('display_errors', 1);
 
 /**
  * This class mounts a html page for the page of the synchronizer, and calls the controller
@@ -140,7 +140,7 @@ class synchView {
 		//OLD
 		//$controlsSync->synchronize($confTE, $serverType, $transactions);
 		
-		$controlsSync->synchronize($this->confDBCache, $request->post['serverType'], $transactions);
+		$controlsSync->synchronize($this->confDBCache, $this->confDB, $request->post['serverType'], $transactions);
 //
 
 		//These lines are being used for testing.
@@ -166,7 +166,7 @@ class synchView {
 	}
 }
 
-ini_set('display_errors', 1);
+
 
 VerificaAutenticacaoAdministracao();
 $synchronizerPage = new synchView();
