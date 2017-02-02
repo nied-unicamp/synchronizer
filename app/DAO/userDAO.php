@@ -6,7 +6,7 @@ require_once dirname(__FILE__) . '/../Wrapper/DBWrapper.php';
 /**
  * Class used when getting user data from database.
  */
-class userDAO implements abstractDAO {
+class userDAO{
 
 	private $dbAccess;
 	
@@ -52,7 +52,14 @@ class userDAO implements abstractDAO {
 	
 	public function getUserCodeByLogin($dbInfo, $login)
 	{
-		return $this->dbAccess->manipulateData($dbInfo, "select cod_usuario from Usuario where login=?", true, array($login));
+		$codeList = $this->dbAccess->manipulateData($dbInfo, "select cod_usuario from Usuario where login=?", true, array($login));
+		
+		if(count($codeList) != 1)
+		{
+			echo "IMPLEMENTAR ERRO!";
+		}
+		
+		return $codeList[0]['cod_usuario'];
 	}
 
 	public function getUserByEmail($dbInfo, $internal, $email)
@@ -163,8 +170,5 @@ class userDAO implements abstractDAO {
 	public function deleteUser($dbInfo, $serverType, $user) {
 		
 	}
-	
-	public function serverQuery($string, $serverType){
-	
-	}
+
 }

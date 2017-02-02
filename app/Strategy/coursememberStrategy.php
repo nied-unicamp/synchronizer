@@ -1,7 +1,6 @@
 <?php
 
 require_once dirname(__FILE__) . '/formatStrategy.php';
-require_once dirname(__FILE__) . '/../DAO/abstractDAO.php';
 require_once dirname(__FILE__) . '/../DAO/coursememberDAO.php';
 
 /**

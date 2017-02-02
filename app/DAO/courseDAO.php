@@ -5,7 +5,7 @@ require_once dirname(__FILE__) . '/../Context/serverContext.php';
 /**
  * TODO Auto-generated comment.
  */
-class courseDAO implements abstractDAO {
+class courseDAO{
 
 	private $dbAccess;
 	
@@ -238,7 +238,4 @@ class courseDAO implements abstractDAO {
 	public function deleteCourse($dbInfo, $serverType, $course) {
 	}
 
-	public function serverQuery($string, $serverType){
-
-	}
 }

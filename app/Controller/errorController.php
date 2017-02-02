@@ -49,10 +49,7 @@ class errorController {
 	
 	public function searchErrors()
 	{
-		echo "VARDUMP DE EXTERNALLIST<br>";
-		var_dump($this->externalList);
-		echo "<br><br>";
-		
+
 		$courseDAOObject = new courseDAO();
 		$userDAOObject = new userDAO();
 		
@@ -205,16 +202,19 @@ class errorController {
 	}
 	
 	private function validadeRoles($AllRoles)
-	{
-		foreach ($AllRoles as $role)
+	{		
+		foreach ($AllRoles as $roleArray)
 		{
+			$role = $roleArray['role'];
 			if ($role != 'V' && $role != 'Z' && $role != 'A' && $role != 'F')
 			{
 				if ($role != 'v' && $role != 'z' && $role != 'a' && $role != 'f')
 				{
+					echo "<p>Olha so, achei a role " . $role . " e pra mim ela eh invalida!!!</p>";
+					
 					$this->errorsFound = true;
 					
-					array_push($this->invalidRoles, $role['role']);
+					array_push($this->invalidRoles, $role);
 				}
 			}
 		}
