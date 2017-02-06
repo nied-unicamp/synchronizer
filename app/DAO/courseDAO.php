@@ -1,6 +1,7 @@
 <?php
 
 require_once dirname(__FILE__) . '/../Context/serverContext.php';
+require_once dirname(__FILE__) . '/userDAO.php';
 
 /**
  * TODO Auto-generated comment.
@@ -106,8 +107,12 @@ class courseDAO{
 		$query="insert into Usuario_config (cod_usuario,cod_curso) values (1, ".$cod_curso.")";
 		Enviar($sock,$query);
 		
+		
+		/*
 		$query="insert into Usuario_curso (cod_usuario_global,cod_usuario,cod_curso,tipo_usuario,portfolio,data_inscricao) values (".$cod_usuario.",1, ".$cod_curso.", 'F', 'ativado', ".time().")";
 		Enviar($sock,$query);
+		*/
+		
 		
 		$query="insert into Usuario_curso (cod_usuario_global,cod_usuario,cod_curso,tipo_usuario,portfolio,data_inscricao) values (-1,-1, ".$cod_curso.", 'F', 'ativado', ".time().")";
 		Enviar($sock,$query);
@@ -226,6 +231,151 @@ class courseDAO{
 		
 	}
 
+	public function insertUserInCourse($dbInfo ,$userLogin, $courseName, $role)
+	{
+		$sock=Conectar("");
+		
+		$lista_frases=RetornaListaDeFrases($sock,0);
+		
+		Desconectar($sock);
+		
+		// Get cod_curso using course parameter
+		$courseCode = $this->getCourseCodByName($dbInfo, $courseName);
+		
+		$dados = array();
+		
+		// get cod_usuario using user parameter
+		// prepare "dados" parameter: $dados['cod_usuario_global'] and $dados['tipo_usuario'];
+		$userDAOObj = new userDAO();
+		$dados['cod_usuario_global'] = $userDAOObj->getUserByLogin($dbInfo, true, $userLogin);
+		$dados['tipo_usuario'] = $role;
+		
+		$sock = Conectar($courseCode);
+		
+		// call CadastrarUsuarioExistente or paste it there...
+		//CadastrarUsuarioExistente($sock,$courseCode,$data, $lista_frases);
+		
+		//function CadastrarUsuarioExistente($sock,$cod_curso,$dados, $lista_frases)
+		
+		$cod_curso=$courseCode;
+		
+		
+		$dbnamebase = $_SESSION['dbnamebase'];
+		$cod_lingua_s = $_SESSION['cod_lingua_s'];
+		
+		$data_inscricao = time();
+		
+		$cod_usuario_prox = RetornaProximoCodigoUsuarioCurso($sock,$cod_curso);
+		//$dados['cod_usuario_global'] = RetornaCodigoUsuarioGlobalPorLogin($sock, $dados['login']);
+		
+		$query  = "insert into ".$dbnamebase.".Usuario_curso (cod_usuario_global,cod_usuario,cod_curso,tipo_usuario,data_inscricao) ";
+		$query .= "values ('".$dados['cod_usuario_global']."','".$cod_usuario_prox."','".$cod_curso."','".$dados['tipo_usuario']."',".$data_inscricao.")";
+		Enviar($sock,$query);
+		
+		$query  = "insert into ".$dbnamebase.".Usuario_config (cod_usuario,cod_curso,notificar_email) values ";
+		$query .= "('".$cod_usuario_prox."','".$cod_curso."','0')";
+		Enviar($sock, $query);
+		
+		$dados_curso = DadosCursoParaEmail($sock, $cod_curso);
+		
+		$remetente=$dados_curso['email'];
+		
+		$query  = "select email from ".$dbnamebase.".Usuario ";
+		$query .= "where cod_usuario='".$dados['cod_usuario_global']."'";
+		$res=Enviar($sock,$query);
+		
+		$email=RetornaLinha($res);
+		$destino=$email[0];
+		
+		Desconectar($sock);
+		$sock=Conectar("");
+		
+		$query="select valor from Config where item='host'";
+		$res=Enviar($sock,$query);
+		$linha=RetornaLinha($res);
+		$host=$linha['valor'];
+		
+		$query="select diretorio from Diretorio where item='raiz_www'";
+		$res=Enviar($sock,$query);
+		$linha=RetornaLinha($res);
+		$raiz_www=$linha['diretorio'];
+		
+		/* 63 - TelEduc: Inscri  o */
+		$assunto=RetornaFraseDaLista($lista_frases,63)." ".$dados_curso['nome_curso'];
+		
+		if ($dados['tipo_usuario'] == 'A')
+		{
+			/* 64 - Voc\EA foi inscrito como aluno no curso */
+			$mensagem = "<p>".RetornaFraseDaLista($lista_frases,64)." <strong>".$dados_curso['nome_curso']."</strong>.</p>\n";
+		}
+		else if ($dados[tipo_usuario] == 'F')
+		{
+			/* 72 - Voc\EA foi inscrito como formador no curso */
+			$mensagem = "<p>".RetornaFraseDaLista($lista_frases,72)." <strong>".$dados_curso['nome_curso']."</strong>.</p>\n";
+		}
+		else if ($dados[tipo_usuario] == 'Z')
+		{
+			/* 196 - Voc\EA foi inscrito como colaborador no curso */
+			$mensagem = "<p>".RetornaFraseDaLista($lista_frases,196)." <strong>".$dados_curso['nome_curso']."</strong>.</p>\n";
+		}
+		else if ($dados[tipo_usuario] == 'V')
+		{
+			/* 188 - Voc\EA foi inscrito como visitante no curso */
+			$mensagem = "<p>".RetornaFraseDaLista($lista_frases,188)." <strong>".$dados_curso['nome_curso']."</strong>.</p>\n";
+		}
+		else
+		{
+			// Erro !
+			echo("<big>Erro em ".__FILE__." linha ".__LINE__." parametro tipo_usuario inesperado</big>");
+			var_dump($dados[tipo_usuario]);
+			die();
+		}
+		
+		/* 65 - Visite a p gina do curso para obter informa  es sobre o seu in cio. */
+		//$mensagem.="<p>".RetornaFraseDaLista($lista_frases,65).".</p>\n";
+		
+		//MENSAGEM DEVE INFORMAR QUE LOGIN E SENHA SAO OS MESMOS QUE ELE UTILIZA EM OUTROS CURSOS
+		
+		/* 254 - O seu login e senha são os mesmos já utilizados em cursos do endereço */
+		//$mensagem.="<p>".RetornaFraseDaLista($lista_frases,254)." <a href=\"http://".$host.$raiz_www."\">http://".$host.$raiz_www."</a></p>\n";
+		
+		/* 311 - Para acessar o curso clique  em*/
+		$mensagem .= "<p>".RetornaFraseDaLista($lista_frases,311).": </p>";
+		$mensagem .= "<p><a href=\"http://".$host.$raiz_www."/cursos/aplic/index.php?cod_curso=".$cod_curso."\">http://".$host.$raiz_www."/cursos/aplic/index.php?cod_curso=".$cod_curso."</a></p>\n\n";
+		/* 312 - Use login e senha j� cadastrados.*/
+		$mensagem .= "<br /><p>".RetornaFraseDaLista($lista_frases,312)."</p>";
+		/* 313 - Visite a p�gina do curso pra saber o seu in�cio.*/
+		$mensagem .= "<br /><p>".RetornaFraseDaLista($lista_frases,313)."</p>";
+		
+		
+		$mensagem.="\n";
+		
+		/* 66 - Anteciosamente, Coordena  o do curso */
+		$mensagem .= "<p style=\"text-align:right;\">".RetornaFraseDaLista($lista_frases,66)." <strong>".$dados_curso[nome_curso]."</strong>. </p><br />\n";
+		
+		Desconectar($sock);
+		
+		$mensagem_envio = MontaMsg($host, $raiz_www, $cod_curso, $mensagem, $assunto);
+		
+		MandaMsg($remetente,$destino,$assunto,$mensagem_envio);
+		
+		$sock=Conectar($cod_curso);
+		
+		return ($sock);
+		
+		
+		
+	}
+	
+	public function getCourseCodByName($dbInfo, $courseName)
+	{
+		$query = "select cod_curso from Cursos where nome_curso=?";
+		
+		$qresult = $this->dbAccess->dataRequest($dbInfo, $query, array($courseName));
+		
+		return $qresult[0]['cod_curso'];
+	}
+	
 	/**
 	 * TODO Auto-generated comment.
 	 */

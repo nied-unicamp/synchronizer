@@ -89,6 +89,9 @@ class transactionDAO{
 				break;
 					
 			case 'coursemember':
+				$cmData = $transaction->getOperand();
+				
+				$this->courseDAOObject->insertUserInCourse($dbInfo, $cmData['login'], $cmData['courseName'], $cmData['role']);
 				
 				break;
 				
