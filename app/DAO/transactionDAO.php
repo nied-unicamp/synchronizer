@@ -82,19 +82,6 @@ class transactionDAO{
 								
 				$coordCode = $this->userDAOObject->getUserCodeByLogin($dbInfo, $coord);
 				
-
-				echo "<h1>";
-				
-				
-				var_dump($coord);
-				
-				echo "<br><br><br>";
-				
-				echo "<strong>";
-				var_dump($coordCode);
-				echo "</strong>";
-				echo "</h1>";
-				
 				$categoryCode = $this->categoryDAOObj->getCategoryCode($dbInfo, $courseData['category']);
 				
 				$this->courseDAOObject->addCourse($courseData['courseName'], 300, $categoryCode, $coordData['name'], $coordData['email'], $coordData['login'], NULL, $coordCode);

@@ -31,6 +31,8 @@ class DBWrapper extends serverStrategy {
 				 * TODO Try catch here.*/
 	 			foreach ($values as $key => &$value) {
 					
+
+	 				
 	 				$stmt->bindParam($key+1, $value);
 	 			}
 	 				 			

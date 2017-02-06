@@ -63,8 +63,10 @@ abstract class dataStrategy {
 		
 		$categories = $categoryFinder->getExtCategories($confExtDB);
 		
-		foreach ($categories as $category)
+		foreach ($categories as $categoryArray)
 		{
+			$category = $categoryArray["category"];
+			
 			if($categoryFinder->isNewCategory($confDB, $category))
 			{
 				array_push($this->transactions, new transaction('insert', 'category', $category));

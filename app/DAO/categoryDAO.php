@@ -40,6 +40,7 @@ class categoryDAO
 	
 	public function getCategoryCode($dbInfo, $category)
 	{
-		return $this->dbAccess->dataRequest($dbInfo, "select cod_pasta from Cursos_pastas where pasta like ?", array($category));
+		$qresult = $this->dbAccess->dataRequest($dbInfo, "select cod_pasta from Cursos_pastas where pasta like ?", array($category));
+		return $qresult[0]["cod_pasta"];
 	}
 }
