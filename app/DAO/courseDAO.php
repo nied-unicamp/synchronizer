@@ -78,7 +78,7 @@ class courseDAO{
 	 * TODO Auto-generated comment.
 	 */
 	//public function addCourse($dbInfo, $serverType, $course) {
-	public function addCourse($nome_curso, $num_alunos,   $cod_pasta, $nome_coordenador, $email, $login, $senha, $cod_usuario) {
+	public function addCourse($nome_curso, $num_alunos, $cod_pasta, $nome_coordenador, $email, $login, $senha, $cod_usuario) {
 		
 		global $dbnamecurso;
 		global $cod_lingua_s;
@@ -104,16 +104,18 @@ class courseDAO{
 			Enviar($sock,$query);
 		}
 		
-		$query="insert into Usuario_config (cod_usuario,cod_curso) values (1, ".$cod_curso.")";
-		Enviar($sock,$query);
-		
-		
+		// Coordinator will be inserted during coursemember sync, so do his config information.
+		/*
+ 		$query="insert into Usuario_config (cod_usuario,cod_curso) values (1, ".$cod_curso.")";
+ 		Enviar($sock,$query);
+		*/
+		// Coordinator will be inserted during coursemember sync.
 		/*
 		$query="insert into Usuario_curso (cod_usuario_global,cod_usuario,cod_curso,tipo_usuario,portfolio,data_inscricao) values (".$cod_usuario.",1, ".$cod_curso.", 'F', 'ativado', ".time().")";
 		Enviar($sock,$query);
 		*/
 		
-		
+		// admtele is always a coordinator.
 		$query="insert into Usuario_curso (cod_usuario_global,cod_usuario,cod_curso,tipo_usuario,portfolio,data_inscricao) values (-1,-1, ".$cod_curso.", 'F', 'ativado', ".time().")";
 		Enviar($sock,$query);
 		
@@ -128,8 +130,6 @@ class courseDAO{
 			$query="insert into Cursos (cod_curso,nome_curso,num_alunos,cod_coordenador,cod_pasta,cod_lingua,acesso_visitante)
 							values (".$cod_curso.",'".$nome_curso."',".$num_alunos.",1,NULL,".$cod_lingua_s.",'N')";
 		}
-		
-		
 		
 		Enviar($sock,$query);
 		
@@ -240,25 +240,19 @@ class courseDAO{
 		Desconectar($sock);
 		
 		// Get cod_curso using course parameter
-		$courseCode = $this->getCourseCodByName($dbInfo, $courseName);
+		$cod_curso = $this->getCourseCodByName($dbInfo, $courseName);
 		
 		$dados = array();
 		
 		// get cod_usuario using user parameter
-		// prepare "dados" parameter: $dados['cod_usuario_global'] and $dados['tipo_usuario'];
+		// prepare "dados" parameter: $dados['cod_usuario_global'] and $role;
 		$userDAOObj = new userDAO();
-		$dados['cod_usuario_global'] = $userDAOObj->getUserByLogin($dbInfo, true, $userLogin);
-		$dados['tipo_usuario'] = $role;
-		
-		$sock = Conectar($courseCode);
+
+		$sock = Conectar($cod_curso);
 		
 		// call CadastrarUsuarioExistente or paste it there...
 		//CadastrarUsuarioExistente($sock,$courseCode,$data, $lista_frases);
-		
 		//function CadastrarUsuarioExistente($sock,$cod_curso,$dados, $lista_frases)
-		
-		$cod_curso=$courseCode;
-		
 		
 		$dbnamebase = $_SESSION['dbnamebase'];
 		$cod_lingua_s = $_SESSION['cod_lingua_s'];
@@ -266,26 +260,21 @@ class courseDAO{
 		$data_inscricao = time();
 		
 		$cod_usuario_prox = RetornaProximoCodigoUsuarioCurso($sock,$cod_curso);
-		//$dados['cod_usuario_global'] = RetornaCodigoUsuarioGlobalPorLogin($sock, $dados['login']);
+		
+		$dados['cod_usuario_global'] = $userDAOObj->getUserCodeByLogin($dbInfo, $userLogin);
+				
 		
 		$query  = "insert into ".$dbnamebase.".Usuario_curso (cod_usuario_global,cod_usuario,cod_curso,tipo_usuario,data_inscricao) ";
-		$query .= "values ('".$dados['cod_usuario_global']."','".$cod_usuario_prox."','".$cod_curso."','".$dados['tipo_usuario']."',".$data_inscricao.")";
+		$query .= "values ('".$dados['cod_usuario_global']."','".$cod_usuario_prox."','".$cod_curso."','".$role."',".$data_inscricao.")";
 		Enviar($sock,$query);
 		
 		$query  = "insert into ".$dbnamebase.".Usuario_config (cod_usuario,cod_curso,notificar_email) values ";
 		$query .= "('".$cod_usuario_prox."','".$cod_curso."','0')";
 		Enviar($sock, $query);
 		
-		$dados_curso = DadosCursoParaEmail($sock, $cod_curso);
+		$remetente = RetornaConfig('adm_email');
 		
-		$remetente=$dados_curso['email'];
-		
-		$query  = "select email from ".$dbnamebase.".Usuario ";
-		$query .= "where cod_usuario='".$dados['cod_usuario_global']."'";
-		$res=Enviar($sock,$query);
-		
-		$email=RetornaLinha($res);
-		$destino=$email[0];
+		$destino = $userDAOObj->getEmailByLogin($dbInfo, $userLogin);
 		
 		Desconectar($sock);
 		$sock=Conectar("");
@@ -301,27 +290,27 @@ class courseDAO{
 		$raiz_www=$linha['diretorio'];
 		
 		/* 63 - TelEduc: Inscri  o */
-		$assunto=RetornaFraseDaLista($lista_frases,63)." ".$dados_curso['nome_curso'];
+		$assunto=RetornaFraseDaLista($lista_frases,63)." ".$courseName;
 		
-		if ($dados['tipo_usuario'] == 'A')
+		if ($role == 'A')
 		{
 			/* 64 - Voc\EA foi inscrito como aluno no curso */
-			$mensagem = "<p>".RetornaFraseDaLista($lista_frases,64)." <strong>".$dados_curso['nome_curso']."</strong>.</p>\n";
+			$mensagem = "<p>".RetornaFraseDaLista($lista_frases,64)." <strong>".$courseName."</strong>.</p>\n";
 		}
-		else if ($dados[tipo_usuario] == 'F')
+		else if ($role == 'F')
 		{
 			/* 72 - Voc\EA foi inscrito como formador no curso */
-			$mensagem = "<p>".RetornaFraseDaLista($lista_frases,72)." <strong>".$dados_curso['nome_curso']."</strong>.</p>\n";
+			$mensagem = "<p>".RetornaFraseDaLista($lista_frases,72)." <strong>".$courseName."</strong>.</p>\n";
 		}
-		else if ($dados[tipo_usuario] == 'Z')
+		else if ($role == 'Z')
 		{
 			/* 196 - Voc\EA foi inscrito como colaborador no curso */
-			$mensagem = "<p>".RetornaFraseDaLista($lista_frases,196)." <strong>".$dados_curso['nome_curso']."</strong>.</p>\n";
+			$mensagem = "<p>".RetornaFraseDaLista($lista_frases,196)." <strong>".$courseName."</strong>.</p>\n";
 		}
-		else if ($dados[tipo_usuario] == 'V')
+		else if ($role == 'V')
 		{
 			/* 188 - Voc\EA foi inscrito como visitante no curso */
-			$mensagem = "<p>".RetornaFraseDaLista($lista_frases,188)." <strong>".$dados_curso['nome_curso']."</strong>.</p>\n";
+			$mensagem = "<p>".RetornaFraseDaLista($lista_frases,188)." <strong>".$courseName."</strong>.</p>\n";
 		}
 		else
 		{
@@ -351,7 +340,7 @@ class courseDAO{
 		$mensagem.="\n";
 		
 		/* 66 - Anteciosamente, Coordena  o do curso */
-		$mensagem .= "<p style=\"text-align:right;\">".RetornaFraseDaLista($lista_frases,66)." <strong>".$dados_curso[nome_curso]."</strong>. </p><br />\n";
+		$mensagem .= "<p style=\"text-align:right;\">".RetornaFraseDaLista($lista_frases,66)." <strong>".$courseName."</strong>. </p><br />\n";
 		
 		Desconectar($sock);
 		
@@ -362,9 +351,7 @@ class courseDAO{
 		$sock=Conectar($cod_curso);
 		
 		return ($sock);
-		
-		
-		
+	
 	}
 	
 	public function getCourseCodByName($dbInfo, $courseName)

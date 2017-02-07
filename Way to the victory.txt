@@ -29,11 +29,17 @@ Sincronizar Usuários.
 		NÂO ENVOLVER admtele na REMOçÃO
 
 Sincronizer Cursos.
+	A criação de novo curso está funcionando!
+	
 	Ao criar curso, buscar um coordenador na criação.
 	Usar a função CriarBaseDoCurso, declarada em administracao/admin.inc, arquivo do TE4.
 	A criação de curso já funciona para categorias já existentes. É preciso cadastrar categorias.
 
 Sincronizar relacões coursemember
+	A inserção de um  novo aluno em curso está funcionando!
+	
+	Assim que a insercao de usuario em curso funcionar, parar de inserir a relacao coursemember do coordenador na criacao do curso.
+
 	Testar se a relação já existe antes de inserir: o TE4 não faz isso,
 	e o coordenador já vai estar inserido no seu curso.
 	Usar a funcao CadastrarUsuarioExistente, declarada em cursos/aplic/administracao/administracao.inc, arquivo do TE4.
@@ -42,4 +48,4 @@ Sincronizar relacões coursemember
 	- desliga-lo: usar a funcao ??, declarada em ??, arquivo do TE4. (buscar em desligamento de usuário, na administracao de curso)
 	- desativar seu portfolio: usar a funcao ??, declarada em ??, arquivo do TE4. (buscar em desativar portfolio, na administracao de curso)
 
-	- por ultimo, criar coursemembers do admtele se ele nao exisir.
+	- por ultimo, criar coursemembers do admtele se ele nao exisir. // admtele eh inserido na criacao de curso.

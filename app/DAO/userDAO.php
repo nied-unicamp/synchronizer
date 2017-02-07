@@ -50,12 +50,22 @@ class userDAO{
 		return $this->dbAccess->manipulateData($dbInfo, 'SELECT * FROM users WHERE login=?', true, array($login));
 	}
 	
+	public function getEmailByLogin($dbInfo, $login)
+	{
+		$query = 'SELECT email from Usuario where login=?';
+		
+		$qresult = $this->dbAccess->dataRequest($dbInfo, $query, array($login));
+		
+		return $qresult[0]['email'];
+	}
+	
 	public function getUserCodeByLogin($dbInfo, $login)
 	{
-		$codeList = $this->dbAccess->manipulateData($dbInfo, "select cod_usuario from Usuario where login=?", true, array($login));
+		$codeList = $this->dbAccess->manipulateData($dbInfo, "select cod_usuario from Usuario where login=?", true, array($login));	
 		
 		if(count($codeList) != 1)
 		{
+			echo "<br>" . $login . "<br>";
 			echo "IMPLEMENTAR ERRO!";
 		}
 		

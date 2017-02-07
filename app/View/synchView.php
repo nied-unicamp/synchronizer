@@ -11,7 +11,7 @@ require_once dirname(__FILE__) . '/../Model/DBInfo.php';
 require_once dirname(__FILE__) . '/../Wrapper/DBWrapper.php';
 require_once dirname(__FILE__) . '/../DAO/courseDAO.php';
 //ini_set('display_errors', 'On');
-ini_set('display_errors', 1);
+//ini_set('display_errors', 1);
 
 /**
  * This class mounts a html page for the page of the synchronizer, and calls the controller
