@@ -2,6 +2,7 @@
 
 require_once dirname(__FILE__) . '/../Context/serverContext.php';
 require_once dirname(__FILE__) . '/userDAO.php';
+require_once dirname(__FILE__) . '/categoryDAO.php';
 
 /**
  * TODO Auto-generated comment.
@@ -366,7 +367,18 @@ class courseDAO{
 	/**
 	 * TODO Auto-generated comment.
 	 */
-	public function updateCourse($dbInfo, $serverType, $course) {
+	public function updateCourseCategory($dbInfo, $serverType, $course, $newCategory) {
+		
+		// get cod_pasta from 
+		$categoryDAOObj = new categoryDAO();
+		
+		$categoryCode = $categoryDAOObj->getCategoryCode($dbInfo, $course['category']);
+		
+		$courseCode = $this->getCourseCodByName($dbInfo, $course['courseName']);
+		
+		$query ='UPDATE Cursos SET cod_pasta=? WHERE cod_curso=?';
+		
+		$this->dbAccess->manipulateData($confDB, $query, true, array($categoryCode, $courseCode));
 	}
 
 	/**

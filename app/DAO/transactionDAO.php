@@ -110,20 +110,40 @@ class transactionDAO{
 	/**
 	 * TODO Auto-generated comment.
 	 */
-	public function deleteTransaction($dbInfo, $serverType, $transaction) {
+	public function deleteTransaction($dbInfo, $serverType, transaction $transaction) {
 		
 		switch ($transaction->getdataType()) {
 		
 			case 'user':
 				/* Build sql query */
+				// get cod_usuario by login
+				// usando o cod_usuario:
+					//drop usuario da tabela Cursos, 
+					// drop de todas as entradas da tabela Usuario_curso, 
+					// drop de todas entradas em Usuario_config, 
+					// e pesquisar sobre desativacao de portfolio				
+				
 				break;
 					
 			case 'course':
 				/* Build sql query */
+				// get cod_curso by courseName
+				// drop todas entradas com esse cod_curso em Usuario_curso
+				// drop de todas as entradas com esse cod_curso em Usuario_config
+				// apagar as pastas de arquivos deste curso
+				// apagar as pastas de diretorio deste curso
+				// apagar a entrada deste curso na tabela Cursos
+				// drop o banco deste curso
+				
 				break;
 					
 			case 'coursemember':
 				/* Build sql query */
+				// get cod_usuario by login
+				// get cod_curso by login
+				// remover a linha desta relacao na tabela Usuario_curso
+				// remover a linha desta relacao na tabela Usuario_config
+				
 				break;
 					
 			default:
@@ -136,20 +156,27 @@ class transactionDAO{
 	/**
 	 * TODO Auto-generated comment.
 	 */
-	public function updateTransaction($dbInfo, $serverType, $transaction) {
+	public function updateTransaction($dbInfo, $serverType, transaction $transaction) {
 		
 		switch ($transaction->getdataType()) {
 		
 			case 'user':
-				/* Build sql query */
+				$userData = $transaction->getOperand();
+				
+				$this->userDAOObject->updateUser($dbInfo, $serverType, $userData);
+				
 				break;
 					
 			case 'course':
-				/* Build sql query */
+				$courseData = $transaction->getOperand();
+				$this->courseDAOObject->updateCourseCategory($dbInfo, $serverType, $courseData);
+				
 				break;
 					
 			case 'coursemember':
-				/* Build sql query */
+				$courMemData = $transaction->getOperand();
+				$this->courmemberDAOObj->updateUserRole($dbInfo, $serverType, $courMemData);
+		
 				break;
 					
 			default:

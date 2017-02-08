@@ -71,6 +71,19 @@ class userDAO{
 		
 		return $codeList[0]['cod_usuario'];
 	}
+	
+	public function getUserCodeByEmail($dbInfo, $email)
+	{
+		$codeList = $this->dbAccess->manipulateData($dbInfo, "select cod_usuario from Usuario where email=?", true, array($email));
+	
+		if(count($codeList) != 1)
+		{
+			echo "<br>" . $email . "<br>";
+			echo "IMPLEMENTAR ERRO!";
+		}
+	
+		return $codeList[0]['email'];
+	}
 
 	public function getUserByEmail($dbInfo, $internal, $email)
 	{
@@ -171,7 +184,9 @@ class userDAO{
 	 * TODO Auto-generated comment.
 	 */
 	public function updateUser($dbInfo, $serverType, $user) {
+		$query = "UPDATE Usuario SET login=?, nome=? WHERE email=?";
 		
+		$this->dbAccess->manipulateData($confDB, $query, true, array($user['login'], $user['nome'], $user['email']));
 	}
 
 	/**

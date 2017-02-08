@@ -1,6 +1,8 @@
 <?php
 
 require_once dirname(__FILE__) . '/../Context/serverContext.php';
+require_once dirname(__FILE__) . '/userDAO.php';
+require_once dirname(__FILE__) . '/courseDAO.php';
 
 /**
  * TODO Auto-generated comment.
@@ -71,13 +73,23 @@ class coursememberDAO{
 	/**
 	 * TODO Auto-generated comment.
 	 */
-	public function addCourseMember($dbInfo, $serverType, $courseMember) {
-	}
+// 	public function addCourseMember($dbInfo, $serverType, $courseMember) {
+// 	}
 
 	/**
 	 * TODO Auto-generated comment.
 	 */
-	public function updateCourseMember($dbInfo, $serverType, $courseMember) {
+	public function updateUserRole($dbInfo, $serverType, $courseMember) {
+		$userDAOObj = new userDAO();
+		$courseDAOObj = new courseDAO();
+		
+		$userCode = $userDAOObj->getUserCodeByLogin($dbInfo, $courseMember['login']);
+		$courseCode = $courseDAOObj->getCourseCodByName($dbInfo, $courseMember['courseName']);
+		
+		$query = 'UPDATE Usuario_curso SET tipo_usuario=? WHERE cod_usuario_global=? AND cod_curso=?';
+		
+		$this->dbAccess->manipulateData($confDB, $query, true, array($courseMember['role'], $userCode, $courseCode));
+	
 	}
 
 	/**
