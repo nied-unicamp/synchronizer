@@ -129,7 +129,27 @@ class synchView {
 												);
 
 	//	//echo "<br><br>Numero real de transactions:" . count($transactions) . "<br>";
-	//	//var_dump($transactions);
+	
+		
+		
+		// Tests of update transactions.		
+// 		var_dump($transactions);
+// 		echo "<p>Transactions:</p>";
+		
+// 		$numTrans = count($transactions);
+		
+// 		for($i=0; $i<$numTrans; $i++)
+// 		{
+// 			echo "<p>";
+// 			echo $transactions[$i]->getOperation(). " " . $transactions[$i]->getDataType() . " ";
+// 			var_dump($transactions[$i]->getOperand());
+// 			echo "</p>";
+// 		}
+	
+		
+		
+		
+		
 		//var_dump(json_decode($transactions));
 		
 	//	//echo "<br>";

@@ -367,7 +367,7 @@ class courseDAO{
 	/**
 	 * TODO Auto-generated comment.
 	 */
-	public function updateCourseCategory($dbInfo, $serverType, $course, $newCategory) {
+	public function updateCourseCategory($dbInfo, $serverType, $course) {
 		
 		// get cod_pasta from 
 		$categoryDAOObj = new categoryDAO();
@@ -378,7 +378,7 @@ class courseDAO{
 		
 		$query ='UPDATE Cursos SET cod_pasta=? WHERE cod_curso=?';
 		
-		$this->dbAccess->manipulateData($confDB, $query, true, array($categoryCode, $courseCode));
+		$this->dbAccess->manipulateData($dbInfo, $query, true, array($categoryCode, $courseCode));
 	}
 
 	/**

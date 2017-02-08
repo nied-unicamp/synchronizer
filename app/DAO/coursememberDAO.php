@@ -88,7 +88,7 @@ class coursememberDAO{
 		
 		$query = 'UPDATE Usuario_curso SET tipo_usuario=? WHERE cod_usuario_global=? AND cod_curso=?';
 		
-		$this->dbAccess->manipulateData($confDB, $query, true, array($courseMember['role'], $userCode, $courseCode));
+		$this->dbAccess->manipulateData($dbInfo, $query, true, array($courseMember['role'], $userCode, $courseCode));
 	
 	}
 

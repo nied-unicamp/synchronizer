@@ -186,7 +186,7 @@ class userDAO{
 	public function updateUser($dbInfo, $serverType, $user) {
 		$query = "UPDATE Usuario SET login=?, nome=? WHERE email=?";
 		
-		$this->dbAccess->manipulateData($confDB, $query, true, array($user['login'], $user['nome'], $user['email']));
+		$this->dbAccess->manipulateData($dbInfo, $query, true, array($user['login'], $user['name'], $user['email']));
 	}
 
 	/**
