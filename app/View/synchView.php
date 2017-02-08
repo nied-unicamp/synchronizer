@@ -11,7 +11,7 @@ require_once dirname(__FILE__) . '/../Model/DBInfo.php';
 require_once dirname(__FILE__) . '/../Wrapper/DBWrapper.php';
 require_once dirname(__FILE__) . '/../DAO/courseDAO.php';
 //ini_set('display_errors', 'On');
-//ini_set('display_errors', 1);
+ini_set('display_errors', 1);
 
 /**
  * This class mounts a html page for the page of the synchronizer, and calls the controller
@@ -31,6 +31,22 @@ class synchView {
 	 */
 	private $confTE;
 
+	public function showTransactions($transactions)
+	{
+	// Tests of update transactions.
+		echo "<p>Transactions:</p>";
+	
+		$numTrans = count($transactions);
+	
+		for($i=0; $i<$numTrans; $i++)
+		{
+			echo "<p>";
+			echo $transactions[$i]->getOperation(). " " . $transactions[$i]->getDataType() . " ";
+			var_dump($transactions[$i]->getOperand());
+			echo "</p>";
+		}
+	}
+	
 	/**
 	 * Shows synchronization page to user by loading html code on browser.
 	 * If a synchronization was requested, then calls a controller that synchronizes
@@ -116,39 +132,55 @@ class synchView {
  		$teleducInc = new TeleducInc();
  		$this->confDBCache = $teleducInc->buildConfDBCache();
 	
-   	$cacheManager = new DBWrapper();
+   		//$cacheManager = new DBWrapper();
 //   	echo 'Retorno da consulta:<br>';
 //   	var_dump($cacheManager->manipulateData($this->confDBCache, "select * from usersCache where login=?;", true, array('admtele')));
 //   	echo '<br><br>';
 
+		var_dump($request->post['targets']);
 		
-//These lines are the future calls. They dont work yet.
-		$transactions = $controlsDiff->createDiff(
-													$this->confDB, $this->confDBCache,
-													$request->post['targets'], $request->post['serverType']
-												);
+		
+	   	if (in_array('users', $request->post['targets']))
+	   	{
+	   		
+	   		
+			$transactions = $controlsDiff->createDiff(
+														$this->confDB, $this->confDBCache,
+														array('users'), $request->post['serverType']
+													);
+			echo "<p>Transações da sinc de users:</p>";
+			$this->showTransactions($transactions);
+			
+			$controlsSync->synchronize($this->confDBCache, $this->confDB, $request->post['serverType'], $transactions);
+			
+			if (in_array('courses', $request->post['targets']))
+			{
+				$transactions = $controlsDiff->createDiff(
+						$this->confDB, $this->confDBCache,
+						array('courses'), $request->post['serverType']
+				);
+				
+				echo "<p>Transações da sinc de courses:</p>";
+				$this->showTransactions($transactions);
+				
+				$controlsSync->synchronize($this->confDBCache, $this->confDB, $request->post['serverType'], $transactions);
+			
+				if (in_array('coursemember', $request->post['targets']))
+				{
+										
+					$transactions = $controlsDiff->createDiff(
+							$this->confDB, $this->confDBCache,
+							array('coursemember'), $request->post['serverType']
+					);
+				
+					echo "<p>Transações da sinc de coursemembers:</p>";
+					$this->showTransactions($transactions);
+					
+					$controlsSync->synchronize($this->confDBCache, $this->confDB, $request->post['serverType'], $transactions);
+				}
+			}
+	   	}
 
-	//	//echo "<br><br>Numero real de transactions:" . count($transactions) . "<br>";
-	
-		
-		
-		// Tests of update transactions.		
-// 		var_dump($transactions);
-// 		echo "<p>Transactions:</p>";
-		
-// 		$numTrans = count($transactions);
-		
-// 		for($i=0; $i<$numTrans; $i++)
-// 		{
-// 			echo "<p>";
-// 			echo $transactions[$i]->getOperation(). " " . $transactions[$i]->getDataType() . " ";
-// 			var_dump($transactions[$i]->getOperand());
-// 			echo "</p>";
-// 		}
-	
-		
-		
-		
 		
 		//var_dump(json_decode($transactions));
 		
@@ -160,7 +192,7 @@ class synchView {
 		//OLD
 		//$controlsSync->synchronize($confTE, $serverType, $transactions);
 		
-		$controlsSync->synchronize($this->confDBCache, $this->confDB, $request->post['serverType'], $transactions);
+		
 //
 
 		//These lines are being used for testing.
