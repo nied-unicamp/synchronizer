@@ -28,7 +28,7 @@ class userDAO{
 		
 		if($internal)
 		{
-			$query = 'select login, nome AS name, email from Usuario';
+			$query = "select login, nome AS name, email from Usuario where not login='admtele'";
 			return $recordsLoader->serverQuery($dbInfo, $query);
 		}
 

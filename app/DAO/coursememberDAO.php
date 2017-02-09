@@ -30,7 +30,8 @@ class coursememberDAO{
 						from Usuario_curso
 						INNER JOIN Cursos
 						ON Cursos.cod_curso=Usuario_curso.cod_curso LEFT OUTER JOIN Usuario
-						ON cod_usuario_global=Usuario.cod_usuario;
+						ON cod_usuario_global=Usuario.cod_usuario
+						WHERE not Usuario.login='admtele';
 					";
 			return $recordsLoader->serverQuery($dbInfo, $query);
 		}

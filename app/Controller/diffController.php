@@ -148,6 +148,13 @@ class diffController {
 		// TODO Here, servertype has to be the internal teleduc's database?
 		$this->cacheList = $this->configDB($confDbCache, $syncTargets, 'SERVER_TYPE_MYSQL', 1);
 
+// 		echo "<p>externalList:</p>";
+// 		var_dump($this->externalList);
+// 		echo "<br>";
+// 		echo "<p>cacheList</p>";
+// 		var_dump($this->cacheList);
+// 		echo "<br>";
+		
 		/*
 		 * TODO redundant information in parameter $formatType? See DifferContext.php.
 		 * */
