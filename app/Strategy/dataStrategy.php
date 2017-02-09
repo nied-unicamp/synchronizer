@@ -206,9 +206,16 @@ abstract class dataStrategy {
 		
 		$TEuser = $this->getData('users', $user, $confDB, $searchingDeletions);
 		
+		// If there is some user with this login 
 		if(isset($TEuser[0]) && $TEuser[0]['login'] == $user['login'])
 		{
 			$numOfLines=count($TEuser);
+			
+// 			if($numOfLines > 1)
+// 			{
+// 				echo "<h1>ERROR!Repeated login!!!</h1>";
+// 			}
+			
 			for($i = 0; $i < $numOfLines; $i = $i+1)
 			{
 				if($TEuser[$i] == $user)
@@ -221,6 +228,7 @@ abstract class dataStrategy {
 			{
 				return null;
 			}
+			
 			return new transaction('update', 'user', $user);
 		}
 		if($searchingDeletions)

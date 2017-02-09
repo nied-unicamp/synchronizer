@@ -44,7 +44,7 @@ class userDAO{
 	{
 		if($internal)
 		{
-			return $this->dbAccess->manipulateData($dbInfo, 'SELECT login, nome, email FROM Usuario WHERE login=?', true, array($login));
+			return $this->dbAccess->manipulateData($dbInfo, 'SELECT login, nome AS name, email FROM Usuario WHERE login=?', true, array($login));
 		}
 		
 		return $this->dbAccess->manipulateData($dbInfo, 'SELECT * FROM users WHERE login=?', true, array($login));
