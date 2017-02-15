@@ -50,6 +50,11 @@ class userDAO{
 		return $this->dbAccess->manipulateData($dbInfo, 'SELECT * FROM users WHERE login=?', true, array($login));
 	}
 	
+	public function getUserByCode($dbInfo, $userCode)
+	{
+		return $this->dbAccess->manipulateData($dbInfo, 'SELECT login, nome AS name, email FROM Usuario WHERE cod_usuario=?', true, array($userCode));
+	}
+	
 	public function getEmailByLogin($dbInfo, $login)
 	{
 		$query = 'SELECT email from Usuario where login=?';
@@ -62,6 +67,9 @@ class userDAO{
 	public function getUserCodeByLogin($dbInfo, $login)
 	{
 		$codeList = $this->dbAccess->manipulateData($dbInfo, "select cod_usuario from Usuario where login=?", true, array($login));	
+		
+		echo "<p>Estou buscando o codigo global do usuario " . $login . ", encontrei a seguinte coisa na busca: </p>";
+		var_dump($codeList);
 		
 		if(count($codeList) != 1)
 		{

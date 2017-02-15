@@ -16,6 +16,47 @@ class courseDAO{
 		$this->dbAccess = new DBWrapper();
 	}
 	
+	public function getLocalCoordCode($dbInfo, $courseName)
+	{
+		$courseCode = $this->getCourseCodByName($dbInfo, $courseName);
+		
+		$query="SELECT cod_coordenador FROM Cursos WHERE nome_curso=?";
+		
+		$qresult = $this->dbAccess->dataRequest($dbInfo, $query, array($courseName));
+		
+		return $qresult[0]['cod_coordenador'];
+	}
+	
+	public function hasValidCoordinator($dbInfo, $courseName)
+	{
+		$localCoordCode = $this->getLocalCoordCode($dbInfo, $courseName);
+		
+		if($localCoordCode)
+		{
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public function getCourseCoordData($dbInfo, $courseName)
+	{
+		$courseCode = $this->getCourseCodByName($dbInfo, $courseName);
+		
+		$localCoordCode = $this->getLocalCoordCode($dbInfo, $courseName);
+		
+		$query = "SELECT cod_usuario FROM Usuario_curso WHERE cod_usuario=? AND cod_curso=?";
+		
+		$qresult = $this->dbAccess->dataRequest($dbInfo, $query, array($localCoordCode, $courseCode));
+
+		$userCode = $qresult[0]['cod_usuario'];
+		
+		$userDAOObj = new userDAO();
+		
+		return $userDAOObj->getUserByCode($dbInfo, $userCode);
+		
+	}
+	
 	public function getCourseCordList($dbInfo, $internal, $courseName)
 	{
 		if($internal)
@@ -106,15 +147,15 @@ class courseDAO{
 		}
 		
 		// Coordinator will be inserted during coursemember sync, so do his config information.
-		/*
+		
  		$query="insert into Usuario_config (cod_usuario,cod_curso) values (1, ".$cod_curso.")";
  		Enviar($sock,$query);
-		*/
+		
 		// Coordinator will be inserted during coursemember sync.
-		/*
+		
 		$query="insert into Usuario_curso (cod_usuario_global,cod_usuario,cod_curso,tipo_usuario,portfolio,data_inscricao) values (".$cod_usuario.",1, ".$cod_curso.", 'F', 'ativado', ".time().")";
 		Enviar($sock,$query);
-		*/
+		
 		
 		// admtele is always a coordinator.
 		$query="insert into Usuario_curso (cod_usuario_global,cod_usuario,cod_curso,tipo_usuario,portfolio,data_inscricao) values (-1,-1, ".$cod_curso.", 'F', 'ativado', ".time().")";
@@ -234,6 +275,10 @@ class courseDAO{
 
 	public function insertUserInCourse($dbInfo ,$userLogin, $courseName, $role)
 	{
+		
+		echo "<p><strong>Vou inserir o usuario " . $userLogin . " como " . $role . " no curso " . $courseName . ".</strong></p>";
+		
+		
 		$sock=Conectar("");
 		
 		$lista_frases=RetornaListaDeFrases($sock,0);
@@ -267,6 +312,10 @@ class courseDAO{
 		
 		$query  = "insert into ".$dbnamebase.".Usuario_curso (cod_usuario_global,cod_usuario,cod_curso,tipo_usuario,data_inscricao) ";
 		$query .= "values ('".$dados['cod_usuario_global']."','".$cod_usuario_prox."','".$cod_curso."','".$role."',".$data_inscricao.")";
+		
+		echo "<p>A query usada para inserir este aluno foi: </p>";
+		echo "<p>" . $query . "</p>";
+		
 		Enviar($sock,$query);
 		
 		$query  = "insert into ".$dbnamebase.".Usuario_config (cod_usuario,cod_curso,notificar_email) values ";
@@ -381,6 +430,24 @@ class courseDAO{
 		$this->dbAccess->manipulateData($dbInfo, $query, true, array($categoryCode, $courseCode));
 	}
 
+	public function setCourseCoordinator($dbInfo, $login, $courseName)
+	{
+		$courMembDAOObj = new coursememberDAO();
+		
+		$coordLocalCod = $courMembDAOObj->getLocalUserCode($dbInfo, $login, $courseName);
+	
+		$query = "UPDATE Cursos SET cod_coordenador=? WHERE nome_curso=?";
+	
+		$this->dbAccess->manipulateData($dbInfo, $query, true, array($coordLocalCod, $courseName));
+	}
+	
+	public function setInvalidCoord($dbInfo, $couseName)
+	{
+		$query = "UPDATE Cursos SET cod_coordenador='-1' where nome_curso=?";
+		
+		$this->dbAccess->manipulateData($dbInfo, $query, true, array($courseName));
+	}
+	
 	/**
 	 * TODO Auto-generated comment.
 	 */

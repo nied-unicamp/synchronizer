@@ -93,6 +93,22 @@ class coursememberDAO{
 	
 	}
 
+	public function getLocalUserCode($dbInfo, $login, $courseName)
+	{
+		$query = "
+						SELECT Usuario_curso.cod_usuario AS userLocalCode
+						from Usuario_curso
+						INNER JOIN Cursos
+						ON Cursos.cod_curso=Usuario_curso.cod_curso LEFT OUTER JOIN Usuario
+						ON cod_usuario_global=Usuario.cod_usuario
+						WHERE Cursos.nome_curso=?
+						AND Usuario.login=?";
+		
+		$qresult = $this->dbAccess->dataRequest($dbInfo, $query, array($courseName, $login));
+		
+		return $qresult[0]['userLocalCode'];
+	}
+	
 	/**
 	 * TODO Auto-generated comment.
 	 */
