@@ -17,9 +17,7 @@ class courseDAO{
 	}
 	
 	public function getLocalCoordCode($dbInfo, $courseName)
-	{
-		$courseCode = $this->getCourseCodByName($dbInfo, $courseName);
-		
+	{		
 		$query="SELECT cod_coordenador FROM Cursos WHERE nome_curso=?";
 		
 		$qresult = $this->dbAccess->dataRequest($dbInfo, $query, array($courseName));
@@ -31,7 +29,7 @@ class courseDAO{
 	{
 		$localCoordCode = $this->getLocalCoordCode($dbInfo, $courseName);
 		
-		if($localCoordCode)
+		if($localCoordCode != -1 && $localCoordCode != 0)
 		{
 			return true;
 		}
@@ -45,15 +43,17 @@ class courseDAO{
 		
 		$localCoordCode = $this->getLocalCoordCode($dbInfo, $courseName);
 		
-		$query = "SELECT cod_usuario FROM Usuario_curso WHERE cod_usuario=? AND cod_curso=?";
+		$query = "SELECT cod_usuario_global FROM Usuario_curso WHERE cod_usuario=? AND cod_curso=?";
 		
 		$qresult = $this->dbAccess->dataRequest($dbInfo, $query, array($localCoordCode, $courseCode));
 
-		$userCode = $qresult[0]['cod_usuario'];
+		$userCode = $qresult[0]['cod_usuario_global'];
 		
 		$userDAOObj = new userDAO();
 		
-		return $userDAOObj->getUserByCode($dbInfo, $userCode);
+		$qresult = $userDAOObj->getUserByCode($dbInfo, $userCode);
+		
+		return $qresult[0];
 		
 	}
 	
@@ -276,8 +276,6 @@ class courseDAO{
 	public function insertUserInCourse($dbInfo ,$userLogin, $courseName, $role)
 	{
 		
-		echo "<p><strong>Vou inserir o usuario " . $userLogin . " como " . $role . " no curso " . $courseName . ".</strong></p>";
-		
 		
 		$sock=Conectar("");
 		
@@ -312,9 +310,6 @@ class courseDAO{
 		
 		$query  = "insert into ".$dbnamebase.".Usuario_curso (cod_usuario_global,cod_usuario,cod_curso,tipo_usuario,data_inscricao) ";
 		$query .= "values ('".$dados['cod_usuario_global']."','".$cod_usuario_prox."','".$cod_curso."','".$role."',".$data_inscricao.")";
-		
-		echo "<p>A query usada para inserir este aluno foi: </p>";
-		echo "<p>" . $query . "</p>";
 		
 		Enviar($sock,$query);
 		
@@ -441,7 +436,7 @@ class courseDAO{
 		$this->dbAccess->manipulateData($dbInfo, $query, true, array($coordLocalCod, $courseName));
 	}
 	
-	public function setInvalidCoord($dbInfo, $couseName)
+	public function setInvalidCoord($dbInfo, $courseName)
 	{
 		$query = "UPDATE Cursos SET cod_coordenador='-1' where nome_curso=?";
 		

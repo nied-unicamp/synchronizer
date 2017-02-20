@@ -193,40 +193,86 @@ class transactionDAO{
 				
 				$actualCoursememb = $this->courmemberDAOObj->getCourseMemberByPair($dbInfo, true, $courMemData['courseName'], $courMemData['login']);
 				
+// 				echo "<p>Vardump de actualCourseMembr</p>";
+// 				echo "<p>";
+// 				var_dump($actualCoursememb);
+// 				echo "</p>";
+				
 				// If the target user was a teacher...
 				if($actualCoursememb['role'] = 'f' || $actualCoursememb = 'F')
 				{
 					$coord = $this->courseDAOObject->getCourseCoordData($dbInfo, $courMemData['courseName']);
+		
+					
+					
 					
 					// and if he is this course's coordinator...
 					if ($coord['login'] == $courMemData['login'])
 					{
+						
+						
+// 						echo "<h1>OLHA EU AQUI...</h1>";
+// 						echo "<p>Vardump de coord:</p>";
+// 						echo "<p>";
+// 						var_dump($coord);
+// 						echo "</p>";
+// 						echo "<p>Vardump de courMemData:</p>";
+// 						echo "<p>";
+// 						var_dump($courMemData);
+// 						echo "</p>";
+// 						echo "<p></p>";
+						
+						
+						
+						
 						// search for another teacher already in the course, to be the new coordinator.
-						$coordList = $this->courseDAOObject->getCourseCordList($dbInfo, $true, $courMemData['courseName']);
+						$coordList = $this->courseDAOObject->getCourseCordList($dbInfo, true, $courMemData['courseName']);
 						
 						// remove from the teachers list the teacher that won't be the coordinator anymore.
 						unset($coordList[array_search($coord['login'], $coordList)]);
 						
+
+
+						
 						// If there isn't another teacher...
 						if(empty($coordList))
-						
 						{
+							
+							echo "<p>Eu vou colocar um codigo invalido para o coordenado!!</p>";
+							
 							//entao colocar um cod_coordenador invalido reconhecivel: um novo formador sera inserido
 							// posteriormente pois erroController garantiu que existe um coordenador, ou ja inserido, ou novo. nesse caso sera novo
 							// pois nenhum foi encontrado ja inserido.
 							$this->courseDAOObject->setInvalidCoord($dbInfo, $courMemData['courseName']);
 							
-							break;
+							//break;
 						}
 						
 						//Otherwise, if there is some other teacher...
 							//then this other teacher will become the coordinator.
-						$this->courseDAOObject->setCourseCoordinator($dbInfo, $coordList[0]['login'], $courMemData['courseName']);
+						else
+						{
+							$this->courseDAOObject->setCourseCoordinator($dbInfo, $coordList[0]['login'], $courMemData['courseName']);
+						}
 						
-						break;
 					}					
 				}
 				
+ 				if($courMemData['role'] == 'F' || $courMemData['role'] == 'f') 
+ 				{
+ 					
+ 					echo "<h1>Esse update transforma alguem em formador...</h1>";
+ 					
+ 					if( ! $this->courseDAOObject->hasValidCoordinator($dbInfo, $courMemData['courseName']))
+ 					{
+ 						echo "<h1>Achei um coord invalido... esse formador vai se tornar coordenador!</h1>";
+ 						
+ 						$this->courseDAOObject->setCourseCoordinator($dbInfo, $courMemData['login'], $courMemData['courseName']);
+ 					}
+ 				}
+				
+ 				
+ 				echo "<h1>EU TENHO QUE APARECER 3 vezes</h1>";
 				$this->courmemberDAOObj->updateUserRole($dbInfo, $serverType, $courMemData);
 		
 				break;
